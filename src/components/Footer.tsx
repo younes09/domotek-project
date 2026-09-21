@@ -39,7 +39,7 @@ export const Footer: React.FC<{ s: Store }> = ({ s }) => (
         <p className="text-sm font-semibold mb-3.5" style={{ color: "var(--text)" }}>Commandes & Support</p>
         <div className="space-y-2.5 text-xs sm:text-sm" style={{ color: "var(--text-dim)" }}>
           <p className="flex items-center gap-1.5"><strong style={{ color: "var(--text)" }}>Wilayas :</strong> 58 Wilayas en Algérie</p>
-          <p className="flex items-center gap-1.5"><strong style={{ color: "var(--text)" }}>Paiement :</strong> À la livraison (Main à main)</p>
+          <p className="flex items-center gap-1.5"><strong style={{ color: "var(--text)" }}>Paiement :</strong> À la livraison</p>
           <p className="flex items-center gap-1.5"><strong style={{ color: "var(--text)" }}>Garantie :</strong> Produits vérifiés</p>
           <a
             href="https://wa.me/213775302636"

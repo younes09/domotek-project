@@ -12,6 +12,7 @@ export interface Category {
   key: string;
   name: string;
   icon: IconType;
+  iconName?: string;
   desc: string;
 }
 
@@ -99,6 +100,10 @@ export interface Store {
   goHome: () => void;
   goShop: (patch: Partial<ShopFilters>) => void;
   openProduct: (p: Product) => void;
+
+  categories: Category[];
+  setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
+  categoryLabel: Record<string, string>;
 
   products: Product[];
   setProducts: React.Dispatch<React.SetStateAction<Product[]>>;

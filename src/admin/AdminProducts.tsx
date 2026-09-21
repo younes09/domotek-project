@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { PlusCircle, Pencil, Trash2, Search, Filter, AlertTriangle, CheckCircle2, ShieldAlert, Image as ImageIcon, Upload, X } from "lucide-react";
 import { IconTile } from "../components/ui";
-import { CATEGORIES, CATEGORY_LABEL } from "../data/categories";
 import { formatDZD } from "../lib/format";
 import { Cpu } from "lucide-react";
-import type { Product, Store, StockStatus } from "../types";
+import type { Category, Product, Store, StockStatus } from "../types";
 
 interface FormState {
   name: string;
@@ -16,9 +15,9 @@ interface FormState {
   imageUrl: string;
 }
 
-const emptyForm = (): FormState => ({
+const emptyForm = (defaultCatKey = "smart-home"): FormState => ({
   name: "",
-  category: CATEGORIES[0].key,
+  category: defaultCatKey,
   price: "",
   oldPrice: "",
   stock: "in",
@@ -26,7 +25,12 @@ const emptyForm = (): FormState => ({
   imageUrl: "",
 });
 
-const ProductFormModal: React.FC<{ initial: Product | null; onSave: (f: FormState) => void; onClose: () => void }> = ({ initial, onSave, onClose }) => {
+const ProductFormModal: React.FC<{
+  initial: Product | null;
+  categories: Category[];
+  onSave: (f: FormState) => void;
+  onClose: () => void;
+}> = ({ initial, categories, onSave, onClose }) => {
   const [form, setForm] = useState<FormState>(
     initial
       ? {
@@ -38,7 +42,7 @@ const ProductFormModal: React.FC<{ initial: Product | null; onSave: (f: FormStat
           shortDesc: initial.shortDesc || "",
           imageUrl: initial.imageUrl || "",
         }
-      : emptyForm()
+      : emptyForm(categories[0]?.key || "smart-home")
   );
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -136,7 +140,7 @@ const ProductFormModal: React.FC<{ initial: Product | null; onSave: (f: FormStat
                 onChange={(e) => setForm({ ...form, category: e.target.value })}
                 className="dk-input rounded-xl px-3.5 py-2.5 w-full text-sm"
               >
-                {CATEGORIES.map((c) => <option key={c.key} value={c.key} className="bg-[var(--surface)] text-[var(--text)]">{c.name}</option>)}
+                {categories.map((c) => <option key={c.key} value={c.key} className="bg-[var(--surface)] text-[var(--text)]">{c.name}</option>)}
               </select>
             </div>
             <div>
@@ -367,7 +371,7 @@ export const AdminProducts: React.FC<{ s: Store }> = ({ s }) => {
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
                     <span className="px-2.5 py-1 rounded-lg dk-surface-2 text-[11px]" style={{ color: "var(--text-dim)" }}>
-                      {CATEGORY_LABEL[p.category] || p.category}
+                      {s.categoryLabel[p.category] || p.category}
                     </span>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap font-mono font-bold" style={{ color: "var(--text)" }}>
@@ -419,7 +423,12 @@ export const AdminProducts: React.FC<{ s: Store }> = ({ s }) => {
       </div>
 
       {(editing || adding) && (
-        <ProductFormModal initial={editing} onSave={save} onClose={() => { setEditing(null); setAdding(false); }} />
+        <ProductFormModal
+          initial={editing}
+          categories={s.categories}
+          onSave={save}
+          onClose={() => { setEditing(null); setAdding(false); }}
+        />
       )}
     </div>
   );

@@ -18,7 +18,7 @@ export const QuickViewModal: React.FC<{ s: Store }> = ({ s }) => {
           <X className="h-4 w-4" style={{ color: "var(--text)" }} />
         </button>
         <div className="h-40 w-40 mx-auto mb-4"><IconTile Icon={p.icon} /></div>
-        <p className="text-xs" style={{ color: "var(--text-dim)" }}>{CATEGORY_LABEL[p.category]}</p>
+        <p className="text-xs" style={{ color: "var(--text-dim)" }}>{s.categoryLabel[p.category] || p.category}</p>
         <h3 className="dk-heading text-lg font-semibold mt-1" style={{ color: "var(--text)" }}>{p.name}</h3>
         <p className="text-sm mt-1" style={{ color: "var(--text-dim)" }}>{p.shortDesc}</p>
         <div className="mt-3 flex items-baseline gap-2">

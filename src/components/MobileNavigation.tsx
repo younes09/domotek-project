@@ -1,7 +1,7 @@
 import React from "react";
 import { X, Settings } from "lucide-react";
 import { Logo } from "./Logo";
-import { CATEGORIES } from "../data/categories";
+import { getCategoryIcon } from "../data/categories";
 import type { Store } from "../types";
 
 export const MobileNavigation: React.FC<{ s: Store }> = ({ s }) => (
@@ -22,12 +22,15 @@ export const MobileNavigation: React.FC<{ s: Store }> = ({ s }) => (
           Boutique
         </button>
         <p className="pt-3 pb-1 text-xs" style={{ color: "var(--text-faint)" }}>Catégories</p>
-        {CATEGORIES.map((c) => (
-          <button key={c.key} onClick={() => { s.goShop({ category: c.key }); s.setMobileMenuOpen(false); }} className="w-full flex items-center gap-3 py-2.5 dk-focus rounded">
-            <c.icon className="h-4 w-4" style={{ color: "var(--teal)" }} />
-            <span className="text-sm" style={{ color: "var(--text-dim)" }}>{c.name}</span>
-          </button>
-        ))}
+        {s.categories.map((c) => {
+          const IconComp = c.icon || getCategoryIcon(c.iconName);
+          return (
+            <button key={c.key} onClick={() => { s.goShop({ category: c.key }); s.setMobileMenuOpen(false); }} className="w-full flex items-center gap-3 py-2.5 dk-focus rounded">
+              <IconComp className="h-4 w-4" style={{ color: "var(--teal)" }} />
+              <span className="text-sm" style={{ color: "var(--text-dim)" }}>{c.name}</span>
+            </button>
+          );
+        })}
       </div>
       <div className="p-4 border-t" style={{ borderColor: "var(--border)" }}>
         <button

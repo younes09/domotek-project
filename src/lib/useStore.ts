@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { PRODUCTS } from "../data/products";
+import { DEFAULT_CATEGORIES, buildCategoryLabel, getCategoryIcon } from "../data/categories";
 import { DEMO_ORDERS } from "../data/demoAdminData";
-import type { CartItem, CheckoutFormData, Order, Product, ShopFilters, Store, View } from "../types";
+import type { CartItem, Category, CheckoutFormData, Order, Product, ShopFilters, Store, View } from "../types";
 
 const EMPTY_FILTERS: ShopFilters = {
   category: "all", minPrice: "", maxPrice: "", availability: "all", sort: "popularite", special: null, query: "",
@@ -9,7 +10,74 @@ const EMPTY_FILTERS: ShopFilters = {
 
 export function useStore(): Store {
   const [view, setView] = useState<View>("home");
-  const [products, setProducts] = useState<Product[]>(PRODUCTS);
+
+  // Dynamic Categories with LocalStorage persistence
+  const [categories, setCategories] = useState<Category[]>(() => {
+    try {
+      const saved = localStorage.getItem("domotek_categories");
+      if (saved) {
+        const parsed: Array<{ key: string; name: string; desc: string; iconName?: string }> = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed.map((item) => ({
+            key: item.key,
+            name: item.name,
+            desc: item.desc || "",
+            iconName: item.iconName,
+            icon: getCategoryIcon(item.iconName),
+          }));
+        }
+      }
+    } catch (e) {
+      console.error("Failed to parse saved categories", e);
+    }
+    return DEFAULT_CATEGORIES;
+  });
+
+  const categoryLabel = useMemo(() => buildCategoryLabel(categories), [categories]);
+
+  useEffect(() => {
+    try {
+      const serialized = categories.map((c) => ({
+        key: c.key,
+        name: c.name,
+        desc: c.desc,
+        iconName: c.iconName,
+      }));
+      localStorage.setItem("domotek_categories", JSON.stringify(serialized));
+    } catch (e) {
+      console.error("Failed to persist categories", e);
+    }
+  }, [categories]);
+
+  const [products, setProducts] = useState<Product[]>(() => {
+    try {
+      const saved = localStorage.getItem("domotek_products");
+      if (saved) {
+        const parsed: Product[] = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed.map((p) => {
+            const original = PRODUCTS.find((op) => op.id === p.id);
+            return {
+              ...p,
+              icon: original?.icon || getCategoryIcon(undefined),
+            };
+          });
+        }
+      }
+    } catch (e) {
+      console.error("Failed to parse saved products", e);
+    }
+    return PRODUCTS;
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("domotek_products", JSON.stringify(products));
+    } catch (e) {
+      console.error("Failed to persist products", e);
+    }
+  }, [products]);
+
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [wishlist, setWishlist] = useState<Set<number>>(new Set());
@@ -20,7 +88,29 @@ export function useStore(): Store {
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [shopFilters, setShopFilters] = useState<ShopFilters>(EMPTY_FILTERS);
   const [toast, setToast] = useState<string | null>(null);
-  const [orders, setOrders] = useState<Order[]>(DEMO_ORDERS);
+  const [orders, setOrders] = useState<Order[]>(() => {
+    try {
+      const saved = localStorage.getItem("domotek_orders");
+      if (saved) {
+        const parsed: Order[] = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      }
+    } catch (e) {
+      console.error("Failed to parse saved orders", e);
+    }
+    return DEMO_ORDERS;
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("domotek_orders", JSON.stringify(orders));
+    } catch (e) {
+      console.error("Failed to persist orders", e);
+    }
+  }, [orders]);
+
   const [lastOrder, setLastOrder] = useState<Order | null>(null);
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
   const [theme, setTheme] = useState<"light" | "dark">(() => {
@@ -87,6 +177,7 @@ export function useStore(): Store {
 
   return {
     view, setView, goHome, goShop, openProduct,
+    categories, setCategories, categoryLabel,
     products, setProducts, selectedProduct,
     cart, addToCart, removeFromCart, updateQty, cartItemsDetailed, cartCount, cartTotal,
     cartOpen, setCartOpen,

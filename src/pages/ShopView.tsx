@@ -27,7 +27,14 @@ export const ShopView: React.FC<{ s: Store }> = ({ s }) => {
     return list;
   }, [s.products, f]);
 
-  const title = f.special === "new" ? "Nouveautés" : f.special === "best" ? "Meilleures ventes" : f.category !== "all" ? CATEGORY_LABEL[f.category] : "Tous les produits";
+  const title =
+    f.special === "new"
+      ? "Nouveautés"
+      : f.special === "best"
+      ? "Meilleures ventes"
+      : f.category !== "all"
+      ? s.categoryLabel[f.category] || f.category
+      : "Tous les produits";
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6">

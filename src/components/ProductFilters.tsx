@@ -1,5 +1,4 @@
 import React from "react";
-import { CATEGORIES } from "../data/categories";
 import type { ShopFilters, Store } from "../types";
 
 export const EMPTY_FILTERS: ShopFilters = {
@@ -18,7 +17,7 @@ export const ProductFilters: React.FC<{ s: Store }> = ({ s }) => {
           <label className="flex items-center gap-2 text-sm cursor-pointer" style={{ color: "var(--text-dim)" }}>
             <input type="radio" name="cat" checked={f.category === "all"} onChange={() => set({ category: "all" })} /> Toutes
           </label>
-          {CATEGORIES.map((c) => (
+          {s.categories.map((c) => (
             <label key={c.key} className="flex items-center gap-2 text-sm cursor-pointer" style={{ color: "var(--text-dim)" }}>
               <input type="radio" name="cat" checked={f.category === c.key} onChange={() => set({ category: c.key })} /> {c.name}
             </label>

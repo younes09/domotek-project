@@ -29,7 +29,7 @@ export const ProductDetailView: React.FC<{ s: Store }> = ({ s }) => {
       <div className="flex items-center gap-2 text-xs mb-4" style={{ color: "var(--text-faint)" }}>
         <button onClick={() => s.goHome()} className="dk-focus rounded">Accueil</button>
         <ChevronRight className="h-3 w-3" />
-        <button onClick={() => s.goShop({ category: p.category })} className="dk-focus rounded">{CATEGORY_LABEL[p.category]}</button>
+        <button onClick={() => s.goShop({ category: p.category })} className="dk-focus rounded">{s.categoryLabel[p.category] || p.category}</button>
         <ChevronRight className="h-3 w-3" />
         <span style={{ color: "var(--text-dim)" }}>{p.name}</span>
       </div>
@@ -38,7 +38,7 @@ export const ProductDetailView: React.FC<{ s: Store }> = ({ s }) => {
         <ProductGallery key={p.id} icon={p.icon} />
 
         <div>
-          <p className="text-sm" style={{ color: "var(--text-dim)" }}>{CATEGORY_LABEL[p.category]}</p>
+          <p className="text-sm" style={{ color: "var(--text-dim)" }}>{s.categoryLabel[p.category] || p.category}</p>
           <h1 className="dk-heading text-2xl font-semibold mt-1" style={{ color: "var(--text)" }}>{p.name}</h1>
           <p className="text-sm mt-2 leading-relaxed" style={{ color: "var(--text-dim)" }}>{p.shortDesc}</p>
 

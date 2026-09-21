@@ -23,8 +23,9 @@ import {
   Smartphone,
   Check,
   ToggleLeft,
+  Blinds,
 } from "lucide-react";
-import { TrustBadges } from "../components/ui";
+import { TrustBadges, WhatsAppIcon } from "../components/ui";
 import { ProductCard } from "../components/ProductCard";
 import type { Store } from "../types";
 
@@ -533,7 +534,7 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
                   rel="noreferrer"
                   className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition-all shadow-md shrink-0"
                 >
-                  <Phone className="h-3.5 w-3.5 fill-slate-950" />
+                  <WhatsAppIcon className="h-4 w-4 fill-slate-950" />
                   <span>Demander ce pack sur WhatsApp</span>
                 </a>
               </div>
@@ -629,19 +630,21 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
                   href="https://wa.me/213775302636?text=Bonjour,%20je%20voudrais%20savoir%20si%20mon%20installation%20est%20compatible%20sans%20fil%20neutre."
                   target="_blank"
                   rel="noreferrer"
-                  className="text-xs font-semibold px-3 py-1.5 rounded-lg dk-surface-2 hover:border-cyan-500/50 transition-all"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg dk-surface-2 hover:border-cyan-500/50 transition-all"
                   style={{ color: "var(--text)" }}
                 >
-                  ⚡ Compatibilité sans neutre ?
+                  <Zap className="h-3.5 w-3.5 text-amber-500 shrink-0" />
+                  <span>Compatibilité sans neutre ?</span>
                 </a>
                 <a
                   href="https://wa.me/213775302636?text=Bonjour,%20j'aimerais%20automatiser%20mes%20volets%20roulants,%20que%20me%20conseillez-vous%20?"
                   target="_blank"
                   rel="noreferrer"
-                  className="text-xs font-semibold px-3 py-1.5 rounded-lg dk-surface-2 hover:border-cyan-500/50 transition-all"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg dk-surface-2 hover:border-cyan-500/50 transition-all"
                   style={{ color: "var(--text)" }}
                 >
-                  🪟 Module pour volets roulants
+                  <Blinds className="h-3.5 w-3.5 text-cyan-500 shrink-0" />
+                  <span>Module pour volets roulants</span>
                 </a>
               </div>
 
@@ -652,7 +655,7 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
                   rel="noreferrer"
                   className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm transition-all shadow-[0_0_25px_rgba(37,211,102,0.35)] transform hover:-translate-y-0.5"
                 >
-                  <MessageCircle className="h-5 w-5 fill-slate-950" />
+                  <WhatsAppIcon className="h-5 w-5 fill-slate-950" />
                   <span>Échanger en direct sur WhatsApp</span>
                   <ArrowRight className="h-4 w-4" />
                 </a>

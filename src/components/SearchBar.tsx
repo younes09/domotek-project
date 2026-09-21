@@ -1,16 +1,22 @@
 import React from "react";
 import { Search, X } from "lucide-react";
 import { IconTile } from "./ui";
-import { CATEGORIES, CATEGORY_LABEL } from "../data/categories";
+import { getCategoryIcon } from "../data/categories";
 import { formatDZD } from "../lib/format";
 import type { Store } from "../types";
 
 export const SearchBar: React.FC<{ s: Store }> = ({ s }) => {
   const q = s.searchQuery.trim().toLowerCase();
   const matchedProducts = q
-    ? s.products.filter((p) => p.name.toLowerCase().includes(q) || CATEGORY_LABEL[p.category].toLowerCase().includes(q)).slice(0, 6)
+    ? s.products
+        .filter(
+          (p) =>
+            p.name.toLowerCase().includes(q) ||
+            (s.categoryLabel[p.category] && s.categoryLabel[p.category].toLowerCase().includes(q))
+        )
+        .slice(0, 6)
     : [];
-  const matchedCategories = q ? CATEGORIES.filter((c) => c.name.toLowerCase().includes(q)) : [];
+  const matchedCategories = q ? s.categories.filter((c) => c.name.toLowerCase().includes(q)) : [];
   const noResults = q.length > 1 && matchedProducts.length === 0 && matchedCategories.length === 0;
   const recommended = s.products.filter((p) => p.isBestSeller).slice(0, 4);
 
@@ -60,16 +66,19 @@ export const SearchBar: React.FC<{ s: Store }> = ({ s }) => {
             <div className="mt-5">
               <p className="text-xs mb-2" style={{ color: "var(--text-faint)" }}>Catégories</p>
               <div className="space-y-1">
-                {matchedCategories.map((c) => (
-                  <button
-                    key={c.key}
-                    onClick={() => { s.addRecentSearch(c.name); s.goShop({ category: c.key }); s.setSearchOpen(false); }}
-                    className="w-full flex items-center gap-3 py-2 dk-focus rounded"
-                  >
-                    <c.icon className="h-4 w-4" style={{ color: "var(--teal)" }} />
-                    <span className="text-sm" style={{ color: "var(--text)" }}>{c.name}</span>
-                  </button>
-                ))}
+                {matchedCategories.map((c) => {
+                  const IconComp = c.icon || getCategoryIcon(c.iconName);
+                  return (
+                    <button
+                      key={c.key}
+                      onClick={() => { s.addRecentSearch(c.name); s.goShop({ category: c.key }); s.setSearchOpen(false); }}
+                      className="w-full flex items-center gap-3 py-2 dk-focus rounded"
+                    >
+                      <IconComp className="h-4 w-4" style={{ color: "var(--teal)" }} />
+                      <span className="text-sm" style={{ color: "var(--text)" }}>{c.name}</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
