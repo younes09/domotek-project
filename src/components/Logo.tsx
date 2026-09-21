@@ -11,7 +11,7 @@ interface LogoProps {
 
 export const Logo: React.FC<LogoProps> = ({
   onClick,
-  className = "h-10 sm:h-12",
+  className = "h-12 sm:h-14",
   theme,
   variant = "white",
 }) => {

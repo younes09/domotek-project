@@ -8,7 +8,7 @@ export const Footer: React.FC<{ s: Store }> = ({ s }) => (
   <footer className="border-t mt-12" style={{ borderColor: "var(--border)", background: "var(--surface)" }}>
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
       <div>
-        <Logo onClick={() => s.goHome()} className="h-11 sm:h-13" theme={s.theme} />
+        <Logo onClick={() => s.goHome()} className="h-12 sm:h-14" theme={s.theme} />
         <p className="text-xs sm:text-sm mt-3.5 leading-relaxed" style={{ color: "var(--text-dim)" }}>
           DomoTek — <strong className="text-cyan-400 font-semibold">La maison connectée, simplement.</strong><br />
           Contrôlez, automatisez et sécurisez votre maison avec nos interrupteurs, prises et capteurs intelligents.

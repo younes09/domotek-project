@@ -21,9 +21,15 @@ export interface ProductVariant {
   options: string[];
 }
 
+export interface ProductSpec {
+  name: string;
+  value: string;
+}
+
 export interface Product {
   id: number;
   slug: string;
+  sku?: string;
   name: string;
   category: string;
   icon: IconType;
@@ -31,10 +37,16 @@ export interface Product {
   longDesc: string;
   price: number;
   oldPrice: number | null;
+  costPrice?: number | null;
+  quantity?: number;
+  lowStockThreshold?: number;
   stock: StockStatus;
   isNew: boolean;
   isBestSeller: boolean;
+  isFeatured?: boolean;
   imageUrl?: string;
+  images?: string[];
+  specs?: ProductSpec[];
   variants?: ProductVariant;
 }
 

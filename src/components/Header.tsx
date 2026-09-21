@@ -53,7 +53,7 @@ export const Header: React.FC<{ s: Store }> = ({ s }) => {
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="h-20 flex items-center justify-between gap-4">
           <div className="flex items-center gap-8">
-            <Logo onClick={() => s.goHome()} className="h-10 sm:h-12 md:h-14" theme={s.theme} />
+            <Logo onClick={() => s.goHome()} className="h-12 sm:h-14 md:h-16" theme={s.theme} />
             <nav className="hidden lg:flex items-center gap-6">
               {navItems.map((item) => (
                 <button

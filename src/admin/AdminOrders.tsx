@@ -933,8 +933,8 @@ export const AdminOrders: React.FC<{ s: Store }> = ({ s }) => {
 
       {/* Orders Table */}
       <div className="dk-surface rounded-2xl overflow-hidden shadow-sm border" style={{ borderColor: "var(--border)" }}>
-        <div className="overflow-x-auto">
-          <table className="w-full text-xs sm:text-sm">
+        <div className="overflow-x-auto dk-scrollbar">
+          <table className="w-full min-w-[850px] text-xs sm:text-sm">
             <thead>
               <tr className="border-b dk-surface-2" style={{ borderColor: "var(--border)", color: "var(--text-dim)" }}>
                 <th className="text-left px-4 py-3.5 font-semibold">N° Commande & Date</th>

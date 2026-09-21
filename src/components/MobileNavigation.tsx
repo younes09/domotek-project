@@ -9,7 +9,7 @@ export const MobileNavigation: React.FC<{ s: Store }> = ({ s }) => (
     <div className="absolute inset-0" style={{ background: "rgba(0,0,0,0.6)" }} onClick={() => s.setMobileMenuOpen(false)} />
     <div className="absolute inset-y-0 left-0 w-72 dk-surface flex flex-col" style={{ borderRight: "1px solid var(--border)" }}>
       <div className="flex items-center justify-between p-4 border-b" style={{ borderColor: "var(--border)" }}>
-        <Logo onClick={() => { s.goHome(); s.setMobileMenuOpen(false); }} theme={s.theme} />
+        <Logo onClick={() => { s.goHome(); s.setMobileMenuOpen(false); }} className="h-11 sm:h-13" theme={s.theme} />
         <button onClick={() => s.setMobileMenuOpen(false)} className="h-9 w-9 flex items-center justify-center rounded-lg dk-focus" aria-label="Fermer">
           <X className="h-5 w-5" style={{ color: "var(--text)" }} />
         </button>
