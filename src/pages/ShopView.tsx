@@ -61,8 +61,8 @@ export const ShopView: React.FC<{ s: Store }> = ({ s }) => {
         </div>
       </div>
 
-      <div className="lg:flex gap-8">
-        <aside className="hidden lg:block lg:w-56 lg:shrink-0"><ProductFilters s={s} /></aside>
+      <div className="lg:flex gap-8 items-start">
+        <aside className="hidden lg:block lg:w-56 lg:shrink-0 lg:sticky lg:top-24 z-20 self-start"><ProductFilters s={s} /></aside>
         <div className="flex-1 min-w-0">
           {filtered.length === 0 ? (
             <div className="dk-surface rounded-2xl p-10 text-center">

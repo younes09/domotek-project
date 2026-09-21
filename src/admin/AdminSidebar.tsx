@@ -33,7 +33,7 @@ export const AdminSidebar: React.FC<{
 
   return (
     <div
-      className={`dk-surface rounded-2xl p-2.5 lg:sticky lg:top-20 flex lg:flex-col gap-1.5 overflow-x-auto lg:overflow-visible shadow-md transition-all duration-300 ${
+      className={`dk-surface rounded-2xl p-2.5 flex lg:flex-col gap-1.5 overflow-x-auto lg:overflow-visible shadow-md transition-all duration-300 ${
         isCollapsed ? "lg:items-center" : ""
       }`}
     >

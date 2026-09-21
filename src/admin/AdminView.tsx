@@ -127,9 +127,9 @@ export const AdminView: React.FC<{ s: Store }> = ({ s }) => {
       </div>
 
       <div className="lg:flex gap-6 items-start">
-        {/* Sidebar */}
-        <div
-          className={`lg:shrink-0 mb-6 lg:mb-0 transition-all duration-300 ${
+        {/* Sidebar that follows the scroll */}
+        <aside
+          className={`lg:shrink-0 mb-6 lg:mb-0 transition-all duration-300 lg:sticky lg:top-24 z-20 self-start ${
             isSidebarCollapsed ? "lg:w-16" : "lg:w-56"
           }`}
         >
@@ -140,7 +140,7 @@ export const AdminView: React.FC<{ s: Store }> = ({ s }) => {
             onLogout={handleLogout}
             isCollapsed={isSidebarCollapsed}
           />
-        </div>
+        </aside>
 
         {/* Content Area */}
         <div className="flex-1 min-w-0">
