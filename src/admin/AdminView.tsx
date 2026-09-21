@@ -127,9 +127,9 @@ export const AdminView: React.FC<{ s: Store }> = ({ s }) => {
       </div>
 
       <div className="lg:flex gap-6 items-start">
-        {/* Sidebar that follows the scroll */}
+        {/* Sidebar that follows the scroll with clean spacing below the header */}
         <aside
-          className={`lg:shrink-0 mb-6 lg:mb-0 transition-all duration-300 lg:sticky lg:top-24 z-20 self-start ${
+          className={`lg:shrink-0 mb-6 lg:mb-0 transition-all duration-300 lg:sticky lg:top-32 z-20 self-start ${
             isSidebarCollapsed ? "lg:w-16" : "lg:w-56"
           }`}
         >
