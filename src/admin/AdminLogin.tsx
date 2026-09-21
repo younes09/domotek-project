@@ -43,21 +43,21 @@ export const AdminLogin: React.FC<{ s: Store; onLogin: () => void }> = ({ s, onL
           <div className="flex justify-center">
             <Logo onClick={() => s.goHome()} className="h-12 sm:h-14" theme={s.theme} />
           </div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold dk-chip-teal">
             <ShieldCheck className="h-3.5 w-3.5" /> Espace Administrateur Sécurisé
           </div>
-          <h2 className="dk-heading text-2xl font-extrabold text-white">
+          <h2 className="dk-heading text-2xl font-extrabold" style={{ color: "var(--text)" }}>
             Connexion au Panel de Gestion
           </h2>
-          <p className="text-xs sm:text-sm text-slate-400">
+          <p className="text-xs sm:text-sm" style={{ color: "var(--text-dim)" }}>
             Gérez vos stocks, commandes et relation client en toute sécurité.
           </p>
         </div>
 
         {/* Form Card */}
-        <div className="dk-surface rounded-3xl p-6 sm:p-8 border border-slate-700/80 shadow-2xl space-y-5 bg-[#1a2235]">
+        <div className="dk-surface rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5">
           {error && (
-            <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs flex items-center gap-2.5">
+            <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-500 dark:text-red-400 text-xs flex items-center gap-2.5">
               <AlertCircle className="h-4 w-4 shrink-0" />
               <span>{error}</span>
             </div>
@@ -65,9 +65,9 @@ export const AdminLogin: React.FC<{ s: Store; onLogin: () => void }> = ({ s, onL
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold text-slate-300 mb-1.5">Identifiant</label>
+              <label className="block text-xs font-bold mb-1.5" style={{ color: "var(--text)" }}>Identifiant</label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none" style={{ color: "var(--text-faint)" }}>
                   <User className="h-4 w-4" />
                 </div>
                 <input
@@ -76,15 +76,15 @@ export const AdminLogin: React.FC<{ s: Store; onLogin: () => void }> = ({ s, onL
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   placeholder="admin"
-                  className="dk-input w-full pl-10 pr-4 py-2.5 rounded-xl text-sm bg-slate-900/90 text-white placeholder-slate-500"
+                  className="dk-input w-full pl-10 pr-4 py-2.5 rounded-xl text-sm"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-300 mb-1.5">Mot de passe</label>
+              <label className="block text-xs font-bold mb-1.5" style={{ color: "var(--text)" }}>Mot de passe</label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none" style={{ color: "var(--text-faint)" }}>
                   <KeyRound className="h-4 w-4" />
                 </div>
                 <input
@@ -93,7 +93,7 @@ export const AdminLogin: React.FC<{ s: Store; onLogin: () => void }> = ({ s, onL
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="dk-input w-full pl-10 pr-4 py-2.5 rounded-xl text-sm bg-slate-900/90 text-white placeholder-slate-500"
+                  className="dk-input w-full pl-10 pr-4 py-2.5 rounded-xl text-sm"
                 />
               </div>
             </div>
@@ -101,7 +101,7 @@ export const AdminLogin: React.FC<{ s: Store; onLogin: () => void }> = ({ s, onL
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 px-4 rounded-xl text-sm font-bold bg-cyan-500 hover:bg-cyan-400 text-slate-950 flex items-center justify-center gap-2 transition-all shadow-lg shadow-cyan-500/20 disabled:opacity-50"
+              className="w-full py-3 px-4 rounded-xl text-sm font-bold dk-btn-primary flex items-center justify-center gap-2 transition-all disabled:opacity-50"
             >
               <Lock className="h-4 w-4" />
               <span>{loading ? "Vérification..." : "Se connecter"}</span>
@@ -109,12 +109,12 @@ export const AdminLogin: React.FC<{ s: Store; onLogin: () => void }> = ({ s, onL
           </form>
 
           {/* Demo hint pill */}
-          <div className="pt-3 border-t border-slate-800 text-center space-y-2">
-            <p className="text-[11px] text-slate-400">Identifiants de démonstration :</p>
+          <div className="pt-3 border-t text-center space-y-2" style={{ borderColor: "var(--border)" }}>
+            <p className="text-[11px]" style={{ color: "var(--text-faint)" }}>Identifiants de démonstration :</p>
             <button
               type="button"
               onClick={handleFillDemo}
-              className="text-xs font-mono px-3 py-1.5 rounded-lg bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 hover:bg-cyan-900/50 transition-all inline-flex items-center gap-1.5"
+              className="text-xs font-mono px-3 py-1.5 rounded-lg dk-chip-teal hover:opacity-80 transition-all inline-flex items-center gap-1.5"
             >
               <span>Utilisateur : <strong>admin</strong></span>
               <span>•</span>
@@ -127,7 +127,8 @@ export const AdminLogin: React.FC<{ s: Store; onLogin: () => void }> = ({ s, onL
         <div className="text-center">
           <button
             onClick={() => s.goHome()}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-cyan-400 transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold hover:underline transition-colors"
+            style={{ color: "var(--text-dim)" }}
           >
             <ArrowLeft className="h-3.5 w-3.5" /> Retour au magasin DomoTek
           </button>

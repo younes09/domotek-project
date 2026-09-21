@@ -332,12 +332,13 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
                 className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all whitespace-nowrap ${
                   isActive
                     ? "bg-cyan-500 text-slate-950 shadow-[0_0_20px_rgba(0,180,255,0.35)] scale-105"
-                    : "bg-slate-900/90 hover:bg-slate-800 text-slate-300 border border-slate-800 hover:border-slate-700"
+                    : "dk-surface-2 hover:border-cyan-500/50"
                 }`}
+                style={!isActive ? { color: "var(--text-dim)" } : {}}
               >
-                <Icon className={`h-4 w-4 ${isActive ? "text-slate-950" : "text-cyan-400"}`} />
+                <Icon className={`h-4 w-4 ${isActive ? "text-slate-950" : "text-cyan-500"}`} />
                 <span>{tab.label}</span>
-                <span className={`text-[10px] px-2 py-0.5 rounded-full font-mono ${isActive ? "bg-slate-950/25 text-slate-950" : "bg-slate-800 text-slate-400"}`}>
+                <span className={`text-[10px] px-2 py-0.5 rounded-full font-mono ${isActive ? "bg-slate-950/25 text-slate-950" : "dk-surface"}`} style={!isActive ? { color: "var(--text-faint)" } : {}}>
                   {tab.count}
                 </span>
               </button>
@@ -349,13 +350,13 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
       {/* 3. MAIN PRODUCTS SECTION */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-10 space-y-2">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold text-cyan-400 bg-cyan-950/40 border border-cyan-500/20">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold dk-chip-teal">
             <Sparkles className="h-3 w-3" /> Catalogue Disponible Immédiatement
           </div>
-          <h2 className="dk-heading text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
+          <h2 className="dk-heading text-2xl sm:text-4xl font-extrabold tracking-tight" style={{ color: "var(--text)" }}>
             Nos solutions pour votre maison
           </h2>
-          <p className="text-xs sm:text-base text-slate-400 max-w-xl mx-auto leading-relaxed">
+          <p className="text-xs sm:text-base max-w-xl mx-auto leading-relaxed" style={{ color: "var(--text-dim)" }}>
             Des équipements domotiques fiables et rapides à installer pour rendre chaque pièce plus intelligente.
           </p>
         </div>
@@ -370,7 +371,7 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
           <div className="mt-10 text-center">
             <button
               onClick={() => s.goShop({})}
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl border border-cyan-500/40 text-cyan-300 hover:bg-cyan-500/10 font-bold text-sm transition-all shadow-lg hover:border-cyan-400"
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl border border-cyan-500/40 text-cyan-600 dark:text-cyan-300 hover:bg-cyan-500/10 font-bold text-sm transition-all shadow-lg hover:border-cyan-400"
             >
               Voir tout le catalogue ({filteredProducts.length} produits) <ChevronRight className="h-4 w-4" />
             </button>
@@ -380,16 +381,16 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
 
       {/* 4. INTERACTIVE SMART HOME EXPERIENCE - SCENARIOS */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="rounded-3xl border border-slate-800 bg-[#080d1a] p-6 sm:p-10 md:p-12 relative overflow-hidden shadow-2xl">
+        <div className="rounded-3xl dk-surface p-6 sm:p-10 md:p-12 relative overflow-hidden shadow-xl">
           <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10 space-y-8">
             <div className="text-center space-y-2 max-w-2xl mx-auto">
-              <span className="text-xs font-bold text-cyan-400 tracking-wider uppercase">Expérience Interactive</span>
-              <h3 className="dk-heading text-2xl sm:text-3xl font-extrabold text-white">
+              <span className="text-xs font-bold text-cyan-500 dark:text-cyan-400 tracking-wider uppercase">Expérience Interactive</span>
+              <h3 className="dk-heading text-2xl sm:text-3xl font-extrabold" style={{ color: "var(--text)" }}>
                 Vivez la maison connectée en action
               </h3>
-              <p className="text-xs sm:text-sm text-slate-300">
+              <p className="text-xs sm:text-sm" style={{ color: "var(--text-dim)" }}>
                 Cliquez sur un scénario pour voir comment DomoTek orchestre automatiquement vos appareils au quotidien.
               </p>
             </div>
@@ -406,11 +407,12 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
                     onClick={() => setActiveScenario(key)}
                     className={`p-4 rounded-2xl border text-left transition-all flex flex-col gap-2 ${
                       isCurrent
-                        ? "bg-cyan-950/60 border-cyan-500 text-white shadow-[0_0_20px_rgba(0,180,255,0.25)]"
-                        : "bg-slate-900/60 border-slate-800 hover:border-slate-700 text-slate-400"
+                        ? "bg-cyan-500/15 border-cyan-500 text-cyan-700 dark:text-white shadow-[0_0_20px_rgba(0,180,255,0.25)]"
+                        : "dk-surface-2 hover:border-cyan-500/40"
                     }`}
+                    style={!isCurrent ? { color: "var(--text-dim)" } : {}}
                   >
-                    <ScIcon className={`h-6 w-6 ${isCurrent ? "text-cyan-400" : "text-slate-500"}`} />
+                    <ScIcon className={`h-6 w-6 ${isCurrent ? "text-cyan-500 dark:text-cyan-400" : "text-slate-400"}`} />
                     <span className="text-xs sm:text-sm font-bold">{sc.title}</span>
                   </button>
                 );
@@ -418,14 +420,14 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
             </div>
 
             {/* Scenario Live Dashboard Preview */}
-            <div className="p-6 rounded-2xl border border-cyan-500/20 bg-slate-900/80 backdrop-blur-md">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-800">
+            <div className="p-6 rounded-2xl border dk-surface-2">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b" style={{ borderColor: "var(--border)" }}>
                 <div>
-                  <h4 className="text-lg font-bold text-white flex items-center gap-2">
+                  <h4 className="text-lg font-bold flex items-center gap-2" style={{ color: "var(--text)" }}>
                     <span>{scenarios[activeScenario].title}</span>
                     <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
                   </h4>
-                  <p className="text-xs sm:text-sm text-slate-300 mt-0.5">
+                  <p className="text-xs sm:text-sm mt-0.5" style={{ color: "var(--text-dim)" }}>
                     {scenarios[activeScenario].subtitle}
                   </p>
                 </div>
@@ -443,12 +445,12 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
               {/* Devices simulated grid */}
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
                 {scenarios[activeScenario].devices.map((d, idx) => (
-                  <div key={idx} className="p-3.5 rounded-xl border border-slate-800 bg-slate-950/60 flex items-center justify-between gap-2">
+                  <div key={idx} className="p-3.5 rounded-xl dk-surface flex items-center justify-between gap-2">
                     <div>
-                      <p className="text-xs font-bold text-white">{d.name}</p>
-                      <p className="text-[11px] text-slate-400 mt-0.5">{d.state}</p>
+                      <p className="text-xs font-bold" style={{ color: "var(--text)" }}>{d.name}</p>
+                      <p className="text-[11px] mt-0.5" style={{ color: "var(--text-dim)" }}>{d.state}</p>
                     </div>
-                    <div className={`h-6 w-6 rounded-full flex items-center justify-center shrink-0 ${d.active ? "bg-cyan-500/20 text-cyan-400" : "bg-slate-800 text-slate-600"}`}>
+                    <div className={`h-6 w-6 rounded-full flex items-center justify-center shrink-0 ${d.active ? "bg-cyan-500/20 text-cyan-500 dark:text-cyan-400" : "dk-surface-2 text-slate-400"}`}>
                       <Check className="h-3.5 w-3.5 stroke-[3]" />
                     </div>
                   </div>
@@ -462,20 +464,20 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
       {/* 5. VERIFIED REVIEWS SECTION (Algeria) */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-10 space-y-2">
-          <div className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
+          <div className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-500 dark:text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
             <Star className="h-3.5 w-3.5 fill-amber-400" /> Retours d'expérience clients
           </div>
-          <h2 className="dk-heading text-2xl sm:text-3xl font-extrabold text-white">
+          <h2 className="dk-heading text-2xl sm:text-3xl font-extrabold" style={{ color: "var(--text)" }}>
             Ils ont transformé leur maison avec DomoTek
           </h2>
-          <p className="text-xs sm:text-sm text-slate-400">
+          <p className="text-xs sm:text-sm" style={{ color: "var(--text-dim)" }}>
             Avis vérifiés de clients satisfaits à travers les 58 Wilayas d'Algérie.
           </p>
         </div>
 
         <div className="grid sm:grid-cols-3 gap-6">
           {reviews.map((rev, idx) => (
-            <div key={idx} className="glass-card-hover p-5 rounded-2xl border border-slate-800 bg-slate-900/60 flex flex-col justify-between space-y-4">
+            <div key={idx} className="glass-card-hover p-5 rounded-2xl dk-surface flex flex-col justify-between space-y-4">
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex text-amber-400">
@@ -483,19 +485,19 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
                       <Star key={i} className="h-3.5 w-3.5 fill-amber-400" />
                     ))}
                   </div>
-                  <span className="text-[11px] text-slate-500">{rev.date}</span>
+                  <span className="text-[11px]" style={{ color: "var(--text-faint)" }}>{rev.date}</span>
                 </div>
-                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed italic">
+                <p className="text-xs sm:text-sm leading-relaxed italic" style={{ color: "var(--text)" }}>
                   « {rev.comment} »
                 </p>
               </div>
 
-              <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between">
+              <div className="pt-3 border-t flex items-center justify-between" style={{ borderColor: "var(--border)" }}>
                 <div>
-                  <p className="text-xs font-bold text-white">{rev.name}</p>
-                  <p className="text-[11px] text-cyan-400">{rev.wilaya}</p>
+                  <p className="text-xs font-bold" style={{ color: "var(--text)" }}>{rev.name}</p>
+                  <p className="text-[11px] font-semibold text-cyan-600 dark:text-cyan-400">{rev.wilaya}</p>
                 </div>
-                <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-semibold border border-emerald-500/20">
+                <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold border border-emerald-500/20">
                   Achat vérifié
                 </span>
               </div>
@@ -506,22 +508,22 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
 
       {/* 6. WHATSAPP VIP CONSULTATION BANNER */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="relative overflow-hidden rounded-3xl border border-cyan-500/30 bg-gradient-to-r from-[#162138] via-[#1a2d4a] to-[#111827] p-6 sm:p-10 md:p-12 shadow-2xl">
-          <div className="absolute right-0 top-0 w-96 h-96 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="relative overflow-hidden rounded-3xl border border-cyan-500/30 dk-surface p-6 sm:p-10 md:p-12 shadow-xl">
+          <div className="absolute right-0 top-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10 grid md:grid-cols-12 gap-8 items-center">
             {/* Left Content */}
             <div className="md:col-span-7 space-y-4">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400">
                 <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
                 <span>Conseiller DomoTek disponible en ligne</span>
               </div>
 
-              <h3 className="dk-heading text-2xl sm:text-3xl font-extrabold text-white">
+              <h3 className="dk-heading text-2xl sm:text-3xl font-extrabold" style={{ color: "var(--text)" }}>
                 Quel produit choisir pour votre maison ?
               </h3>
 
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-lg">
+              <p className="text-xs sm:text-sm leading-relaxed max-w-lg" style={{ color: "var(--text-dim)" }}>
                 Vous hésitez sur la compatibilité (avec ou sans neutre, volets, prises) ? Envoyez-nous simplement une photo de votre interrupteur ou tableau sur WhatsApp.
               </p>
 
@@ -531,7 +533,8 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
                   href="https://wa.me/213775302636?text=Bonjour,%20je%20voudrais%20savoir%20si%20mon%20installation%20est%20compatible%20sans%20fil%20neutre."
                   target="_blank"
                   rel="noreferrer"
-                  className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 hover:border-cyan-500/50 transition-all"
+                  className="text-xs font-semibold px-3 py-1.5 rounded-lg dk-surface-2 hover:border-cyan-500/50 transition-all"
+                  style={{ color: "var(--text)" }}
                 >
                   ⚡ Compatibilité sans neutre ?
                 </a>
@@ -539,7 +542,8 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
                   href="https://wa.me/213775302636?text=Bonjour,%20j'aimerais%20automatiser%20mes%20volets%20roulants,%20que%20me%20conseillez-vous%20?"
                   target="_blank"
                   rel="noreferrer"
-                  className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 hover:border-cyan-500/50 transition-all"
+                  className="text-xs font-semibold px-3 py-1.5 rounded-lg dk-surface-2 hover:border-cyan-500/50 transition-all"
+                  style={{ color: "var(--text)" }}
                 >
                   🪟 Module pour volets roulants
                 </a>
@@ -560,12 +564,12 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
             </div>
 
             {/* Right Side Slogan Artwork */}
-            <div className="md:col-span-5 flex flex-col items-center justify-center text-center p-6 border-t md:border-t-0 md:border-l border-slate-800/80">
-              <Sparkles className="h-8 w-8 text-amber-400 mb-3 animate-pulse" />
-              <p className="font-script text-3xl sm:text-4xl text-cyan-300 font-bold leading-tight">
+            <div className="md:col-span-5 flex flex-col items-center justify-center text-center p-6 border-t md:border-t-0 md:border-l" style={{ borderColor: "var(--border)" }}>
+              <Sparkles className="h-8 w-8 text-amber-500 dark:text-amber-400 mb-3 animate-pulse" />
+              <p className="font-script text-3xl sm:text-4xl text-cyan-600 dark:text-cyan-300 font-bold leading-tight">
                 Une maison plus intelligente commence ici !
               </p>
-              <p className="text-xs text-slate-400 mt-2">
+              <p className="text-xs mt-2" style={{ color: "var(--text-dim)" }}>
                 DomoTek • Votre partenaire domotique en Algérie
               </p>
             </div>
@@ -575,7 +579,7 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
 
       {/* 7. WHY DOMOTEK / TRUST BADGES */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 pt-4">
-        <h2 className="dk-heading text-lg font-bold mb-4 text-white">Pourquoi choisir DomoTek ?</h2>
+        <h2 className="dk-heading text-lg font-bold mb-4" style={{ color: "var(--text)" }}>Pourquoi choisir DomoTek ?</h2>
         <TrustBadges />
       </section>
     </div>

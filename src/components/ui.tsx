@@ -30,7 +30,7 @@ export const IconTile: React.FC<{ Icon: IconType; variant?: 1 | 2 | 3 }> = ({ Ic
 export const ProductTile: React.FC<{ Icon: IconType; imageUrl?: string; name?: string; variant?: 1 | 2 | 3 }> = ({ Icon, imageUrl, name, variant = 1 }) => {
   if (imageUrl) {
     return (
-      <div className="relative h-full w-full overflow-hidden rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-center p-1 group">
+      <div className="relative h-full w-full overflow-hidden rounded-xl dk-surface-2 flex items-center justify-center p-1 group">
         <img src={imageUrl} alt={name || "Produit DomoTek"} className="max-h-full max-w-full object-contain rounded transform group-hover:scale-105 transition-transform duration-300" />
       </div>
     );

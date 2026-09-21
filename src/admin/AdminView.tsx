@@ -31,12 +31,12 @@ export const AdminView: React.FC<{ s: Store }> = ({ s }) => {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
-      <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-800">
+      <div className="flex items-center justify-between mb-6 pb-4 border-b" style={{ borderColor: "var(--border)" }}>
         <div>
-          <h1 className="dk-heading text-2xl sm:text-3xl font-extrabold text-white">
+          <h1 className="dk-heading text-2xl sm:text-3xl font-extrabold" style={{ color: "var(--text)" }}>
             Tableau de Bord Administrateur
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
+          <p className="text-xs sm:text-sm mt-1" style={{ color: "var(--text-dim)" }}>
             Gestion du catalogue, inventaire des stocks, commandes et CRM clients DomoTek.
           </p>
         </div>

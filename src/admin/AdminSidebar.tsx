@@ -22,7 +22,7 @@ export const AdminSidebar: React.FC<{
   const newOrdersCount = s.orders.filter((o) => o.status === "Nouvelle").length;
 
   return (
-    <div className="dk-surface rounded-2xl p-3 lg:sticky lg:top-20 flex lg:flex-col gap-1.5 overflow-x-auto lg:overflow-visible border border-slate-800 bg-[#1a2235]">
+    <div className="dk-surface rounded-2xl p-3 lg:sticky lg:top-20 flex lg:flex-col gap-1.5 overflow-x-auto lg:overflow-visible shadow-md">
       {ITEMS.map((it) => {
         const isActive = tab === it.key;
         return (
@@ -31,18 +31,19 @@ export const AdminSidebar: React.FC<{
             onClick={() => setTab(it.key)}
             className={`flex items-center justify-between gap-2.5 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-semibold whitespace-nowrap transition-all dk-focus ${
               isActive
-                ? "bg-cyan-500/15 text-cyan-300 border border-cyan-500/30"
-                : "text-slate-400 hover:text-white hover:bg-slate-800/60"
+                ? "bg-cyan-500/15 text-cyan-600 dark:text-cyan-300 border border-cyan-500/30"
+                : "hover:bg-[var(--surface-2)]"
             }`}
+            style={!isActive ? { color: "var(--text-dim)" } : {}}
           >
             <div className="flex items-center gap-2.5">
-              <it.Icon className={`h-4 w-4 ${isActive ? "text-cyan-400" : "text-slate-500"}`} />
+              <it.Icon className={`h-4 w-4 ${isActive ? "text-cyan-500 dark:text-cyan-400" : "opacity-70"}`} />
               <span>{it.label}</span>
             </div>
 
             {/* Badges for alerts */}
             {it.key === "produits" && lowStockCount > 0 && (
-              <span className="text-[10px] px-1.5 py-0.2 rounded-full font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center gap-1">
+              <span className="text-[10px] px-1.5 py-0.2 rounded-full font-bold bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30 flex items-center gap-1">
                 <AlertTriangle className="h-3 w-3" />
                 {lowStockCount}
               </span>
@@ -56,11 +57,11 @@ export const AdminSidebar: React.FC<{
         );
       })}
 
-      <div className="hidden lg:block flex-1 my-2 border-t border-slate-800/80" />
+      <div className="hidden lg:block flex-1 my-2 border-t" style={{ borderColor: "var(--border)" }} />
 
       <button
         onClick={onLogout}
-        className="flex items-center gap-2 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-bold text-red-400 hover:bg-red-500/10 border border-transparent hover:border-red-500/20 transition-all dk-focus whitespace-nowrap"
+        className="flex items-center gap-2 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-bold text-red-500 dark:text-red-400 hover:bg-red-500/10 border border-transparent hover:border-red-500/20 transition-all dk-focus whitespace-nowrap"
       >
         <LogOut className="h-4 w-4" />
         <span>Déconnexion</span>
@@ -68,7 +69,8 @@ export const AdminSidebar: React.FC<{
 
       <button
         onClick={() => s.goHome()}
-        className="flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs text-slate-500 hover:text-slate-300 transition-colors dk-focus whitespace-nowrap"
+        className="flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs transition-colors dk-focus whitespace-nowrap hover:underline"
+        style={{ color: "var(--text-faint)" }}
       >
         <ArrowLeft className="h-3.5 w-3.5" />
         <span>Retour au site</span>
