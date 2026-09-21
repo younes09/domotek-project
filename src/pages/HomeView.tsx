@@ -188,48 +188,92 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
     },
   ];
 
+  const isDark = s.theme === "dark";
+
   return (
     <div className="space-y-16 pb-20 overflow-hidden">
       {/* 1. HERO SECTION - FULL COVER BACKGROUND IMAGE */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 pt-4 sm:pt-6">
-        <div className="relative overflow-hidden rounded-3xl border border-cyan-500/30 bg-[#111827] shadow-[0_0_60px_rgba(0,180,255,0.12)] min-h-[520px] sm:min-h-[560px] flex flex-col justify-between">
+        <div className={`relative overflow-hidden rounded-3xl border transition-all duration-500 min-h-[520px] sm:min-h-[560px] flex flex-col justify-between ${
+          isDark 
+            ? "border-cyan-500/30 bg-[#111827] shadow-[0_0_60px_rgba(0,180,255,0.12)]" 
+            : "border-slate-200 bg-white shadow-[0_20px_50px_rgba(0,180,255,0.10)]"
+        }`}>
           {/* Background Image Full Cover */}
           <img
-            src="/images/hero-bg.png"
+            src={isDark ? "/images/hero-bg.png" : "/images/hero-bg-white.png"}
             alt="DomoTek — La maison connectée, simplement"
             className="absolute inset-0 w-full h-full object-cover object-right sm:object-center pointer-events-none transition-transform duration-700 hover:scale-105"
           />
 
-          {/* Dark gradient mask tuned for text contrast on left and device clarity on right */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#111827] via-[#111827]/90 sm:via-[#111827]/70 to-[#111827]/20 pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#111827] via-transparent to-[#111827]/60 pointer-events-none" />
+          {/* Gradient mask tuned for text contrast on left and device clarity on right */}
+          <div
+            className={`absolute inset-0 pointer-events-none transition-colors duration-500 ${
+              isDark
+                ? "bg-gradient-to-r from-[#111827] via-[#111827]/90 sm:via-[#111827]/70 to-[#111827]/20"
+                : "bg-gradient-to-r from-white/95 via-white/85 sm:via-white/60 to-transparent"
+            }`}
+          />
+          <div
+            className={`absolute inset-0 pointer-events-none transition-colors duration-500 ${
+              isDark
+                ? "bg-gradient-to-t from-[#111827] via-transparent to-[#111827]/60"
+                : "bg-gradient-to-t from-white/90 via-transparent to-white/40"
+            }`}
+          />
 
           <div className="relative z-10 p-6 sm:p-10 md:p-12 space-y-8">
             {/* Top status bar */}
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold border border-cyan-500/40 bg-cyan-950/70 text-cyan-300 backdrop-blur-md shadow-lg">
+              <div
+                className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold backdrop-blur-md shadow-lg transition-colors ${
+                  isDark
+                    ? "border border-cyan-500/40 bg-cyan-950/70 text-cyan-300"
+                    : "border border-cyan-500/30 bg-cyan-50/90 text-cyan-800"
+                }`}
+              >
                 <span className="h-2 w-2 rounded-full bg-cyan-400 animate-ping" />
-                <Sparkles className="h-3.5 w-3.5 text-cyan-400" />
+                <Sparkles className="h-3.5 w-3.5 text-cyan-500" />
                 <span>Smart Home & Électronique Connectée en Algérie 🇩🇿</span>
               </div>
 
               {/* Price Pill Badge */}
-              <div className="bg-slate-950/80 backdrop-blur-md border border-cyan-500/40 text-white rounded-2xl px-4 py-1.5 shadow-xl flex items-center gap-2">
-                <span className="text-xs text-slate-300">À partir de</span>
-                <span className="text-base font-extrabold text-cyan-400 font-mono">1 800 DA</span>
+              <div
+                className={`backdrop-blur-md rounded-2xl px-4 py-1.5 shadow-xl flex items-center gap-2 transition-colors ${
+                  isDark
+                    ? "bg-slate-950/80 border border-cyan-500/40 text-white"
+                    : "bg-white/90 border border-cyan-500/30 text-slate-800"
+                }`}
+              >
+                <span className={`text-xs ${isDark ? "text-slate-300" : "text-slate-500"}`}>À partir de</span>
+                <span className="text-base font-extrabold text-cyan-500 font-mono">1 800 DA</span>
               </div>
             </div>
 
             {/* Headline & Subtitle */}
             <div className="max-w-2xl space-y-5">
-              <h1 className="dk-heading text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-[1.1] text-white drop-shadow-md">
+              <h1
+                className={`dk-heading text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-[1.1] drop-shadow-sm ${
+                  isDark ? "text-white" : "text-slate-900"
+                }`}
+              >
                 Votre maison <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-cyan-300 to-blue-400 drop-shadow-[0_0_35px_rgba(0,180,255,0.4)]">
+                <span
+                  className={`text-transparent bg-clip-text ${
+                    isDark
+                      ? "bg-gradient-to-r from-cyan-400 via-cyan-300 to-blue-400 drop-shadow-[0_0_35px_rgba(0,180,255,0.4)]"
+                      : "bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600"
+                  }`}
+                >
                   devient connectée.
                 </span>
               </h1>
 
-              <p className="text-base sm:text-lg text-slate-200 font-medium leading-relaxed max-w-xl drop-shadow">
+              <p
+                className={`text-base sm:text-lg font-medium leading-relaxed max-w-xl ${
+                  isDark ? "text-slate-200" : "text-slate-700"
+                }`}
+              >
                 Des solutions intelligentes, simples et fiables pour moderniser votre quotidien. Contrôlez l'éclairage, vos volets et prises depuis votre smartphone ou par la voix.
               </p>
 
@@ -237,7 +281,7 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
               <div className="pt-2 flex flex-wrap items-center gap-4">
                 <button
                   onClick={() => s.goShop({})}
-                  className="group relative overflow-hidden bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-extrabold text-sm sm:text-base px-8 py-4 rounded-xl shadow-[0_0_30px_rgba(0,180,255,0.4)] transition-all transform hover:-translate-y-0.5 flex items-center gap-2.5"
+                  className="group relative overflow-hidden bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-extrabold text-sm sm:text-base px-8 py-4 rounded-xl shadow-[0_0_30px_rgba(0,180,255,0.3)] transition-all transform hover:-translate-y-0.5 flex items-center gap-2.5"
                 >
                   <span className="absolute inset-0 w-1/2 h-full bg-white/30 transform -skew-x-12 -translate-x-full group-hover:translate-x-[300%] transition-transform duration-1000 ease-out" />
                   <span>Découvrir les produits</span>
@@ -248,70 +292,122 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
                   href="https://wa.me/213775302636?text=Bonjour%20DomoTek,%20j'aimerais%20avoir%20des%20informations%20sur%20vos%20solutions%20maison%20connectée."
                   target="_blank"
                   rel="noreferrer"
-                  className="px-6 py-4 rounded-xl text-sm font-bold border border-emerald-500/40 bg-emerald-950/60 backdrop-blur-md text-emerald-300 hover:bg-emerald-900/70 hover:border-emerald-500/60 transition-all flex items-center gap-2.5 shadow-lg"
+                  className={`px-6 py-4 rounded-xl text-sm font-bold backdrop-blur-md transition-all flex items-center gap-2.5 shadow-lg ${
+                    isDark
+                      ? "border border-emerald-500/40 bg-emerald-950/60 text-emerald-300 hover:bg-emerald-900/70 hover:border-emerald-500/60"
+                      : "border border-emerald-400 bg-emerald-50/90 text-emerald-800 hover:bg-emerald-100"
+                  }`}
                 >
-                  <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse" />
                   <span>Conseil WhatsApp : <strong>0775 30 26 36</strong></span>
                 </a>
               </div>
 
               {/* Social Proof Stats Under Hero CTA */}
-              <div className="pt-3 flex flex-wrap items-center gap-6 text-xs text-slate-300">
+              <div
+                className={`pt-3 flex flex-wrap items-center gap-6 text-xs ${
+                  isDark ? "text-slate-300" : "text-slate-600"
+                }`}
+              >
                 <div className="flex items-center gap-1.5">
                   <div className="flex text-amber-400">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="h-3.5 w-3.5 fill-amber-400" />
                     ))}
                   </div>
-                  <span className="text-white font-bold text-sm">4.9/5</span>
-                  <span className="text-slate-300">(+1 200 foyers équipés)</span>
+                  <span className={`font-bold text-sm ${isDark ? "text-white" : "text-slate-900"}`}>4.9/5</span>
+                  <span className={isDark ? "text-slate-300" : "text-slate-500"}>(+1 200 foyers équipés)</span>
                 </div>
-                <div className="flex items-center gap-1.5 text-slate-200">
-                  <CheckCircle2 className="h-4 w-4 text-cyan-400" />
+                <div className={`flex items-center gap-1.5 ${isDark ? "text-slate-200" : "text-slate-700"}`}>
+                  <CheckCircle2 className="h-4 w-4 text-cyan-500" />
                   <span>Livraison 58 Wilayas & Paiement main à main</span>
                 </div>
               </div>
             </div>
 
             {/* Feature Bar (4 item pills under Hero content) */}
-            <div className="pt-8 border-t border-slate-700/60 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-              <div className="glass-card-hover rounded-2xl p-3.5 flex items-center gap-3.5 border border-slate-700/60 bg-slate-950/50 backdrop-blur-md">
+            <div
+              className={`pt-8 border-t grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 ${
+                isDark ? "border-slate-700/60" : "border-slate-200"
+              }`}
+            >
+              <div
+                className={`glass-card-hover rounded-2xl p-3.5 flex items-center gap-3.5 border backdrop-blur-md ${
+                  isDark
+                    ? "border-slate-700/60 bg-slate-950/50"
+                    : "border-slate-200/80 bg-white/80 shadow-sm"
+                }`}
+              >
                 <div className="h-11 w-11 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center shrink-0">
-                  <Heart className="h-5 w-5 text-cyan-400" />
+                  <Heart className="h-5 w-5 text-cyan-500" />
                 </div>
                 <div>
-                  <h4 className="text-xs sm:text-sm font-bold text-white">Plus de confort</h4>
-                  <p className="text-[11px] text-slate-300 leading-tight">Contrôlez sans vous lever</p>
+                  <h4 className={`text-xs sm:text-sm font-bold ${isDark ? "text-white" : "text-slate-900"}`}>
+                    Plus de confort
+                  </h4>
+                  <p className={`text-[11px] leading-tight ${isDark ? "text-slate-300" : "text-slate-500"}`}>
+                    Contrôlez sans vous lever
+                  </p>
                 </div>
               </div>
 
-              <div className="glass-card-hover rounded-2xl p-3.5 flex items-center gap-3.5 border border-slate-700/60 bg-slate-950/50 backdrop-blur-md">
+              <div
+                className={`glass-card-hover rounded-2xl p-3.5 flex items-center gap-3.5 border backdrop-blur-md ${
+                  isDark
+                    ? "border-slate-700/60 bg-slate-950/50"
+                    : "border-slate-200/80 bg-white/80 shadow-sm"
+                }`}
+              >
                 <div className="h-11 w-11 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center shrink-0">
-                  <Leaf className="h-5 w-5 text-cyan-400" />
+                  <Leaf className="h-5 w-5 text-cyan-500" />
                 </div>
                 <div>
-                  <h4 className="text-xs sm:text-sm font-bold text-white">Maison plus économe</h4>
-                  <p className="text-[11px] text-slate-300 leading-tight">Jusqu'à -30% sur l'énergie</p>
+                  <h4 className={`text-xs sm:text-sm font-bold ${isDark ? "text-white" : "text-slate-900"}`}>
+                    Maison plus économe
+                  </h4>
+                  <p className={`text-[11px] leading-tight ${isDark ? "text-slate-300" : "text-slate-500"}`}>
+                    Jusqu'à -30% sur l'énergie
+                  </p>
                 </div>
               </div>
 
-              <div className="glass-card-hover rounded-2xl p-3.5 flex items-center gap-3.5 border border-slate-700/60 bg-slate-950/50 backdrop-blur-md">
+              <div
+                className={`glass-card-hover rounded-2xl p-3.5 flex items-center gap-3.5 border backdrop-blur-md ${
+                  isDark
+                    ? "border-slate-700/60 bg-slate-950/50"
+                    : "border-slate-200/80 bg-white/80 shadow-sm"
+                }`}
+              >
                 <div className="h-11 w-11 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center shrink-0">
-                  <ShieldCheck className="h-5 w-5 text-cyan-400" />
+                  <ShieldCheck className="h-5 w-5 text-cyan-500" />
                 </div>
                 <div>
-                  <h4 className="text-xs sm:text-sm font-bold text-white">Contrôle & Sécurité</h4>
-                  <p className="text-[11px] text-slate-300 leading-tight">Alertes instantanées</p>
+                  <h4 className={`text-xs sm:text-sm font-bold ${isDark ? "text-white" : "text-slate-900"}`}>
+                    Sécurité renforcée
+                  </h4>
+                  <p className={`text-[11px] leading-tight ${isDark ? "text-slate-300" : "text-slate-500"}`}>
+                    Alertes directes sur mobile
+                  </p>
                 </div>
               </div>
 
-              <div className="glass-card-hover rounded-2xl p-3.5 flex items-center gap-3.5 border border-slate-700/60 bg-slate-950/50 backdrop-blur-md">
+              <div
+                className={`glass-card-hover rounded-2xl p-3.5 flex items-center gap-3.5 border backdrop-blur-md ${
+                  isDark
+                    ? "border-slate-700/60 bg-slate-950/50"
+                    : "border-slate-200/80 bg-white/80 shadow-sm"
+                }`}
+              >
                 <div className="h-11 w-11 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center shrink-0">
-                  <Settings className="h-5 w-5 text-cyan-400" />
+                  <Settings className="h-5 w-5 text-cyan-500" />
                 </div>
                 <div>
-                  <h4 className="text-xs sm:text-sm font-bold text-white">Installation facile</h4>
-                  <p className="text-[11px] text-slate-300 leading-tight">Sans casser les murs</p>
+                  <h4 className={`text-xs sm:text-sm font-bold ${isDark ? "text-white" : "text-slate-900"}`}>
+                    Installation facile
+                  </h4>
+                  <p className={`text-[11px] leading-tight ${isDark ? "text-slate-300" : "text-slate-500"}`}>
+                    Sans travaux & guidé pas-à-pas
+                  </p>
                 </div>
               </div>
             </div>
