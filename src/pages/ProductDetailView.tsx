@@ -35,7 +35,7 @@ export const ProductDetailView: React.FC<{ s: Store }> = ({ s }) => {
       </div>
 
       <div className="grid md:grid-cols-2 gap-8">
-        <ProductGallery key={p.id} icon={p.icon} />
+        <ProductGallery key={p.id} icon={p.icon} images={p.images} imageUrl={p.imageUrl} name={p.name} />
 
         <div>
           <p className="text-sm" style={{ color: "var(--text-dim)" }}>{s.categoryLabel[p.category] || p.category}</p>

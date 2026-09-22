@@ -27,11 +27,12 @@ export const IconTile: React.FC<{ Icon: IconType; variant?: 1 | 2 | 3 }> = ({ Ic
   </div>
 );
 
-export const ProductTile: React.FC<{ Icon: IconType; imageUrl?: string; name?: string; variant?: 1 | 2 | 3 }> = ({ Icon, imageUrl, name, variant = 1 }) => {
-  if (imageUrl) {
+export const ProductTile: React.FC<{ Icon: IconType; imageUrl?: string; images?: string[]; name?: string; variant?: 1 | 2 | 3 }> = ({ Icon, imageUrl, images, name, variant = 1 }) => {
+  const finalImage = (images && images.length > 0 && images[0]) ? images[0] : imageUrl;
+  if (finalImage) {
     return (
       <div className="relative h-full w-full overflow-hidden rounded-xl dk-surface-2 flex items-center justify-center p-1 group">
-        <img src={imageUrl} alt={name || "Produit DomoTek"} className="max-h-full max-w-full object-contain rounded transform group-hover:scale-105 transition-transform duration-300" />
+        <img src={finalImage} alt={name || "Produit DomoTek"} className="max-h-full max-w-full object-contain rounded transform group-hover:scale-105 transition-transform duration-300" />
       </div>
     );
   }

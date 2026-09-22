@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { X, Minus, Plus, ShoppingCart } from "lucide-react";
-import { IconTile, StockLabel } from "./ui";
+import { ProductTile, StockLabel } from "./ui";
 import { CATEGORY_LABEL } from "../data/categories";
 import { formatDZD } from "../lib/format";
 import type { Store } from "../types";
@@ -17,7 +17,9 @@ export const QuickViewModal: React.FC<{ s: Store }> = ({ s }) => {
         <button onClick={() => s.setQuickViewProduct(null)} className="absolute top-4 right-4 h-8 w-8 flex items-center justify-center rounded-full dk-surface-2 dk-focus" aria-label="Fermer">
           <X className="h-4 w-4" style={{ color: "var(--text)" }} />
         </button>
-        <div className="h-40 w-40 mx-auto mb-4"><IconTile Icon={p.icon} /></div>
+        <div className="h-44 w-44 mx-auto mb-4">
+          <ProductTile Icon={p.icon} imageUrl={p.imageUrl} images={p.images} name={p.name} />
+        </div>
         <p className="text-xs" style={{ color: "var(--text-dim)" }}>{s.categoryLabel[p.category] || p.category}</p>
         <h3 className="dk-heading text-lg font-semibold mt-1" style={{ color: "var(--text)" }}>{p.name}</h3>
         <p className="text-sm mt-1" style={{ color: "var(--text-dim)" }}>{p.shortDesc}</p>

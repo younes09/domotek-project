@@ -90,8 +90,8 @@ export async function fetchProductsFromDb(): Promise<Product[] | null> {
       isNew: Boolean(p.is_new),
       isBestSeller: Boolean(p.is_bestseller),
       isFeatured: Boolean(p.is_featured),
-      imageUrl: p.image_url,
-      images: Array.isArray(p.images) ? p.images : [],
+      imageUrl: p.image_url || (Array.isArray(p.images) && p.images[0]) || "",
+      images: Array.isArray(p.images) && p.images.length > 0 ? p.images : (p.image_url ? [p.image_url] : []),
       specs: Array.isArray(p.specs) ? p.specs : [],
       variants: p.variants || undefined,
       characteristics: p.characteristics || "",
@@ -109,6 +109,10 @@ export async function fetchProductsFromDb(): Promise<Product[] | null> {
 export async function saveProductToDb(product: Product): Promise<boolean> {
   if (!isSupabaseConfigured || !supabase) return false;
   try {
+    const imagesList = (product.images && product.images.length > 0)
+      ? product.images
+      : (product.imageUrl ? [product.imageUrl] : []);
+
     const payload = {
       id: product.id,
       slug: product.slug || `product-${product.id}`,
@@ -127,8 +131,8 @@ export async function saveProductToDb(product: Product): Promise<boolean> {
       is_new: Boolean(product.isNew),
       is_bestseller: Boolean(product.isBestSeller),
       is_featured: Boolean(product.isFeatured),
-      image_url: product.imageUrl || "",
-      images: product.images || [],
+      image_url: imagesList[0] || product.imageUrl || "",
+      images: imagesList,
       specs: product.specs || [],
       variants: product.variants || null,
       characteristics: product.characteristics || "",

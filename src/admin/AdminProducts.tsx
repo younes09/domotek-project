@@ -35,6 +35,8 @@ import {
   Wrench,
   Smartphone,
   BookOpen,
+  ArrowLeft,
+  ArrowRight,
 } from "lucide-react";
 import { IconTile } from "../components/ui";
 import { formatDZD } from "../lib/format";
@@ -111,6 +113,15 @@ const ProductFormModal: React.FC<{
 
   const [form, setForm] = useState<FormState>(() => {
     if (initial) {
+      const rawImages: string[] = [];
+      if (Array.isArray(initial.images)) {
+        rawImages.push(...initial.images.filter((img) => Boolean(img && img.trim())));
+      }
+      if (initial.imageUrl && initial.imageUrl.trim() && !rawImages.includes(initial.imageUrl.trim())) {
+        rawImages.unshift(initial.imageUrl.trim());
+      }
+      const initialImages = rawImages.slice(0, 3);
+
       return {
         name: initial.name,
         sku: initial.sku || `DK-${initial.id.toString().padStart(4, "0")}`,
@@ -131,8 +142,8 @@ const ProductFormModal: React.FC<{
         isNew: initial.isNew ?? false,
         isBestSeller: initial.isBestSeller ?? false,
         isFeatured: initial.isFeatured ?? false,
-        imageUrl: initial.imageUrl || "",
-        images: initial.images || [],
+        imageUrl: initialImages[0] || initial.imageUrl || "",
+        images: initialImages,
         specs: initial.specs || [
           { name: "Alimentation", value: "110-240V AC 50/60Hz" },
           { name: "Connectivité", value: "Wi-Fi 2.4GHz" },
@@ -152,16 +163,74 @@ const ProductFormModal: React.FC<{
   const marginDA = sellingPriceNum - costPriceNum;
   const marginPercent = sellingPriceNum > 0 ? Math.round((marginDA / sellingPriceNum) * 100) : 0;
 
-  // File upload handler
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Multi-photo handlers (1 to 3 photos)
+  const handlePhotoUpload = (slotIndex: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setForm((prev) => ({ ...prev, imageUrl: reader.result as string }));
+        const dataUrl = reader.result as string;
+        setForm((prev) => {
+          const nextImages = [...(prev.images || [])];
+          // Ensure slots up to slotIndex exist
+          while (nextImages.length <= slotIndex) {
+            nextImages.push("");
+          }
+          nextImages[slotIndex] = dataUrl;
+          const clean = nextImages.filter(Boolean).slice(0, 3);
+          return {
+            ...prev,
+            images: clean,
+            imageUrl: clean[0] || "",
+          };
+        });
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handlePhotoUrlChange = (slotIndex: number, val: string) => {
+    setForm((prev) => {
+      const nextImages = [...(prev.images || [])];
+      while (nextImages.length <= slotIndex) {
+        nextImages.push("");
+      }
+      nextImages[slotIndex] = val;
+      const clean = nextImages.filter((s) => s && s.trim() !== "").slice(0, 3);
+      return {
+        ...prev,
+        images: nextImages.slice(0, 3),
+        imageUrl: clean[0] || (slotIndex === 0 ? val : prev.imageUrl),
+      };
+    });
+  };
+
+  const handleRemovePhoto = (slotIndex: number) => {
+    setForm((prev) => {
+      const nextImages = (prev.images || []).filter((_, idx) => idx !== slotIndex);
+      return {
+        ...prev,
+        images: nextImages,
+        imageUrl: nextImages[0] || "",
+      };
+    });
+  };
+
+  const handleMovePhoto = (fromIndex: number, toIndex: number) => {
+    if (toIndex < 0 || toIndex > 2) return;
+    setForm((prev) => {
+      const list = [...(prev.images || [])];
+      while (list.length < 3) list.push("");
+      const item = list[fromIndex];
+      list[fromIndex] = list[toIndex];
+      list[toIndex] = item;
+      const clean = list.filter(Boolean);
+      return {
+        ...prev,
+        images: clean,
+        imageUrl: clean[0] || "",
+      };
+    });
   };
 
   // Spec handlers
@@ -941,54 +1010,174 @@ const ProductFormModal: React.FC<{
             </div>
           )}
 
-          {/* TAB 4: MEDIA & PHOTOS */}
+          {/* TAB 4: MEDIA & PHOTOS (1 à 3 PHOTOS) */}
           {activeTab === "media" && (
             <div className="space-y-4">
-              <div className="p-4 rounded-2xl dk-surface-2 space-y-3">
-                <div className="flex items-center justify-between">
-                  <label className="text-xs font-bold flex items-center gap-1.5" style={{ color: "var(--text)" }}>
-                    <ImageIcon className="h-4 w-4 text-cyan-500" />
-                    <span>Photo principale de l'équipement</span>
-                  </label>
-                  {form.imageUrl && (
-                    <button
-                      type="button"
-                      onClick={() => setForm({ ...form, imageUrl: "" })}
-                      className="text-xs text-red-500 hover:underline flex items-center gap-1 font-medium"
+              {/* Header Info Banner */}
+              <div className="p-3.5 rounded-2xl dk-surface-2 border flex items-start gap-3" style={{ borderColor: "var(--border)" }}>
+                <ImageIcon className="h-5 w-5 shrink-0 mt-0.5" style={{ color: "var(--teal)" }} />
+                <div className="text-xs space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold" style={{ color: "var(--text)" }}>
+                      Galerie Photos du Produit (1 à 3 photos)
+                    </span>
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold dk-chip-teal">
+                      {(form.images || []).filter((s) => Boolean(s && s.trim())).length} / 3 ajoutée(s)
+                    </span>
+                  </div>
+                  <p style={{ color: "var(--text-dim)" }}>
+                    Ajoutez entre <strong>1 et 3 photos haute définition</strong>. La <strong>Photo #1</strong> sert d'image principale sur les cartes de la boutique. Les photos 2 et 3 permettent aux clients d'explorer l'équipement sous différents angles sur la fiche produit.
+                  </p>
+                </div>
+              </div>
+
+              {/* 3 Photo Slots */}
+              <div className="space-y-3">
+                {[
+                  { index: 0, title: "Photo 1 — Image Principale (Couverture)", role: "Principale", required: true, subtitle: "Affichée sur les cartes produit, recherche et page d'accueil" },
+                  { index: 1, title: "Photo 2 — Vue Secondaire / Profil", role: "Secondaire", required: false, subtitle: "Vue de profil, connecteurs ou schéma d'installation" },
+                  { index: 2, title: "Photo 3 — Vue Détails / Boîtier / Application", role: "Détail", required: false, subtitle: "Gros plan sur les finitions, emballage ou capture d'application" },
+                ].map((slot) => {
+                  const currentImg = (form.images && form.images[slot.index]) || (slot.index === 0 ? form.imageUrl : "") || "";
+                  const hasImg = Boolean(currentImg && currentImg.trim());
+
+                  return (
+                    <div
+                      key={slot.index}
+                      className={`p-4 rounded-2xl dk-surface-2 border transition-all ${
+                        hasImg ? "border-cyan-500/40 shadow-sm" : ""
+                      }`}
+                      style={{ borderColor: hasImg ? undefined : "var(--border)" }}
                     >
-                      <X className="h-3 w-3" /> Supprimer la photo
-                    </button>
-                  )}
-                </div>
+                      <div className="flex items-center justify-between pb-2 mb-3 border-b" style={{ borderColor: "var(--border)" }}>
+                        <div className="flex items-center gap-2">
+                          <div className={`h-6 w-6 rounded-lg flex items-center justify-center text-xs font-mono font-bold ${
+                            hasImg ? "bg-cyan-500/20 text-cyan-600 dark:text-cyan-300" : "dk-surface text-[var(--text-dim)]"
+                          }`}>
+                            #{slot.index + 1}
+                          </div>
+                          <div>
+                            <span className="text-xs font-bold block" style={{ color: "var(--text)" }}>
+                              {slot.title}
+                            </span>
+                            <span className="text-[10px]" style={{ color: "var(--text-dim)" }}>
+                              {slot.subtitle}
+                            </span>
+                          </div>
+                        </div>
 
-                <div className="flex items-center gap-4">
-                  <div className="h-24 w-24 shrink-0 rounded-2xl dk-surface flex items-center justify-center overflow-hidden border shadow-inner" style={{ borderColor: "var(--border)" }}>
-                    {form.imageUrl ? (
-                      <img src={form.imageUrl} alt="Aperçu" className="h-full w-full object-contain p-1" />
-                    ) : (
-                      <div className="text-center p-2" style={{ color: "var(--text-faint)" }}>
-                        <ImageIcon className="h-8 w-8 mx-auto mb-1 stroke-[1.5]" />
-                        <span className="text-[10px] block leading-none">Aucune photo</span>
+                        <div className="flex items-center gap-1">
+                          {/* Move up / down controls */}
+                          {hasImg && (
+                            <div className="flex items-center gap-0.5 mr-2">
+                              {slot.index > 0 && (
+                                <button
+                                  type="button"
+                                  onClick={() => handleMovePhoto(slot.index, slot.index - 1)}
+                                  className="h-6 px-1.5 rounded text-[10px] dk-surface hover:border-cyan-500/50 flex items-center gap-0.5"
+                                  style={{ color: "var(--text-dim)" }}
+                                  title="Déplacer vers le haut"
+                                >
+                                  ▲
+                                </button>
+                              )}
+                              {slot.index < 2 && (
+                                <button
+                                  type="button"
+                                  onClick={() => handleMovePhoto(slot.index, slot.index + 1)}
+                                  className="h-6 px-1.5 rounded text-[10px] dk-surface hover:border-cyan-500/50 flex items-center gap-0.5"
+                                  style={{ color: "var(--text-dim)" }}
+                                  title="Déplacer vers le bas"
+                                >
+                                  ▼
+                                </button>
+                              )}
+                            </div>
+                          )}
+
+                          {hasImg ? (
+                            <button
+                              type="button"
+                              onClick={() => handleRemovePhoto(slot.index)}
+                              className="text-xs text-red-500 hover:text-red-600 hover:underline flex items-center gap-1 font-medium px-2 py-1 rounded-lg hover:bg-red-500/10 transition-colors"
+                            >
+                              <Trash2 className="h-3 w-3" /> Supprimer
+                            </button>
+                          ) : (
+                            <span className={`text-[10px] px-2 py-0.5 rounded-md font-semibold ${
+                              slot.required
+                                ? "bg-cyan-500/10 text-cyan-600 dark:text-cyan-400"
+                                : "text-[var(--text-faint)]"
+                            }`}>
+                              {slot.required ? "Recommandée" : "Optionnelle"}
+                            </span>
+                          )}
+                        </div>
                       </div>
-                    )}
-                  </div>
 
-                  <div className="flex-1 space-y-2">
-                    <label className="cursor-pointer dk-surface hover:border-cyan-500/50 rounded-xl px-3 py-2 text-xs font-semibold flex items-center justify-center gap-2 transition-all border" style={{ borderColor: "var(--border)", color: "var(--text)" }}>
-                      <Upload className="h-3.5 w-3.5 text-cyan-500" />
-                      <span>Importer depuis l'ordinateur</span>
-                      <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
-                    </label>
+                      <div className="flex flex-col sm:flex-row items-center gap-4">
+                        {/* Preview Box */}
+                        <div className="h-28 w-28 shrink-0 rounded-2xl dk-surface flex items-center justify-center overflow-hidden border shadow-inner relative group" style={{ borderColor: "var(--border)" }}>
+                          {hasImg ? (
+                            <>
+                              <img src={currentImg} alt={`Aperçu slot ${slot.index + 1}`} className="h-full w-full object-contain p-1.5" />
+                              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <label className="cursor-pointer text-white text-[10px] font-bold px-2 py-1 rounded bg-black/60 hover:bg-black/90 transition-colors">
+                                  Changer
+                                  <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={(e) => handlePhotoUpload(slot.index, e)}
+                                    className="hidden"
+                                  />
+                                </label>
+                              </div>
+                            </>
+                          ) : (
+                            <div className="text-center p-2" style={{ color: "var(--text-faint)" }}>
+                              <ImageIcon className="h-7 w-7 mx-auto mb-1 stroke-[1.5]" />
+                              <span className="text-[10px] block leading-none">Slot #{slot.index + 1} vide</span>
+                            </div>
+                          )}
+                        </div>
 
-                    <input
-                      type="text"
-                      value={form.imageUrl}
-                      onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
-                      placeholder="Ou collez l'URL directe (https://images.unsplash.com/...)"
-                      className="dk-input rounded-xl px-3 py-1.5 w-full text-xs"
-                    />
-                  </div>
-                </div>
+                        {/* Input controls */}
+                        <div className="flex-1 w-full space-y-2">
+                          <label className="cursor-pointer dk-surface hover:border-cyan-500/50 rounded-xl px-3 py-2 text-xs font-semibold flex items-center justify-center gap-2 transition-all border shadow-sm" style={{ borderColor: "var(--border)", color: "var(--text)" }}>
+                            <Upload className="h-3.5 w-3.5 text-cyan-500" />
+                            <span>{hasImg ? "Remplacer par un fichier" : "Importer une photo depuis l'ordinateur"}</span>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={(e) => handlePhotoUpload(slot.index, e)}
+                              className="hidden"
+                            />
+                          </label>
+
+                          <div className="flex items-center gap-1.5">
+                            <input
+                              type="text"
+                              value={currentImg}
+                              onChange={(e) => handlePhotoUrlChange(slot.index, e.target.value)}
+                              placeholder={`Ou collez le lien direct de la photo #${slot.index + 1} (https://...)`}
+                              className="dk-input rounded-xl px-3 py-1.5 flex-1 text-xs"
+                            />
+                            {hasImg && (
+                              <button
+                                type="button"
+                                onClick={() => handlePhotoUrlChange(slot.index, "")}
+                                className="h-7 w-7 rounded-lg flex items-center justify-center text-[var(--text-faint)] hover:text-red-500 hover:bg-red-500/10 transition-colors"
+                                title="Vider le lien"
+                              >
+                                <X className="h-3.5 w-3.5" />
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -1292,6 +1481,17 @@ export const AdminProducts: React.FC<{ s: Store }> = ({ s }) => {
         ? { label: form.variantLabel, options: optionsArray }
         : undefined;
 
+    const cleanImages = (form.images || [])
+      .map((img) => img?.trim())
+      .filter((img): img is string => Boolean(img));
+
+    if (form.imageUrl && form.imageUrl.trim() && !cleanImages.includes(form.imageUrl.trim())) {
+      cleanImages.unshift(form.imageUrl.trim());
+    }
+
+    const finalImages = cleanImages.slice(0, 3);
+    const primaryImageUrl = finalImages[0] || undefined;
+
     if (editing) {
       const updatedProduct: Product = {
         ...editing,
@@ -1314,7 +1514,8 @@ export const AdminProducts: React.FC<{ s: Store }> = ({ s }) => {
         isNew: form.isNew,
         isBestSeller: form.isBestSeller,
         isFeatured: form.isFeatured,
-        imageUrl: form.imageUrl || undefined,
+        imageUrl: primaryImageUrl,
+        images: finalImages.length > 0 ? finalImages : undefined,
         specs: form.specs.filter((sp) => sp.name.trim() && sp.value.trim()),
         variants: variantObj,
       };
@@ -1350,7 +1551,8 @@ export const AdminProducts: React.FC<{ s: Store }> = ({ s }) => {
         price: Number(form.price) || 2500,
         oldPrice: form.oldPrice ? Number(form.oldPrice) : null,
         costPrice: form.costPrice ? Number(form.costPrice) : null,
-        imageUrl: form.imageUrl || undefined,
+        imageUrl: primaryImageUrl,
+        images: finalImages.length > 0 ? finalImages : undefined,
         specs: form.specs.filter((sp) => sp.name.trim() && sp.value.trim()),
         variants: variantObj,
       };

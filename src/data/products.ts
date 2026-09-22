@@ -29,6 +29,12 @@ export const PRODUCTS: Product[] = [
     stock: "in",
     isNew: true,
     isBestSeller: false,
+    imageUrl: "https://images.unsplash.com/photo-1558002038-1055907df827?w=800&auto=format&fit=crop&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1558002038-1055907df827?w=800&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=800&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=800&auto=format&fit=crop&q=80"
+    ],
     characteristics: "Interrupteur tactile en verre trempé anti-rayures, rétroéclairage LED doux personnalisable, mémoire d'état après coupure de courant et protection anti-surtension intégrée.",
     specs: [
       { name: "Tension nominale", value: "110-240V AC 50/60Hz" },
@@ -74,6 +80,11 @@ export const PRODUCTS: Product[] = [
     stock: "in",
     isNew: false,
     isBestSeller: true,
+    imageUrl: "https://images.unsplash.com/photo-1558002038-1055907df827?w=800&auto=format&fit=crop&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1558002038-1055907df827?w=800&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1585338107529-13afc5f02586?w=800&auto=format&fit=crop&q=80"
+    ],
     characteristics: "Double commande indépendante, façade luxueuse en verre trempé, voyants discrets de repérage nocturne, programmation indépendante par circuit.",
     specs: [
       { name: "Tension d'entrée", value: "110-240V AC 50/60Hz" },
