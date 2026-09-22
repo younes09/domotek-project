@@ -30,10 +30,15 @@ import {
   Square,
   RefreshCw,
   Cpu,
+  FileText,
+  HelpCircle,
+  Wrench,
+  Smartphone,
+  BookOpen,
 } from "lucide-react";
 import { IconTile } from "../components/ui";
 import { formatDZD } from "../lib/format";
-import type { Category, Product, ProductSpec, ProductVariant, StockStatus, Store } from "../types";
+import type { Category, Product, ProductFAQ, ProductSpec, ProductVariant, StockStatus, Store } from "../types";
 
 interface FormState {
   name: string;
@@ -47,6 +52,11 @@ interface FormState {
   stock: StockStatus;
   shortDesc: string;
   longDesc: string;
+  characteristics: string;
+  compatibility: string;
+  installation: string;
+  usage: string;
+  faq: ProductFAQ[];
   isNew: boolean;
   isBestSeller: boolean;
   isFeatured: boolean;
@@ -69,6 +79,11 @@ const emptyForm = (defaultCatKey = "smart-home"): FormState => ({
   stock: "in",
   shortDesc: "",
   longDesc: "",
+  characteristics: "",
+  compatibility: "",
+  installation: "",
+  usage: "",
+  faq: [],
   isNew: true,
   isBestSeller: false,
   isFeatured: false,
@@ -90,7 +105,8 @@ const ProductFormModal: React.FC<{
   onSave: (f: FormState) => void;
   onClose: () => void;
 }> = ({ initial, categories, onSave, onClose }) => {
-  const [activeTab, setActiveTab] = useState<"general" | "pricing" | "stock" | "media" | "specs">("general");
+  const [activeTab, setActiveTab] = useState<"general" | "pricing" | "stock" | "details" | "media" | "specs">("general");
+  const [activeDetailsSection, setActiveDetailsSection] = useState<"desc" | "specs" | "compat" | "install" | "usage" | "faq">("desc");
 
   const [form, setForm] = useState<FormState>(() => {
     if (initial) {
@@ -106,6 +122,11 @@ const ProductFormModal: React.FC<{
         stock: initial.stock,
         shortDesc: initial.shortDesc || "",
         longDesc: initial.longDesc || "",
+        characteristics: initial.characteristics || "",
+        compatibility: initial.compatibility || "",
+        installation: initial.installation || "",
+        usage: initial.usage || "",
+        faq: initial.faq ? initial.faq.map((item) => ({ ...item })) : [],
         isNew: initial.isNew ?? false,
         isBestSeller: initial.isBestSeller ?? false,
         isFeatured: initial.isFeatured ?? false,
@@ -161,6 +182,28 @@ const ProductFormModal: React.FC<{
     setForm((prev) => ({
       ...prev,
       specs: prev.specs.filter((_, idx) => idx !== index),
+    }));
+  };
+
+  // FAQ handlers
+  const handleAddFaq = () => {
+    setForm((prev) => ({
+      ...prev,
+      faq: [...prev.faq, { question: "", answer: "" }],
+    }));
+  };
+
+  const handleUpdateFaq = (index: number, field: "question" | "answer", val: string) => {
+    setForm((prev) => ({
+      ...prev,
+      faq: prev.faq.map((item, idx) => (idx === index ? { ...item, [field]: val } : item)),
+    }));
+  };
+
+  const handleRemoveFaq = (index: number) => {
+    setForm((prev) => ({
+      ...prev,
+      faq: prev.faq.filter((_, idx) => idx !== index),
     }));
   };
 
@@ -220,8 +263,9 @@ const ProductFormModal: React.FC<{
             { id: "general", label: "Général & Rayon", icon: Package },
             { id: "pricing", label: "Prix & Rentabilité", icon: DollarSign },
             { id: "stock", label: "Stock & Seuil", icon: Sliders },
+            { id: "details", label: "Fiche Produit (6 Onglets)", icon: FileText },
             { id: "media", label: "Photos & Visuels", icon: ImageIcon },
-            { id: "specs", label: "Fiche & Variantes", icon: Layers },
+            { id: "specs", label: "Variantes & Options", icon: Layers },
           ].map((t) => {
             const IconComp = t.icon;
             const active = activeTab === t.id;
@@ -233,8 +277,9 @@ const ProductFormModal: React.FC<{
                 className={`px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap flex items-center gap-1.5 transition-all ${
                   active
                     ? "bg-cyan-500/20 text-cyan-600 dark:text-cyan-300 border border-cyan-500/30"
-                    : "dk-surface-2 text-slate-400 hover:text-slate-200"
+                    : "dk-surface-2 hover:opacity-100"
                 }`}
+                style={!active ? { color: "var(--text-dim)" } : {}}
               >
                 <IconComp className="h-3.5 w-3.5" />
                 <span>{t.label}</span>
@@ -523,6 +568,375 @@ const ProductFormModal: React.FC<{
                   </button>
                 </div>
               </div>
+            </div>
+          )}
+
+          {/* TAB: FICHE PRODUIT (6 ONGLETS) */}
+          {activeTab === "details" && (
+            <div className="space-y-4">
+              {/* Header explanation banner */}
+              <div className="p-3.5 rounded-2xl dk-surface-2 border flex items-start gap-3" style={{ borderColor: "var(--border)" }}>
+                <FileText className="h-5 w-5 shrink-0 mt-0.5" style={{ color: "var(--teal)" }} />
+                <div className="text-xs">
+                  <span className="font-bold block" style={{ color: "var(--text)" }}>
+                    Personnalisation de la fiche produit sur la boutique
+                  </span>
+                  <span style={{ color: "var(--text-dim)" }}>
+                    Gérez directement les 6 sections d'information affichées sur la page produit client.
+                  </span>
+                </div>
+              </div>
+
+              {/* Sub-tabs selector for the 6 sections */}
+              <div className="flex gap-1.5 overflow-x-auto pb-1 border-b dk-scrollbar" style={{ borderColor: "var(--border)" }}>
+                {[
+                  { id: "desc", label: "1. Description", icon: FileText },
+                  { id: "specs", label: "2. Caractéristiques", icon: Sliders },
+                  { id: "compat", label: "3. Compatibilité", icon: CheckCircle2 },
+                  { id: "install", label: "4. Installation", icon: Wrench },
+                  { id: "usage", label: "5. Utilisation", icon: Smartphone },
+                  { id: "faq", label: `6. Questions fréquentes (${form.faq.length})`, icon: HelpCircle },
+                ].map((sec) => {
+                  const IconC = sec.icon;
+                  const isActiveSec = activeDetailsSection === sec.id;
+                  return (
+                    <button
+                      key={sec.id}
+                      type="button"
+                      onClick={() => setActiveDetailsSection(sec.id as typeof activeDetailsSection)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap flex items-center gap-1.5 transition-all ${
+                        isActiveSec
+                          ? "dk-btn-primary shadow-sm"
+                          : "dk-surface-2 hover:opacity-100"
+                      }`}
+                      style={!isActiveSec ? { color: "var(--text-dim)" } : {}}
+                    >
+                      <IconC className="h-3.5 w-3.5" />
+                      <span>{sec.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* SECTION 1: DESCRIPTION */}
+              {activeDetailsSection === "desc" && (
+                <div className="space-y-3 p-4 rounded-2xl dk-surface-2 border" style={{ borderColor: "var(--border)" }}>
+                  <div>
+                    <h4 className="text-xs font-bold" style={{ color: "var(--text)" }}>1. Description Détaillée</h4>
+                    <p className="text-[11px]" style={{ color: "var(--text-dim)" }}>
+                      Présentation complète du produit affichée dans le premier onglet client.
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="text-[11px] font-semibold block mb-1" style={{ color: "var(--text-dim)" }}>
+                      Texte complet de la description
+                    </label>
+                    <textarea
+                      rows={6}
+                      value={form.longDesc}
+                      onChange={(e) => setForm({ ...form, longDesc: e.target.value })}
+                      placeholder="Décrivez en détail les bénéfices du produit, son fonctionnement et ses usages quotidiens..."
+                      className="dk-input rounded-xl px-3.5 py-2.5 w-full text-xs leading-relaxed"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[11px] font-semibold block mb-1" style={{ color: "var(--text-dim)" }}>
+                      Accroche courte complémentaire (carte produit & haut de fiche)
+                    </label>
+                    <input
+                      type="text"
+                      value={form.shortDesc}
+                      onChange={(e) => setForm({ ...form, shortDesc: e.target.value })}
+                      placeholder="Accroche en 1 phrase concise..."
+                      className="dk-input rounded-xl px-3.5 py-2 w-full text-xs"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 2: CARACTÉRISTIQUES */}
+              {activeDetailsSection === "specs" && (
+                <div className="space-y-4 p-4 rounded-2xl dk-surface-2 border" style={{ borderColor: "var(--border)" }}>
+                  <div>
+                    <h4 className="text-xs font-bold" style={{ color: "var(--text)" }}>2. Caractéristiques & Spécifications</h4>
+                    <p className="text-[11px]" style={{ color: "var(--text-dim)" }}>
+                      Résumé clé et tableau technique des spécifications (Tension, Wi-Fi, Garantie, etc.).
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="text-[11px] font-semibold block mb-1" style={{ color: "var(--text-dim)" }}>
+                      Résumé des caractéristiques (points forts)
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={form.characteristics}
+                      onChange={(e) => setForm({ ...form, characteristics: e.target.value })}
+                      placeholder="ex: Façade verre trempé résistant, commande tactile rétroéclairée, mémoire d'état..."
+                      className="dk-input rounded-xl px-3.5 py-2 w-full text-xs"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <label className="text-[11px] font-bold" style={{ color: "var(--text)" }}>
+                        Tableau technique des spécifications ({form.specs.length})
+                      </label>
+                      <button
+                        type="button"
+                        onClick={handleAddSpec}
+                        className="text-xs text-cyan-500 hover:underline font-semibold flex items-center gap-1"
+                      >
+                        <Plus className="h-3 w-3" /> Ajouter une spécification
+                      </button>
+                    </div>
+
+                    <div className="space-y-2 max-h-52 overflow-y-auto dk-scrollbar pr-1">
+                      {form.specs.map((sp, idx) => (
+                        <div key={idx} className="flex items-center gap-2">
+                          <input
+                            type="text"
+                            value={sp.name}
+                            onChange={(e) => handleUpdateSpec(idx, "name", e.target.value)}
+                            placeholder="Nom (ex: Alimentation)"
+                            className="dk-input rounded-xl px-3 py-1.5 w-1/3 text-xs"
+                          />
+                          <input
+                            type="text"
+                            value={sp.value}
+                            onChange={(e) => handleUpdateSpec(idx, "value", e.target.value)}
+                            placeholder="Valeur (ex: 110-240V AC)"
+                            className="dk-input rounded-xl px-3 py-1.5 flex-1 text-xs"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveSpec(idx)}
+                            className="h-7 w-7 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-500/10"
+                            title="Supprimer"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Presets */}
+                    <div className="pt-2 flex flex-wrap gap-1.5">
+                      <span className="text-[10px] self-center mr-1" style={{ color: "var(--text-faint)" }}>Raccourcis :</span>
+                      {["Tension", "Puissance max", "Connectivité", "Portée", "Matériau", "Garantie"].map((preset) => (
+                        <button
+                          key={preset}
+                          type="button"
+                          onClick={() => setForm((prev) => ({ ...prev, specs: [...prev.specs, { name: preset, value: "" }] }))}
+                          className="px-2 py-0.5 rounded-md dk-surface text-[10px] transition-colors hover:border-cyan-500/50"
+                          style={{ color: "var(--text-dim)" }}
+                        >
+                          + {preset}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 3: COMPATIBILITÉ */}
+              {activeDetailsSection === "compat" && (
+                <div className="space-y-3 p-4 rounded-2xl dk-surface-2 border" style={{ borderColor: "var(--border)" }}>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="text-xs font-bold" style={{ color: "var(--text)" }}>3. Informations de Compatibilité</h4>
+                      <p className="text-[11px]" style={{ color: "var(--text-dim)" }}>
+                        Indiquez les écosystèmes, assistants vocaux, dimensions et normes compatibles.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const template = "• Compatible Tuya Smart & Smart Life (iOS / Android)\n• Compatible commandes vocales Amazon Alexa et Google Assistant\n• Compatible avec boîtes d'encastrement standard 60mm\n• Compatible Wi-Fi 2.4 GHz (sans box domotique requise)";
+                        setForm((prev) => ({ ...prev, compatibility: prev.compatibility ? `${prev.compatibility}\n${template}` : template }));
+                      }}
+                      className="text-[11px] text-cyan-600 dark:text-cyan-400 hover:underline font-semibold"
+                    >
+                      + Insérer un modèle
+                    </button>
+                  </div>
+
+                  <div>
+                    <label className="text-[11px] font-semibold block mb-1" style={{ color: "var(--text-dim)" }}>
+                      Détails de compatibilité (une puce ou tiret par ligne pour affichage avec coche)
+                    </label>
+                    <textarea
+                      rows={6}
+                      value={form.compatibility}
+                      onChange={(e) => setForm({ ...form, compatibility: e.target.value })}
+                      placeholder="• Compatible Tuya Smart & Smart Life&#10;• Compatible Amazon Alexa et Google Home&#10;• Compatible avec toutes les ampoules LED (3W à 600W)..."
+                      className="dk-input rounded-xl px-3.5 py-2.5 w-full text-xs font-mono leading-relaxed"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 4: INSTALLATION */}
+              {activeDetailsSection === "install" && (
+                <div className="space-y-3 p-4 rounded-2xl dk-surface-2 border" style={{ borderColor: "var(--border)" }}>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="text-xs font-bold" style={{ color: "var(--text)" }}>4. Guide d'Installation & Câblage</h4>
+                      <p className="text-[11px]" style={{ color: "var(--text-dim)" }}>
+                        Numérotez les étapes (1. Couper le courant, 2. ...) pour un affichage automatique sous forme de badges.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const template = "1. Coupez impérativement le disjoncteur général avant toute manipulation électrique.\n2. Retirez l'ancien équipement de la boîte murale.\n3. Raccordez la Phase (L) et le retour de lampe conformément au schéma.\n4. Fixez le mécanisme dans la boîte et remettez la façade.\n5. Rétablissez le courant au disjoncteur.";
+                        setForm((prev) => ({ ...prev, installation: prev.installation ? `${prev.installation}\n${template}` : template }));
+                      }}
+                      className="text-[11px] text-cyan-600 dark:text-cyan-400 hover:underline font-semibold"
+                    >
+                      + Insérer un modèle
+                    </button>
+                  </div>
+
+                  <div>
+                    <label className="text-[11px] font-semibold block mb-1" style={{ color: "var(--text-dim)" }}>
+                      Étapes d'installation
+                    </label>
+                    <textarea
+                      rows={6}
+                      value={form.installation}
+                      onChange={(e) => setForm({ ...form, installation: e.target.value })}
+                      placeholder="1. Coupez le disjoncteur général...&#10;2. Raccordez la Phase et le retour de lampe...&#10;3. Vissez dans la boîte d'encastrement..."
+                      className="dk-input rounded-xl px-3.5 py-2.5 w-full text-xs leading-relaxed"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 5: UTILISATION */}
+              {activeDetailsSection === "usage" && (
+                <div className="space-y-3 p-4 rounded-2xl dk-surface-2 border" style={{ borderColor: "var(--border)" }}>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="text-xs font-bold" style={{ color: "var(--text)" }}>5. Guide d'Utilisation & Appairage</h4>
+                      <p className="text-[11px]" style={{ color: "var(--text-dim)" }}>
+                        Expliquez le téléchargement de l'application, l'association Wi-Fi et les scénarios utiles.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const template = "1. Téléchargez l'application 'Smart Life' sur App Store ou Google Play.\n2. Mettez l'appareil en mode appairage en maintenant le bouton 5 secondes.\n3. Ajoutez l'appareil détecté et connectez-le à votre Wi-Fi 2.4 GHz.\n4. Configurez vos plannings, minuteries et commandes vocales.";
+                        setForm((prev) => ({ ...prev, usage: prev.usage ? `${prev.usage}\n${template}` : template }));
+                      }}
+                      className="text-[11px] text-cyan-600 dark:text-cyan-400 hover:underline font-semibold"
+                    >
+                      + Insérer un modèle
+                    </button>
+                  </div>
+
+                  <div>
+                    <label className="text-[11px] font-semibold block mb-1" style={{ color: "var(--text-dim)" }}>
+                      Guide d'usage et de configuration
+                    </label>
+                    <textarea
+                      rows={6}
+                      value={form.usage}
+                      onChange={(e) => setForm({ ...form, usage: e.target.value })}
+                      placeholder="1. Téléchargez l'application Smart Life...&#10;2. Activez le mode appairage...&#10;3. Profitez du pilotage à distance et scénarios..."
+                      className="dk-input rounded-xl px-3.5 py-2.5 w-full text-xs leading-relaxed"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION 6: QUESTIONS FRÉQUENTES (FAQ) */}
+              {activeDetailsSection === "faq" && (
+                <div className="space-y-3 p-4 rounded-2xl dk-surface-2 border" style={{ borderColor: "var(--border)" }}>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="text-xs font-bold" style={{ color: "var(--text)" }}>6. Questions Fréquentes ({form.faq.length})</h4>
+                      <p className="text-[11px]" style={{ color: "var(--text-dim)" }}>
+                        FAQ interactive affichée sous forme d'accordéon pour répondre aux interrogations des clients.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleAddFaq}
+                      className="text-xs text-cyan-500 hover:underline font-semibold flex items-center gap-1"
+                    >
+                      <Plus className="h-3.5 w-3.5" /> Ajouter une question
+                    </button>
+                  </div>
+
+                  {form.faq.length === 0 ? (
+                    <div className="p-6 text-center rounded-xl dk-surface border space-y-2" style={{ borderColor: "var(--border)" }}>
+                      <HelpCircle className="h-8 w-8 mx-auto" style={{ color: "var(--text-faint)" }} />
+                      <p className="text-xs" style={{ color: "var(--text-dim)" }}>Aucune question fréquente renseignée pour ce produit.</p>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setForm((prev) => ({
+                            ...prev,
+                            faq: [
+                              {
+                                question: "Cet équipement nécessite-t-il un fil Neutre ?",
+                                answer: "Ce produit peut fonctionner avec ou sans neutre selon le câblage de votre installation.",
+                              },
+                              {
+                                question: "L'appareil fonctionne-t-il si Internet est coupé ?",
+                                answer: "Oui, le contrôle manuel local reste opérationnel même en cas de coupure de votre connexion Internet.",
+                              },
+                            ],
+                          }));
+                        }}
+                        className="px-3 py-1.5 rounded-xl dk-surface-2 text-xs font-semibold hover:border-cyan-500/50"
+                        style={{ color: "var(--text)" }}
+                      >
+                        + Insérer 2 questions types
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="space-y-3 max-h-72 overflow-y-auto dk-scrollbar pr-1">
+                      {form.faq.map((item, idx) => (
+                        <div key={idx} className="p-3.5 rounded-xl dk-surface border space-y-2 relative" style={{ borderColor: "var(--border)" }}>
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-bold text-cyan-600 dark:text-cyan-400">
+                              Question #{idx + 1}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveFaq(idx)}
+                              className="h-6 w-6 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-500/10"
+                              title="Supprimer cette question"
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </button>
+                          </div>
+
+                          <input
+                            type="text"
+                            value={item.question}
+                            onChange={(e) => handleUpdateFaq(idx, "question", e.target.value)}
+                            placeholder="Question (ex: Cet interrupteur nécessite-t-il un neutre ?)"
+                            className="dk-input rounded-xl px-3 py-1.5 w-full text-xs font-semibold"
+                          />
+
+                          <textarea
+                            rows={2}
+                            value={item.answer}
+                            onChange={(e) => handleUpdateFaq(idx, "answer", e.target.value)}
+                            placeholder="Réponse détaillée..."
+                            className="dk-input rounded-xl px-3 py-1.5 w-full text-xs leading-relaxed"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           )}
 
@@ -893,6 +1307,11 @@ export const AdminProducts: React.FC<{ s: Store }> = ({ s }) => {
                 costPrice: form.costPrice ? Number(form.costPrice) : null,
                 shortDesc: form.shortDesc,
                 longDesc: form.longDesc,
+                characteristics: form.characteristics,
+                compatibility: form.compatibility,
+                installation: form.installation,
+                usage: form.usage,
+                faq: form.faq.filter((q) => q.question.trim() || q.answer.trim()),
                 isNew: form.isNew,
                 isBestSeller: form.isBestSeller,
                 isFeatured: form.isFeatured,
@@ -914,6 +1333,11 @@ export const AdminProducts: React.FC<{ s: Store }> = ({ s }) => {
         icon: Cpu,
         shortDesc: form.shortDesc || "Produit connecté DomoTek",
         longDesc: form.longDesc || "Solution intelligente d'automatisation.",
+        characteristics: form.characteristics,
+        compatibility: form.compatibility,
+        installation: form.installation,
+        usage: form.usage,
+        faq: form.faq.filter((q) => q.question.trim() || q.answer.trim()),
         isNew: form.isNew,
         isBestSeller: form.isBestSeller,
         isFeatured: form.isFeatured,

@@ -58,6 +58,12 @@ export function useStore(): Store {
           return parsed.map((p) => {
             const original = PRODUCTS.find((op) => op.id === p.id);
             return {
+              characteristics: p.characteristics ?? original?.characteristics,
+              compatibility: p.compatibility ?? original?.compatibility,
+              installation: p.installation ?? original?.installation,
+              usage: p.usage ?? original?.usage,
+              faq: p.faq && p.faq.length > 0 ? p.faq : original?.faq,
+              specs: p.specs && p.specs.length > 0 ? p.specs : original?.specs,
               ...p,
               icon: original?.icon || getCategoryIcon(undefined),
             };
@@ -120,6 +126,7 @@ export function useStore(): Store {
   useEffect(() => { window.scrollTo(0, 0); }, [view]);
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
+    document.documentElement.classList.toggle("dark", theme === "dark");
     localStorage.setItem("domotek_theme", theme);
   }, [theme]);
   useEffect(() => {

@@ -26,6 +26,11 @@ export interface ProductSpec {
   value: string;
 }
 
+export interface ProductFAQ {
+  question: string;
+  answer: string;
+}
+
 export interface Product {
   id: number;
   slug: string;
@@ -48,6 +53,13 @@ export interface Product {
   images?: string[];
   specs?: ProductSpec[];
   variants?: ProductVariant;
+
+  // Fiche Produit - Onglets détaillés
+  characteristics?: string;
+  compatibility?: string;
+  installation?: string;
+  usage?: string;
+  faq?: ProductFAQ[];
 }
 
 export interface CartItem {
