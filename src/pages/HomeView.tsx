@@ -337,86 +337,86 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
 
             {/* Feature Bar (4 item pills under Hero content) */}
             <div
-              className={`pt-8 border-t grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 ${
+              className={`pt-6 sm:pt-8 border-t grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 lg:gap-6 ${
                 isDark ? "border-slate-700/60" : "border-slate-200"
               }`}
             >
               <div
-                className={`glass-card-hover rounded-2xl p-3.5 flex items-center gap-3.5 border backdrop-blur-md ${
+                className={`glass-card-hover rounded-2xl p-2.5 sm:p-3.5 flex items-center gap-2.5 sm:gap-3.5 border backdrop-blur-md min-w-0 ${
                   isDark
                     ? "border-slate-700/60 bg-slate-950/50"
                     : "border-slate-200/80 bg-white/80 shadow-sm"
                 }`}
               >
-                <div className="h-11 w-11 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center shrink-0">
-                  <Heart className="h-5 w-5 text-cyan-500" />
+                <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center shrink-0">
+                  <Heart className="h-4 w-4 sm:h-5 sm:w-5 text-cyan-500" />
                 </div>
-                <div>
-                  <h4 className={`text-xs sm:text-sm font-bold ${isDark ? "text-white" : "text-slate-900"}`}>
+                <div className="min-w-0 flex-1">
+                  <h4 className={`text-xs sm:text-sm font-bold truncate sm:whitespace-normal ${isDark ? "text-white" : "text-slate-900"}`}>
                     Plus de confort
                   </h4>
-                  <p className={`text-[11px] leading-tight ${isDark ? "text-slate-300" : "text-slate-500"}`}>
+                  <p className={`text-[10px] sm:text-[11px] leading-tight line-clamp-1 sm:line-clamp-none ${isDark ? "text-slate-300" : "text-slate-500"}`}>
                     Contrôlez sans vous lever
                   </p>
                 </div>
               </div>
 
               <div
-                className={`glass-card-hover rounded-2xl p-3.5 flex items-center gap-3.5 border backdrop-blur-md ${
+                className={`glass-card-hover rounded-2xl p-2.5 sm:p-3.5 flex items-center gap-2.5 sm:gap-3.5 border backdrop-blur-md min-w-0 ${
                   isDark
                     ? "border-slate-700/60 bg-slate-950/50"
                     : "border-slate-200/80 bg-white/80 shadow-sm"
                 }`}
               >
-                <div className="h-11 w-11 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center shrink-0">
-                  <Leaf className="h-5 w-5 text-cyan-500" />
+                <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center shrink-0">
+                  <Leaf className="h-4 w-4 sm:h-5 sm:w-5 text-cyan-500" />
                 </div>
-                <div>
-                  <h4 className={`text-xs sm:text-sm font-bold ${isDark ? "text-white" : "text-slate-900"}`}>
-                    Maison plus économe
+                <div className="min-w-0 flex-1">
+                  <h4 className={`text-xs sm:text-sm font-bold truncate sm:whitespace-normal ${isDark ? "text-white" : "text-slate-900"}`}>
+                    Maison économe
                   </h4>
-                  <p className={`text-[11px] leading-tight ${isDark ? "text-slate-300" : "text-slate-500"}`}>
-                    Jusqu'à -30% sur l'énergie
+                  <p className={`text-[10px] sm:text-[11px] leading-tight line-clamp-1 sm:line-clamp-none ${isDark ? "text-slate-300" : "text-slate-500"}`}>
+                    Jusqu'à -30% d'énergie
                   </p>
                 </div>
               </div>
 
               <div
-                className={`glass-card-hover rounded-2xl p-3.5 flex items-center gap-3.5 border backdrop-blur-md ${
+                className={`glass-card-hover rounded-2xl p-2.5 sm:p-3.5 flex items-center gap-2.5 sm:gap-3.5 border backdrop-blur-md min-w-0 ${
                   isDark
                     ? "border-slate-700/60 bg-slate-950/50"
                     : "border-slate-200/80 bg-white/80 shadow-sm"
                 }`}
               >
-                <div className="h-11 w-11 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center shrink-0">
-                  <ShieldCheck className="h-5 w-5 text-cyan-500" />
+                <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center shrink-0">
+                  <ShieldCheck className="h-4 w-4 sm:h-5 sm:w-5 text-cyan-500" />
                 </div>
-                <div>
-                  <h4 className={`text-xs sm:text-sm font-bold ${isDark ? "text-white" : "text-slate-900"}`}>
+                <div className="min-w-0 flex-1">
+                  <h4 className={`text-xs sm:text-sm font-bold truncate sm:whitespace-normal ${isDark ? "text-white" : "text-slate-900"}`}>
                     Sécurité renforcée
                   </h4>
-                  <p className={`text-[11px] leading-tight ${isDark ? "text-slate-300" : "text-slate-500"}`}>
-                    Alertes directes sur mobile
+                  <p className={`text-[10px] sm:text-[11px] leading-tight line-clamp-1 sm:line-clamp-none ${isDark ? "text-slate-300" : "text-slate-500"}`}>
+                    Alertes directes mobile
                   </p>
                 </div>
               </div>
 
               <div
-                className={`glass-card-hover rounded-2xl p-3.5 flex items-center gap-3.5 border backdrop-blur-md ${
+                className={`glass-card-hover rounded-2xl p-2.5 sm:p-3.5 flex items-center gap-2.5 sm:gap-3.5 border backdrop-blur-md min-w-0 ${
                   isDark
                     ? "border-slate-700/60 bg-slate-950/50"
                     : "border-slate-200/80 bg-white/80 shadow-sm"
                 }`}
               >
-                <div className="h-11 w-11 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center shrink-0">
-                  <Settings className="h-5 w-5 text-cyan-500" />
+                <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center shrink-0">
+                  <Settings className="h-4 w-4 sm:h-5 sm:w-5 text-cyan-500" />
                 </div>
-                <div>
-                  <h4 className={`text-xs sm:text-sm font-bold ${isDark ? "text-white" : "text-slate-900"}`}>
+                <div className="min-w-0 flex-1">
+                  <h4 className={`text-xs sm:text-sm font-bold truncate sm:whitespace-normal ${isDark ? "text-white" : "text-slate-900"}`}>
                     Installation facile
                   </h4>
-                  <p className={`text-[11px] leading-tight ${isDark ? "text-slate-300" : "text-slate-500"}`}>
-                    Sans travaux & guidé pas-à-pas
+                  <p className={`text-[10px] sm:text-[11px] leading-tight line-clamp-1 sm:line-clamp-none ${isDark ? "text-slate-300" : "text-slate-500"}`}>
+                    Guidé pas-à-pas
                   </p>
                 </div>
               </div>
