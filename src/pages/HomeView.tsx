@@ -200,12 +200,21 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
             ? "border-cyan-500/30 bg-[#111827] shadow-[0_0_60px_rgba(0,180,255,0.12)]" 
             : "border-slate-200 bg-white shadow-[0_20px_50px_rgba(0,180,255,0.10)]"
         }`}>
-          {/* Background Image Full Cover */}
-          <img
-            src={isDark ? "/images/hero-bg.png" : "/images/hero-bg-white.png"}
-            alt="DomoTek — La maison connectée, simplement"
-            className="absolute inset-0 w-full h-full object-cover object-right sm:object-center pointer-events-none transition-transform duration-700 hover:scale-105"
-          />
+          {/* Background Image Full Cover (WebP + Optimized PNG fallback) */}
+          <picture className="absolute inset-0 w-full h-full pointer-events-none">
+            <source
+              type="image/webp"
+              srcSet={isDark ? "/images/hero-bg.webp" : "/images/hero-bg-white.webp"}
+            />
+            <img
+              src={isDark ? "/images/hero-bg.png" : "/images/hero-bg-white.png"}
+              alt="DomoTek — La maison connectée, simplement"
+              fetchPriority="high"
+              loading="eager"
+              decoding="async"
+              className="w-full h-full object-cover object-right sm:object-center transition-transform duration-700 hover:scale-105"
+            />
+          </picture>
 
           {/* Gradient mask tuned for text contrast on left and device clarity on right */}
           <div
