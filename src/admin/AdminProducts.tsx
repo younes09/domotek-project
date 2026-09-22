@@ -39,6 +39,7 @@ import {
 import { IconTile } from "../components/ui";
 import { formatDZD } from "../lib/format";
 import type { Category, Product, ProductFAQ, ProductSpec, ProductVariant, StockStatus, Store } from "../types";
+import { saveProductToDb, deleteProductFromDb } from "../lib/supabaseDb";
 
 interface FormState {
   name: string;
@@ -1160,6 +1161,7 @@ export const AdminProducts: React.FC<{ s: Store }> = ({ s }) => {
   const handleDelete = (id: number, name: string) => {
     if (window.confirm(`Voulez-vous vraiment supprimer "${name}" du catalogue ?`)) {
       s.setProducts((prev) => prev.filter((p) => p.id !== id));
+      deleteProductFromDb(id).catch((e) => console.error("Supabase delete product error", e));
       setSelectedIds((prev) => {
         const next = new Set(prev);
         next.delete(id);
@@ -1291,37 +1293,36 @@ export const AdminProducts: React.FC<{ s: Store }> = ({ s }) => {
         : undefined;
 
     if (editing) {
+      const updatedProduct: Product = {
+        ...editing,
+        name: form.name,
+        sku: form.sku,
+        category: form.category,
+        stock: form.stock,
+        quantity: Number(form.quantity) || 0,
+        lowStockThreshold: Number(form.lowStockThreshold) || 5,
+        price: Number(form.price),
+        oldPrice: form.oldPrice ? Number(form.oldPrice) : null,
+        costPrice: form.costPrice ? Number(form.costPrice) : null,
+        shortDesc: form.shortDesc,
+        longDesc: form.longDesc,
+        characteristics: form.characteristics,
+        compatibility: form.compatibility,
+        installation: form.installation,
+        usage: form.usage,
+        faq: form.faq.filter((q) => q.question.trim() || q.answer.trim()),
+        isNew: form.isNew,
+        isBestSeller: form.isBestSeller,
+        isFeatured: form.isFeatured,
+        imageUrl: form.imageUrl || undefined,
+        specs: form.specs.filter((sp) => sp.name.trim() && sp.value.trim()),
+        variants: variantObj,
+      };
+
       s.setProducts((prev) =>
-        prev.map((p) =>
-          p.id === editing.id
-            ? {
-                ...p,
-                name: form.name,
-                sku: form.sku,
-                category: form.category,
-                stock: form.stock,
-                quantity: Number(form.quantity) || 0,
-                lowStockThreshold: Number(form.lowStockThreshold) || 5,
-                price: Number(form.price),
-                oldPrice: form.oldPrice ? Number(form.oldPrice) : null,
-                costPrice: form.costPrice ? Number(form.costPrice) : null,
-                shortDesc: form.shortDesc,
-                longDesc: form.longDesc,
-                characteristics: form.characteristics,
-                compatibility: form.compatibility,
-                installation: form.installation,
-                usage: form.usage,
-                faq: form.faq.filter((q) => q.question.trim() || q.answer.trim()),
-                isNew: form.isNew,
-                isBestSeller: form.isBestSeller,
-                isFeatured: form.isFeatured,
-                imageUrl: form.imageUrl || undefined,
-                specs: form.specs.filter((sp) => sp.name.trim() && sp.value.trim()),
-                variants: variantObj,
-              }
-            : p
-        )
+        prev.map((p) => (p.id === editing.id ? updatedProduct : p))
       );
+      saveProductToDb(updatedProduct).catch((e) => console.error("Supabase save product error", e));
       s.showToast("Produit modifié avec succès");
       setEditing(null);
     } else {
@@ -1355,6 +1356,7 @@ export const AdminProducts: React.FC<{ s: Store }> = ({ s }) => {
       };
 
       s.setProducts((prev) => [newProduct, ...prev]);
+      saveProductToDb(newProduct).catch((e) => console.error("Supabase save product error", e));
       s.showToast("Nouveau produit ajouté au catalogue");
       setAdding(false);
     }

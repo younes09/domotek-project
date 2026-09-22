@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { AVAILABLE_CATEGORY_ICONS, DEFAULT_CATEGORIES, getCategoryIcon } from "../data/categories";
 import type { Category, Store } from "../types";
+import { saveCategoryToDb, deleteCategoryFromDb } from "../lib/supabaseDb";
 
 interface CategoryFormState {
   name: string;
@@ -458,21 +459,18 @@ export const AdminCategories: React.FC<{ s: Store }> = ({ s }) => {
   const handleSave = (form: CategoryFormState, originalKey?: string) => {
     const iconComp = getCategoryIcon(form.iconName);
 
+    const catObj: Category = {
+      key: form.key,
+      name: form.name,
+      desc: form.desc,
+      iconName: form.iconName,
+      icon: iconComp,
+    };
+
     if (originalKey) {
       // Update existing
       s.setCategories((prev) =>
-        prev.map((c) =>
-          c.key === originalKey
-            ? {
-                ...c,
-                key: form.key,
-                name: form.name,
-                desc: form.desc,
-                iconName: form.iconName,
-                icon: iconComp,
-              }
-            : c
-        )
+        prev.map((c) => (c.key === originalKey ? catObj : c))
       );
 
       // If key changed, update products that had the old category key
@@ -482,18 +480,12 @@ export const AdminCategories: React.FC<{ s: Store }> = ({ s }) => {
         );
       }
 
+      saveCategoryToDb(catObj).catch((e) => console.error("Supabase save cat error", e));
       s.showToast(`Catégorie « ${form.name} » mise à jour avec succès`);
     } else {
       // Create new
-      const newCat: Category = {
-        key: form.key,
-        name: form.name,
-        desc: form.desc,
-        iconName: form.iconName,
-        icon: iconComp,
-      };
-
-      s.setCategories((prev) => [...prev, newCat]);
+      s.setCategories((prev) => [...prev, catObj]);
+      saveCategoryToDb(catObj).catch((e) => console.error("Supabase save cat error", e));
       s.showToast(`Nouvelle catégorie « ${form.name} » ajoutée`);
     }
 
@@ -514,6 +506,7 @@ export const AdminCategories: React.FC<{ s: Store }> = ({ s }) => {
     }
 
     s.setCategories((prev) => prev.filter((c) => c.key !== catToDelete.key));
+    deleteCategoryFromDb(catToDelete.key).catch((e) => console.error("Supabase delete cat error", e));
     s.showToast(`Catégorie « ${catToDelete.name} » supprimée`);
     setDeletingCategory(null);
   };

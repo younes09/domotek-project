@@ -1,12 +1,21 @@
-import React from "react";
-import { ArrowRight, Info, Heart, Eye } from "lucide-react";
+import React, { useState } from "react";
+import { ArrowRight, Info, Heart, Eye, ShoppingCart, Check } from "lucide-react";
 import { ProductTile } from "./ui";
 import { formatDZD } from "../lib/format";
 import type { Product, Store } from "../types";
 
 export const ProductCard: React.FC<{ product: Product; s: Store }> = ({ product, s }) => {
+  const [added, setAdded] = useState(false);
   const discount = product.oldPrice ? Math.round((100 * (product.oldPrice - product.price)) / product.oldPrice) : null;
   const inWishlist = s.wishlist.has(product.id);
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (product.stock === "out") return;
+    s.addToCart(product, 1);
+    setAdded(true);
+    setTimeout(() => setAdded(false), 1500);
+  };
 
   return (
     <div className="group flex flex-col dk-surface rounded-2xl overflow-hidden h-full hover:border-cyan-500/40 transition-all duration-300 shadow-md hover:shadow-cyan-500/10">
@@ -98,14 +107,43 @@ export const ProductCard: React.FC<{ product: Product; s: Store }> = ({ product,
           </button>
         </div>
 
-        {/* Primary CTA button */}
-        <button
-          onClick={() => s.openProduct(product)}
-          disabled={product.stock === "out"}
-          className="mt-3 w-full py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold dk-btn-primary flex items-center justify-center gap-1.5 transition-all disabled:opacity-40 disabled:pointer-events-none"
-        >
-          Voir le produit <ArrowRight className="h-4 w-4" />
-        </button>
+        {/* Actions: Direct Add to Cart + Product details view */}
+        <div className="mt-3 flex items-center gap-2">
+          <button
+            onClick={handleAddToCart}
+            disabled={product.stock === "out"}
+            className={`flex-1 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-1.5 transition-all duration-200 ${
+              added
+                ? "bg-emerald-500 text-white shadow-md shadow-emerald-500/20 scale-[1.02]"
+                : "dk-btn-primary"
+            } disabled:opacity-40 disabled:pointer-events-none`}
+            aria-label="Ajouter au panier"
+          >
+            {added ? (
+              <>
+                <Check className="h-4 w-4 stroke-[2.5] shrink-0" />
+                <span>Ajouté !</span>
+              </>
+            ) : (
+              <>
+                <ShoppingCart className="h-4 w-4 shrink-0" />
+                <span className="truncate">
+                  {product.stock === "out" ? "Rupture" : "Ajouter au panier"}
+                </span>
+              </>
+            )}
+          </button>
+
+          <button
+            onClick={() => s.openProduct(product)}
+            className="py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1 transition-all shrink-0 border hover:border-cyan-500/50 hover:text-cyan-500"
+            style={{ background: "var(--surface-2)", borderColor: "var(--border)", color: "var(--text-dim)" }}
+            title="Voir les détails du produit"
+            aria-label="Voir le produit"
+          >
+            <ArrowRight className="h-4 w-4" />
+          </button>
+        </div>
       </div>
     </div>
   );

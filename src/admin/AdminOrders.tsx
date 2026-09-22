@@ -26,6 +26,7 @@ import { ORDER_STATUSES } from "../data/demoAdminData";
 import { ALGERIA_WILAYAS } from "../data/wilayas";
 import { formatDZD } from "../lib/format";
 import type { Order, OrderItem, OrderStatus, Store } from "../types";
+import { saveOrderToDb } from "../lib/supabaseDb";
 
 const STATUS_COLORS: Record<OrderStatus, { bg: string; text: string; border: string }> = {
   Nouvelle: { bg: "bg-blue-500/10", text: "text-blue-600 dark:text-blue-400", border: "border-blue-500/30" },
@@ -797,14 +798,20 @@ export const AdminOrders: React.FC<{ s: Store }> = ({ s }) => {
   };
 
   const handleStatusChange = (orderId: string, newStatus: OrderStatus) => {
-    s.setOrders((prev) =>
-      prev.map((o) => (o.id === orderId ? { ...o, status: newStatus } : o))
-    );
+    s.setOrders((prev) => {
+      const updatedList = prev.map((o) => (o.id === orderId ? { ...o, status: newStatus } : o));
+      const target = updatedList.find((o) => o.id === orderId);
+      if (target) {
+        saveOrderToDb(target).catch((e) => console.error("Supabase status update error", e));
+      }
+      return updatedList;
+    });
     s.showToast(`Statut de la commande ${orderId} mis à jour : ${newStatus}`);
   };
 
   const handleSaveEdit = (updated: Order) => {
     s.setOrders((prev) => prev.map((o) => (o.id === updated.id ? updated : o)));
+    saveOrderToDb(updated).catch((e) => console.error("Supabase order edit error", e));
     s.showToast(`Commande ${updated.id} modifiée avec succès`);
     setEditingOrder(null);
     if (selectedOrder && selectedOrder.id === updated.id) {
@@ -814,6 +821,7 @@ export const AdminOrders: React.FC<{ s: Store }> = ({ s }) => {
 
   const handleSaveCreate = (newOrder: Order) => {
     s.setOrders((prev) => [newOrder, ...prev]);
+    saveOrderToDb(newOrder).catch((e) => console.error("Supabase order create error", e));
     s.showToast(`Nouvelle commande ${newOrder.id} créée`);
     setCreatingOrder(false);
   };

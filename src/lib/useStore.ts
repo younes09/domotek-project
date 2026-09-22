@@ -3,6 +3,14 @@ import { PRODUCTS } from "../data/products";
 import { DEFAULT_CATEGORIES, buildCategoryLabel, getCategoryIcon } from "../data/categories";
 import { DEMO_ORDERS } from "../data/demoAdminData";
 import type { CartItem, Category, CheckoutFormData, Order, Product, ShopFilters, Store, View } from "../types";
+import {
+  fetchCategoriesFromDb,
+  fetchOrdersFromDb,
+  fetchProductsFromDb,
+  saveOrderToDb,
+  seedSupabaseInitialData,
+} from "./supabaseDb";
+import { isSupabaseConfigured } from "./supabase";
 
 const EMPTY_FILTERS: ShopFilters = {
   category: "all", minPrice: "", maxPrice: "", availability: "all", sort: "popularite", special: null, query: "",
@@ -11,7 +19,7 @@ const EMPTY_FILTERS: ShopFilters = {
 export function useStore(): Store {
   const [view, setView] = useState<View>("home");
 
-  // Dynamic Categories with LocalStorage persistence
+  // Dynamic Categories with LocalStorage persistence & Supabase sync
   const [categories, setCategories] = useState<Category[]>(() => {
     try {
       const saved = localStorage.getItem("domotek_categories");
@@ -117,6 +125,33 @@ export function useStore(): Store {
     }
   }, [orders]);
 
+  // Sync initial data from Supabase if configured
+  useEffect(() => {
+    if (!isSupabaseConfigured) return;
+
+    let isMounted = true;
+    async function initSupabaseData() {
+      await seedSupabaseInitialData();
+
+      const [dbCats, dbProds, dbOrders] = await Promise.all([
+        fetchCategoriesFromDb(),
+        fetchProductsFromDb(),
+        fetchOrdersFromDb(),
+      ]);
+
+      if (isMounted) {
+        if (dbCats && dbCats.length > 0) setCategories(dbCats);
+        if (dbProds && dbProds.length > 0) setProducts(dbProds);
+        if (dbOrders && dbOrders.length > 0) setOrders(dbOrders);
+      }
+    }
+
+    initSupabaseData();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const [lastOrder, setLastOrder] = useState<Order | null>(null);
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
   const [theme, setTheme] = useState<"light" | "dark">(() => {
@@ -180,6 +215,9 @@ export function useStore(): Store {
     setLastOrder(newOrder);
     setCart([]);
     setView("confirmation");
+
+    // Async save to Supabase
+    saveOrderToDb(newOrder).catch((err) => console.error("Could not save order to Supabase:", err));
   };
 
   return {
@@ -198,3 +236,4 @@ export function useStore(): Store {
     theme, toggleTheme: () => setTheme((t) => (t === "light" ? "dark" : "light")),
   };
 }
+

@@ -237,11 +237,17 @@ export const ProductDetailView: React.FC<{ s: Store }> = ({ s }) => {
           {/* 4. INSTALLATION */}
           {activeTab === "Installation" && (
             <div className="space-y-4">
-              <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-start gap-3">
-                <span className="text-base leading-none mt-0.5">⚠️</span>
-                <div className="text-xs text-amber-700 dark:text-amber-300">
-                  <strong className="block font-bold">Consigne de sécurité importante :</strong>
-                  Pour toute intervention sur votre installation électrique, veillez toujours à couper le disjoncteur général au préalable.
+              <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/40 dark:border-amber-500/30 border-l-4 border-l-amber-500 flex items-start gap-3.5 shadow-sm">
+                <div className="h-8 w-8 rounded-xl bg-amber-500/20 text-amber-700 dark:text-amber-400 font-bold flex items-center justify-center shrink-0 text-base">
+                  ⚠️
+                </div>
+                <div className="text-xs leading-relaxed">
+                  <strong className="block font-bold text-amber-800 dark:text-amber-300 mb-0.5 text-sm">
+                    Consigne de sécurité importante :
+                  </strong>
+                  <span className="text-slate-800 dark:text-slate-200 font-medium leading-relaxed">
+                    Pour toute intervention sur votre installation électrique, veillez toujours à couper le disjoncteur général au préalable.
+                  </span>
                 </div>
               </div>
 
