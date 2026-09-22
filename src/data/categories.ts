@@ -97,12 +97,12 @@ export function getCategoryIcon(iconName?: string, fallback: IconType = Home): I
 }
 
 export const DEFAULT_CATEGORIES: Category[] = [
-  { key: "smart-home", name: "Smart Home", iconName: "Home", icon: Home, desc: "Pilotez toute votre maison" },
-  { key: "interrupteurs", name: "Interrupteurs intelligents", iconName: "ToggleLeft", icon: ToggleLeft, desc: "Éclairage et circuits à distance" },
-  { key: "capteurs", name: "Capteurs & Sécurité", iconName: "ShieldCheck", icon: ShieldCheck, desc: "Surveillance et alertes" },
-  { key: "prises", name: "Prises intelligentes", iconName: "Plug", icon: Plug, desc: "Pilotez vos appareils branchés" },
-  { key: "telecommandes", name: "Télécommandes", iconName: "RadioTower", icon: RadioTower, desc: "Centralisez vos commandes" },
-  { key: "accessoires", name: "Accessoires électroniques", iconName: "Cpu", icon: Cpu, desc: "Complétez votre installation" },
+  { key: "smart-home", name: "Smart Home", iconName: "Home", icon: Home, description: "Pilotez toute votre maison" },
+  { key: "interrupteurs", name: "Interrupteurs intelligents", iconName: "ToggleLeft", icon: ToggleLeft, description: "Éclairage et circuits à distance" },
+  { key: "capteurs", name: "Capteurs & Sécurité", iconName: "ShieldCheck", icon: ShieldCheck, description: "Surveillance et alertes" },
+  { key: "prises", name: "Prises intelligentes", iconName: "Plug", icon: Plug, description: "Pilotez vos appareils branchés" },
+  { key: "telecommandes", name: "Télécommandes", iconName: "RadioTower", icon: RadioTower, description: "Centralisez vos commandes" },
+  { key: "accessoires", name: "Accessoires électroniques", iconName: "Cpu", icon: Cpu, description: "Complétez votre installation" },
 ];
 
 export const CATEGORIES = DEFAULT_CATEGORIES;

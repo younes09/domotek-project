@@ -24,12 +24,12 @@ export function useStore(): Store {
     try {
       const saved = localStorage.getItem("domotek_categories");
       if (saved) {
-        const parsed: Array<{ key: string; name: string; desc: string; iconName?: string }> = JSON.parse(saved);
+        const parsed: Array<{ key: string; name: string; description?: string; desc?: string; iconName?: string }> = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
           return parsed.map((item) => ({
             key: item.key,
             name: item.name,
-            desc: item.desc || "",
+            description: item.description || item.desc || "",
             iconName: item.iconName,
             icon: getCategoryIcon(item.iconName),
           }));
@@ -48,7 +48,7 @@ export function useStore(): Store {
       const serialized = categories.map((c) => ({
         key: c.key,
         name: c.name,
-        desc: c.desc,
+        description: c.description,
         iconName: c.iconName,
       }));
       localStorage.setItem("domotek_categories", JSON.stringify(serialized));

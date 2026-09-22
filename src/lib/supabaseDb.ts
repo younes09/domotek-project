@@ -17,7 +17,7 @@ export async function fetchCategoriesFromDb(): Promise<Category[] | null> {
     return data.map((item: any) => ({
       key: item.key,
       name: item.name,
-      desc: item.desc || "",
+      description: item.description || item.desc || "",
       iconName: item.icon_name || "Home",
       icon: getCategoryIcon(item.icon_name),
     }));
@@ -34,7 +34,7 @@ export async function saveCategoryToDb(category: Category): Promise<boolean> {
       {
         key: category.key,
         name: category.name,
-        desc: category.desc,
+        description: category.description,
         icon_name: category.iconName || "Home",
       },
       { onConflict: "key" }

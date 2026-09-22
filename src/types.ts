@@ -13,7 +13,7 @@ export interface Category {
   name: string;
   icon: IconType;
   iconName?: string;
-  desc: string;
+  description: string;
 }
 
 export interface ProductVariant {

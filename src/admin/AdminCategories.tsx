@@ -21,14 +21,14 @@ import { saveCategoryToDb, deleteCategoryFromDb } from "../lib/supabaseDb";
 interface CategoryFormState {
   name: string;
   key: string;
-  desc: string;
+  description: string;
   iconName: string;
 }
 
 const emptyFormState = (): CategoryFormState => ({
   name: "",
   key: "",
-  desc: "",
+  description: "",
   iconName: "Home",
 });
 
@@ -53,7 +53,7 @@ const CategoryModal: React.FC<{
       ? {
           name: initial.name,
           key: initial.key,
-          desc: initial.desc || "",
+          description: initial.description || "",
           iconName: initial.iconName || "Home",
         }
       : emptyFormState()
@@ -215,8 +215,8 @@ const CategoryModal: React.FC<{
             </label>
             <textarea
               rows={2}
-              value={form.desc}
-              onChange={(e) => setForm({ ...form, desc: e.target.value })}
+              value={form.description}
+              onChange={(e) => setForm({ ...form, description: e.target.value })}
               placeholder="Ex: Commandez vos luminaires, prises murales et éclairages d'ambiance à distance..."
               className="dk-input rounded-xl px-3.5 py-2 w-full text-xs"
             />
@@ -415,7 +415,7 @@ export const AdminCategories: React.FC<{ s: Store }> = ({ s }) => {
       (c) =>
         c.name.toLowerCase().includes(q) ||
         c.key.toLowerCase().includes(q) ||
-        (c.desc && c.desc.toLowerCase().includes(q))
+        (c.description && c.description.toLowerCase().includes(q))
     );
   }, [s.categories, search]);
 
@@ -462,7 +462,7 @@ export const AdminCategories: React.FC<{ s: Store }> = ({ s }) => {
     const catObj: Category = {
       key: form.key,
       name: form.name,
-      desc: form.desc,
+      description: form.description,
       iconName: form.iconName,
       icon: iconComp,
     };
@@ -661,7 +661,7 @@ export const AdminCategories: React.FC<{ s: Store }> = ({ s }) => {
                               {c.name}
                             </p>
                             <p className="text-[11px] block md:hidden text-slate-400 line-clamp-1">
-                              {c.desc}
+                              {c.description}
                             </p>
                           </div>
                         </div>
@@ -677,7 +677,7 @@ export const AdminCategories: React.FC<{ s: Store }> = ({ s }) => {
                       {/* Description */}
                       <td className="px-4 py-3.5 hidden md:table-cell max-w-xs">
                         <p className="text-xs line-clamp-2" style={{ color: "var(--text-dim)" }}>
-                          {c.desc || "—"}
+                          {c.description || "—"}
                         </p>
                       </td>
 
