@@ -149,7 +149,7 @@ export const ProductCard: React.FC<{ product: Product; s: Store }> = ({ product,
           )}
           {discount && (
             <span className="bg-amber-500/20 text-amber-600 dark:text-amber-300 border border-amber-500/30 text-[11px] font-semibold px-2.5 py-0.5 rounded-full backdrop-blur-md">
-              {discount}%
+              -{discount}%
             </span>
           )}
         </div>
