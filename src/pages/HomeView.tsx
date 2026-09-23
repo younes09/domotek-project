@@ -209,7 +209,6 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
             <img
               src={isDark ? "/images/hero-bg.png" : "/images/hero-bg-white.png"}
               alt="DomoTek — La maison connectée, simplement"
-              fetchPriority="high"
               loading="eager"
               decoding="async"
               className="w-full h-full object-cover object-right sm:object-center transition-transform duration-700 hover:scale-105"

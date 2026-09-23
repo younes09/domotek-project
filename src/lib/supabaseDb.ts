@@ -154,6 +154,37 @@ export async function saveProductToDb(product: Product): Promise<boolean> {
   }
 }
 
+export async function uploadProductImageToSupabase(file: File): Promise<string | null> {
+  if (!isSupabaseConfigured || !supabase) return null;
+  try {
+    const fileExt = file.name.split(".").pop() || "jpg";
+    const fileName = `product-${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
+    const filePath = `uploads/${fileName}`;
+
+    // Upload directly to 'products' storage bucket
+    const { data, error } = await supabase.storage
+      .from("products")
+      .upload(filePath, file, {
+        cacheControl: "3600",
+        upsert: true,
+      });
+
+    if (error) {
+      console.warn("Upload to Supabase Storage bucket 'products' failed:", error.message);
+      return null;
+    }
+
+    const { data: publicUrlData } = supabase.storage
+      .from("products")
+      .getPublicUrl(filePath);
+
+    return publicUrlData?.publicUrl || null;
+  } catch (err) {
+    console.error("Error uploading image to Supabase Storage:", err);
+    return null;
+  }
+}
+
 export async function deleteProductFromDb(id: number): Promise<boolean> {
   if (!isSupabaseConfigured || !supabase) return false;
   try {

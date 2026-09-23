@@ -41,7 +41,7 @@ import {
 import { IconTile } from "../components/ui";
 import { formatDZD } from "../lib/format";
 import type { Category, Product, ProductFAQ, ProductSpec, ProductVariant, StockStatus, Store } from "../types";
-import { saveProductToDb, deleteProductFromDb } from "../lib/supabaseDb";
+import { saveProductToDb, deleteProductFromDb, uploadProductImageToSupabase } from "../lib/supabaseDb";
 
 interface FormState {
   name: string;
@@ -164,29 +164,49 @@ const ProductFormModal: React.FC<{
   const marginPercent = sellingPriceNum > 0 ? Math.round((marginDA / sellingPriceNum) * 100) : 0;
 
   // Multi-photo handlers (1 to 3 photos)
-  const handlePhotoUpload = (slotIndex: number, e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePhotoUpload = async (slotIndex: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const dataUrl = reader.result as string;
-        setForm((prev) => {
-          const nextImages = [...(prev.images || [])];
-          // Ensure slots up to slotIndex exist
-          while (nextImages.length <= slotIndex) {
-            nextImages.push("");
-          }
-          nextImages[slotIndex] = dataUrl;
-          const clean = nextImages.filter(Boolean).slice(0, 3);
-          return {
-            ...prev,
-            images: clean,
-            imageUrl: clean[0] || "",
-          };
-        });
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+
+    // 1. Tenter d'uploader directement sur Supabase Storage
+    const publicUrl = await uploadProductImageToSupabase(file);
+    if (publicUrl) {
+      setForm((prev) => {
+        const nextImages = [...(prev.images || [])];
+        while (nextImages.length <= slotIndex) {
+          nextImages.push("");
+        }
+        nextImages[slotIndex] = publicUrl;
+        const clean = nextImages.filter(Boolean).slice(0, 3);
+        return {
+          ...prev,
+          images: clean,
+          imageUrl: clean[0] || "",
+        };
+      });
+      s.showToast("Photo hébergée sur Supabase avec succès !");
+      return;
     }
+
+    // 2. Fallback reader si Supabase Storage non configuré
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const dataUrl = reader.result as string;
+      setForm((prev) => {
+        const nextImages = [...(prev.images || [])];
+        while (nextImages.length <= slotIndex) {
+          nextImages.push("");
+        }
+        nextImages[slotIndex] = dataUrl;
+        const clean = nextImages.filter(Boolean).slice(0, 3);
+        return {
+          ...prev,
+          images: clean,
+          imageUrl: clean[0] || "",
+        };
+      });
+    };
+    reader.readAsDataURL(file);
   };
 
   const handlePhotoUrlChange = (slotIndex: number, val: string) => {
