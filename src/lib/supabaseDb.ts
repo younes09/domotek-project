@@ -1,7 +1,6 @@
 import { supabase, isSupabaseConfigured } from "./supabase";
 import type { Category, Order, Product } from "../types";
 import { DEFAULT_CATEGORIES, getCategoryIcon } from "../data/categories";
-import { PRODUCTS } from "../data/products";
 import { DEMO_ORDERS } from "../data/demoAdminData";
 
 export async function fetchCategoriesFromDb(): Promise<Category[] | null> {
@@ -70,7 +69,8 @@ export async function fetchProductsFromDb(): Promise<Product[] | null> {
       console.error("Supabase products error:", error);
       return null;
     }
-    if (!data || data.length === 0) return null;
+    if (!data) return [];
+
 
     return data.map((p: any) => ({
       id: p.id,
@@ -234,14 +234,7 @@ export async function seedSupabaseInitialData(): Promise<void> {
       }
     }
 
-    // 2. Seed Products if empty
-    const { data: existingProds } = await supabase.from("products").select("id").limit(1);
-    if (!existingProds || existingProds.length === 0) {
-      console.log("Seeding initial products to Supabase...");
-      for (const prod of PRODUCTS) {
-        await saveProductToDb(prod);
-      }
-    }
+
 
     // 3. Seed Orders if empty
     const { data: existingOrders } = await supabase.from("orders").select("id").limit(1);

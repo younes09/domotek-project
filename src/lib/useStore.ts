@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import { PRODUCTS } from "../data/products";
 import { DEFAULT_CATEGORIES, buildCategoryLabel, getCategoryIcon } from "../data/categories";
 import { DEMO_ORDERS } from "../data/demoAdminData";
 import type { CartItem, Category, CheckoutFormData, Order, Product, ShopFilters, Store, View } from "../types";
@@ -62,26 +61,17 @@ export function useStore(): Store {
       const saved = localStorage.getItem("domotek_products");
       if (saved) {
         const parsed: Product[] = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed.map((p) => {
-            const original = PRODUCTS.find((op) => op.id === p.id);
-            return {
-              characteristics: p.characteristics ?? original?.characteristics,
-              compatibility: p.compatibility ?? original?.compatibility,
-              installation: p.installation ?? original?.installation,
-              usage: p.usage ?? original?.usage,
-              faq: p.faq && p.faq.length > 0 ? p.faq : original?.faq,
-              specs: p.specs && p.specs.length > 0 ? p.specs : original?.specs,
-              ...p,
-              icon: original?.icon || getCategoryIcon(undefined),
-            };
-          });
+        if (Array.isArray(parsed)) {
+          return parsed.map((p) => ({
+            ...p,
+            icon: getCategoryIcon(p.category),
+          }));
         }
       }
     } catch (e) {
       console.error("Failed to parse saved products", e);
     }
-    return PRODUCTS;
+    return [];
   });
 
   useEffect(() => {
