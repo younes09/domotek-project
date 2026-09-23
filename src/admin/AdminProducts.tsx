@@ -568,7 +568,7 @@ const ProductFormModal: React.FC<{
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
                   <label className="text-xs font-bold block mb-1.5" style={{ color: "var(--text)" }}>
-                    Quantité exacte en stock (Pièces) <span className="text-red-500">*</span>
+                    Quantité en stock (Pièces) <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="number"

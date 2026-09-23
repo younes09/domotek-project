@@ -16,9 +16,53 @@ import { useStore } from "./lib/useStore";
 
 export default function App() {
   const s = useStore();
+  const isVisitor = s.view !== "admin";
+
+  React.useEffect(() => {
+    if (!isVisitor) return;
+
+    // Bloquer le clic droit / menu contextuel pour les visiteurs (sauf sur les champs de saisie)
+    const handleContextMenu = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA")) {
+        return;
+      }
+      e.preventDefault();
+    };
+
+    // Bloquer le glisser-déposer (drag & drop) des images
+    const handleDragStart = (e: DragEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (target && (target.tagName === "IMG" || target.closest("img"))) {
+        e.preventDefault();
+      }
+    };
+
+    // Bloquer la copie de texte (Ctrl+C / Cmd+C) hors des champs de formulaire
+    const handleCopy = (e: ClipboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA")) {
+        return;
+      }
+      e.preventDefault();
+    };
+
+    document.addEventListener("contextmenu", handleContextMenu);
+    document.addEventListener("dragstart", handleDragStart);
+    document.addEventListener("copy", handleCopy);
+
+    return () => {
+      document.removeEventListener("contextmenu", handleContextMenu);
+      document.removeEventListener("dragstart", handleDragStart);
+      document.removeEventListener("copy", handleCopy);
+    };
+  }, [isVisitor]);
 
   return (
-    <div className="min-h-screen" style={{ background: "var(--bg)", fontFamily: "var(--font-body)" }}>
+    <div
+      className={`min-h-screen ${isVisitor ? "visitor-protected" : ""}`}
+      style={{ background: "var(--bg)", fontFamily: "var(--font-body)" }}
+    >
       <Header s={s} />
       {s.mobileMenuOpen && <MobileNavigation s={s} />}
       {s.searchOpen && <SearchBar s={s} />}
@@ -39,3 +83,4 @@ export default function App() {
     </div>
   );
 }
+
