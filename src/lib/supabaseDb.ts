@@ -3,12 +3,20 @@ import type { Category, Order, Product } from "../types";
 import { DEFAULT_CATEGORIES, getCategoryIcon } from "../data/categories";
 import { DEMO_ORDERS } from "../data/demoAdminData";
 
+async function withTimeout<T>(promise: PromiseLike<T>, timeoutMs = 4000): Promise<T> {
+  return Promise.race([
+    Promise.resolve(promise),
+    new Promise<T>((_, reject) => setTimeout(() => reject(new Error("Supabase request timeout")), timeoutMs)),
+  ]);
+}
+
 export async function fetchCategoriesFromDb(): Promise<Category[] | null> {
   if (!isSupabaseConfigured || !supabase) return null;
   try {
-    const { data, error } = await supabase.from("categories").select("*").order("id", { ascending: true });
+    const response = await withTimeout(supabase.from("categories").select("*").order("id", { ascending: true }));
+    const { data, error } = response as any;
     if (error) {
-      console.error("Supabase categories error:", error);
+      console.warn("Supabase categories notice:", error.message);
       return null;
     }
     if (!data || data.length === 0) return null;
@@ -21,7 +29,7 @@ export async function fetchCategoriesFromDb(): Promise<Category[] | null> {
       icon: getCategoryIcon(item.icon_name),
     }));
   } catch (err) {
-    console.error("Failed to fetch categories from Supabase:", err);
+    console.warn("Categories fetch note:", err);
     return null;
   }
 }
@@ -64,13 +72,13 @@ export async function deleteCategoryFromDb(key: string): Promise<boolean> {
 export async function fetchProductsFromDb(): Promise<Product[] | null> {
   if (!isSupabaseConfigured || !supabase) return null;
   try {
-    const { data, error } = await supabase.from("products").select("*").order("id", { ascending: true });
+    const response = await withTimeout(supabase.from("products").select("*").order("id", { ascending: true }));
+    const { data, error } = response as any;
     if (error) {
-      console.error("Supabase products error:", error);
+      console.warn("Supabase products notice:", error.message);
       return null;
     }
     if (!data) return [];
-
 
     return data.map((p: any) => ({
       id: p.id,
@@ -101,7 +109,7 @@ export async function fetchProductsFromDb(): Promise<Product[] | null> {
       faq: Array.isArray(p.faq) ? p.faq : [],
     }));
   } catch (err) {
-    console.error("Failed to fetch products from Supabase:", err);
+    console.warn("Products fetch note:", err);
     return null;
   }
 }
@@ -245,9 +253,10 @@ export async function deleteProductFromDb(id: number, imagesToDelete?: string[])
 export async function fetchOrdersFromDb(): Promise<Order[] | null> {
   if (!isSupabaseConfigured || !supabase) return null;
   try {
-    const { data, error } = await supabase.from("orders").select("*").order("created_at", { ascending: false });
+    const response = await withTimeout(supabase.from("orders").select("*").order("created_at", { ascending: false }));
+    const { data, error } = response as any;
     if (error) {
-      console.error("Supabase orders error:", error);
+      console.warn("Supabase orders notice:", error.message);
       return null;
     }
     if (!data || data.length === 0) return null;
@@ -266,7 +275,7 @@ export async function fetchOrdersFromDb(): Promise<Order[] | null> {
       date: o.created_at ? new Date(o.created_at).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
     }));
   } catch (err) {
-    console.error("Failed to fetch orders from Supabase:", err);
+    console.warn("Orders fetch note:", err);
     return null;
   }
 }

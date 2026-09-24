@@ -163,23 +163,27 @@ export const ProductCard: React.FC<{ product: Product; s: Store }> = ({ product,
           )}
         </div>
 
-        {product.stock !== "in" && (
+        {/* 45° Diagonal Corner Ribbon / Sash for Out of Stock */}
+        {product.stock === "out" && (
+          <div className="absolute top-0 right-0 w-28 h-28 overflow-hidden pointer-events-none z-30">
+            <div className="absolute top-[18px] -right-[36px] w-[140px] rotate-45 bg-rose-600 dark:bg-rose-600 text-white text-[9px] font-black uppercase tracking-widest py-1 text-center shadow-lg border-y border-white/30 backdrop-blur-sm">
+              Rupture
+            </div>
+          </div>
+        )}
+
+        {/* Stock limité bottom badge */}
+        {product.stock === "low" && (
           <div className="absolute inset-x-2.5 bottom-2.5 pointer-events-none z-10">
-            <span
-              className={`block text-center text-[11px] font-bold px-2.5 py-1 rounded-full shadow-md backdrop-blur-md ${
-                product.stock === "out"
-                  ? "bg-rose-600/90 text-white dark:bg-rose-600 dark:text-white border border-rose-400/40"
-                  : "bg-amber-500/90 text-slate-950 dark:bg-amber-400 dark:text-slate-950 border border-amber-300/40"
-              }`}
-            >
-              {product.stock === "out" ? "Rupture de stock" : "Stock limité"}
+            <span className="block text-center text-[10px] sm:text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-md backdrop-blur-md bg-amber-500/95 text-slate-950 dark:bg-amber-400 dark:text-slate-950 border border-amber-300/40">
+              Stock limité
             </span>
           </div>
         )}
 
         <button
           onClick={(e) => { e.stopPropagation(); s.toggleWishlist(product.id); }}
-          className="hidden md:flex absolute top-2.5 right-2.5 h-8 w-8 items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition duration-200 dk-focus z-10 shadow-sm"
+          className={`hidden md:flex absolute ${product.stock === "out" ? "top-9" : "top-2.5"} right-2.5 h-8 w-8 items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition duration-200 dk-focus z-10 shadow-sm`}
           style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
           aria-label="Ajouter aux favoris"
         >

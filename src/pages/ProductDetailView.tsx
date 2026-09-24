@@ -20,7 +20,22 @@ export const ProductDetailView: React.FC<{ s: Store }> = ({ s }) => {
     setVariant(p?.variants ? p.variants.options[0] : null);
   }, [p]);
 
-  if (!p) return null;
+  if (!p) {
+    return (
+      <div className="max-w-md mx-auto px-4 py-20 text-center space-y-4">
+        <h2 className="text-xl font-bold" style={{ color: "var(--text)" }}>Produit introuvable</h2>
+        <p className="text-xs sm:text-sm" style={{ color: "var(--text-dim)" }}>
+          Ce produit n'est plus disponible ou a été déplacé.
+        </p>
+        <button
+          onClick={() => s.goShop({})}
+          className="px-6 py-2.5 rounded-xl font-bold text-xs dk-btn-primary"
+        >
+          Découvrir le catalogue
+        </button>
+      </div>
+    );
+  }
   const related = s.products.filter((r) => r.category === p.category && r.id !== p.id).slice(0, 4);
 
   return (

@@ -252,7 +252,7 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
                   isDark ? "text-slate-300" : "text-slate-600"
                 }`}
               >
-                <div className="flex iQuantité exacte en stock (Pièces)tems-center gap-1.5">
+                <div className="flex items-center gap-1.5">
                   <div className="flex text-amber-400">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="h-3.5 w-3.5 fill-amber-400" />

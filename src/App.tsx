@@ -18,6 +18,19 @@ export default function App() {
   const s = useStore();
   const isVisitor = s.view !== "admin";
 
+  // Raccourci clavier discret pour ouvrir l'espace admin (Ctrl + Shift + A ou Alt + A)
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey && e.shiftKey && (e.key === "A" || e.key === "a")) || (e.altKey && (e.key === "a" || e.key === "A"))) {
+        e.preventDefault();
+        s.setView("admin");
+        s.showToast("Accès administrateur demandé");
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [s]);
+
   React.useEffect(() => {
     if (!isVisitor) return;
 
@@ -71,7 +84,7 @@ export default function App() {
       <main>
         {s.view === "home" && <HomeView s={s} />}
         {s.view === "shop" && <ShopView s={s} />}
-        {s.view === "product" && s.selectedProduct && <ProductDetailView s={s} />}
+        {s.view === "product" && <ProductDetailView s={s} />}
         {s.view === "checkout" && <CheckoutForm s={s} />}
         {s.view === "confirmation" && <ConfirmationView s={s} />}
         {s.view === "admin" && <AdminView s={s} />}
@@ -83,4 +96,3 @@ export default function App() {
     </div>
   );
 }
-

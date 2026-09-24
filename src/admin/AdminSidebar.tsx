@@ -5,13 +5,15 @@ import {
   SlidersHorizontal,
   ClipboardList,
   Users,
+  ShieldCheck,
   ArrowLeft,
   LogOut,
   AlertTriangle,
 } from "lucide-react";
 import type { Store } from "../types";
+import { getSecurityConfig } from "../lib/authSecurity";
 
-export type AdminTab = "dashboard" | "produits" | "categories" | "commandes" | "clients";
+export type AdminTab = "dashboard" | "produits" | "categories" | "commandes" | "clients" | "securite";
 
 const ITEMS: Array<{ key: AdminTab; label: string; Icon: React.ComponentType<{ className?: string }> }> = [
   { key: "dashboard", label: "Tableau de bord", Icon: LayoutDashboard },
@@ -19,6 +21,7 @@ const ITEMS: Array<{ key: AdminTab; label: string; Icon: React.ComponentType<{ c
   { key: "categories", label: "Catégories", Icon: SlidersHorizontal },
   { key: "commandes", label: "Commandes", Icon: ClipboardList },
   { key: "clients", label: "Clients CRM", Icon: Users },
+  { key: "securite", label: "Sécurité & Accès", Icon: ShieldCheck },
 ];
 
 export const AdminSidebar: React.FC<{
@@ -30,6 +33,8 @@ export const AdminSidebar: React.FC<{
 }> = ({ tab, setTab, s, onLogout, isCollapsed = false }) => {
   const lowStockCount = s.products.filter((p) => p.stock !== "in").length;
   const newOrdersCount = s.orders.filter((o) => o.status === "Nouvelle").length;
+  const secConfig = getSecurityConfig();
+  const hasSecurityAlert = secConfig.requirePasswordChange;
 
   return (
     <div
@@ -70,6 +75,11 @@ export const AdminSidebar: React.FC<{
                 {newOrdersCount}
               </span>
             )}
+            {!isCollapsed && it.key === "securite" && hasSecurityAlert && (
+              <span className="text-[10px] px-2 py-0.2 rounded-full font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                Action requise
+              </span>
+            )}
 
             {/* Dot badge when collapsed */}
             {isCollapsed && it.key === "produits" && lowStockCount > 0 && (
@@ -77,6 +87,9 @@ export const AdminSidebar: React.FC<{
             )}
             {isCollapsed && it.key === "commandes" && newOrdersCount > 0 && (
               <span className="hidden lg:block absolute top-1 right-1 h-2.5 w-2.5 rounded-full bg-cyan-500 ring-2 ring-[var(--surface)]" />
+            )}
+            {isCollapsed && it.key === "securite" && hasSecurityAlert && (
+              <span className="hidden lg:block absolute top-1 right-1 h-2.5 w-2.5 rounded-full bg-amber-500 ring-2 ring-[var(--surface)]" />
             )}
           </button>
         );

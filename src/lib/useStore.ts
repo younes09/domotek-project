@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { DEFAULT_CATEGORIES, buildCategoryLabel, getCategoryIcon } from "../data/categories";
+import { PRODUCTS } from "../data/products";
 import { DEMO_ORDERS } from "../data/demoAdminData";
 import type { CartItem, Category, CheckoutFormData, Order, Product, ShopFilters, Store, View } from "../types";
 import {
@@ -9,7 +10,7 @@ import {
   saveOrderToDb,
   seedSupabaseInitialData,
 } from "./supabaseDb";
-import { isSupabaseConfigured } from "./supabase";
+import { isSupabaseConfigured, supabase } from "./supabase";
 
 const EMPTY_FILTERS: ShopFilters = {
   category: "all", minPrice: "", maxPrice: "", availability: "all", sort: "popularite", special: null, query: "",
@@ -90,7 +91,7 @@ export function useStore(): Store {
       const saved = localStorage.getItem("domotek_products");
       if (saved) {
         const parsed: Product[] = JSON.parse(saved);
-        if (Array.isArray(parsed)) {
+        if (Array.isArray(parsed) && parsed.length > 0) {
           return parsed.map((p) => ({
             ...p,
             icon: getCategoryIcon(p.category),
@@ -100,7 +101,7 @@ export function useStore(): Store {
     } catch (e) {
       console.error("Failed to parse saved products", e);
     }
-    return [];
+    return PRODUCTS;
   });
 
   useEffect(() => {
@@ -241,30 +242,69 @@ export function useStore(): Store {
     }
   }, [orders]);
 
-  // Sync initial data from Supabase if configured
+  // Sync data and real-time updates from Supabase directly
   useEffect(() => {
-    if (!isSupabaseConfigured) return;
+    if (!isSupabaseConfigured || !supabase) return;
 
     let isMounted = true;
     async function initSupabaseData() {
-      await seedSupabaseInitialData();
+      try {
+        const [dbCats, dbProds, dbOrders] = await Promise.allSettled([
+          fetchCategoriesFromDb(),
+          fetchProductsFromDb(),
+          fetchOrdersFromDb(),
+        ]);
 
-      const [dbCats, dbProds, dbOrders] = await Promise.all([
-        fetchCategoriesFromDb(),
-        fetchProductsFromDb(),
-        fetchOrdersFromDb(),
-      ]);
-
-      if (isMounted) {
-        if (dbCats && dbCats.length > 0) setCategories(dbCats);
-        if (dbProds && dbProds.length > 0) setProducts(dbProds);
-        if (dbOrders && dbOrders.length > 0) setOrders(dbOrders);
+        if (isMounted) {
+          if (dbCats.status === "fulfilled" && dbCats.value && dbCats.value.length > 0) {
+            setCategories(dbCats.value);
+          }
+          if (dbProds.status === "fulfilled" && dbProds.value && dbProds.value.length > 0) {
+            setProducts(dbProds.value);
+          }
+          if (dbOrders.status === "fulfilled" && dbOrders.value && dbOrders.value.length > 0) {
+            setOrders(dbOrders.value);
+          }
+        }
+      } catch (err) {
+        console.warn("Supabase fetch notice:", err);
       }
     }
 
     initSupabaseData();
+
+    // Abonnement temps réel Supabase aux changements sur les produits, catégories et commandes
+    const channel = supabase
+      .channel("schema-db-changes")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "products" },
+        async () => {
+          const freshProds = await fetchProductsFromDb();
+          if (freshProds && isMounted) setProducts(freshProds);
+        }
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "categories" },
+        async () => {
+          const freshCats = await fetchCategoriesFromDb();
+          if (freshCats && isMounted) setCategories(freshCats);
+        }
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "orders" },
+        async () => {
+          const freshOrders = await fetchOrdersFromDb();
+          if (freshOrders && isMounted) setOrders(freshOrders);
+        }
+      )
+      .subscribe();
+
     return () => {
       isMounted = false;
+      supabase.removeChannel(channel);
     };
   }, []);
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Maximize2,
   Minimize2,
@@ -11,12 +11,19 @@ import { AdminProducts } from "./AdminProducts";
 import { AdminCategories } from "./AdminCategories";
 import { AdminOrders } from "./AdminOrders";
 import { AdminCustomers } from "./AdminCustomers";
+import { AdminSecurity } from "./AdminSecurity";
 import { AdminLogin } from "./AdminLogin";
 import type { Store } from "../types";
+import {
+  validateCurrentSession,
+  terminateAdminSession,
+  touchAdminSession,
+  logSecurityEvent,
+} from "../lib/authSecurity";
 
 export const AdminView: React.FC<{ s: Store }> = ({ s }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    return localStorage.getItem("domotek_admin_auth") === "true";
+    return validateCurrentSession().valid;
   });
   const [tab, setTab] = useState<AdminTab>("dashboard");
 
@@ -38,15 +45,51 @@ export const AdminView: React.FC<{ s: Store }> = ({ s }) => {
     localStorage.setItem("domotek_admin_sidebar_collapsed", String(isSidebarCollapsed));
   }, [isSidebarCollapsed]);
 
+  const handleLogout = useCallback((reason?: string) => {
+    logSecurityEvent("LOGOUT", reason || "Déconnexion manuelle effectuée par l'administrateur");
+    terminateAdminSession();
+    setIsAuthenticated(false);
+    s.showToast(reason || "Déconnecté du panneau d'administration");
+  }, [s]);
+
+  // Session validation and Inactivity watchdog
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    // Periodic check every 20 seconds
+    const interval = setInterval(() => {
+      const validation = validateCurrentSession();
+      if (!validation.valid) {
+        handleLogout(validation.reason || "Session expirée");
+      }
+    }, 20000);
+
+    // Throttle user activity touches (max once every 15s)
+    let lastTouch = Date.now();
+    const handleActivity = () => {
+      const now = Date.now();
+      if (now - lastTouch > 15000) {
+        lastTouch = now;
+        touchAdminSession();
+      }
+    };
+
+    window.addEventListener("mousemove", handleActivity);
+    window.addEventListener("keydown", handleActivity);
+    window.addEventListener("touchstart", handleActivity);
+    window.addEventListener("scroll", handleActivity);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("mousemove", handleActivity);
+      window.removeEventListener("keydown", handleActivity);
+      window.removeEventListener("touchstart", handleActivity);
+      window.removeEventListener("scroll", handleActivity);
+    };
+  }, [isAuthenticated, handleLogout]);
+
   const handleLogin = () => {
     setIsAuthenticated(true);
-    localStorage.setItem("domotek_admin_auth", "true");
-  };
-
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    localStorage.removeItem("domotek_admin_auth");
-    s.showToast("Déconnecté du panneau d'administration");
   };
 
   if (!isAuthenticated) {
@@ -136,7 +179,7 @@ export const AdminView: React.FC<{ s: Store }> = ({ s }) => {
             tab={tab}
             setTab={setTab}
             s={s}
-            onLogout={handleLogout}
+            onLogout={() => handleLogout()}
             isCollapsed={isSidebarCollapsed}
           />
         </aside>
@@ -148,6 +191,7 @@ export const AdminView: React.FC<{ s: Store }> = ({ s }) => {
           {tab === "categories" && <AdminCategories s={s} />}
           {tab === "commandes" && <AdminOrders s={s} />}
           {tab === "clients" && <AdminCustomers s={s} />}
+          {tab === "securite" && <AdminSecurity s={s} />}
         </div>
       </div>
     </div>
