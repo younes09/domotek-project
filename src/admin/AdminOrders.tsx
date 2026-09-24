@@ -23,7 +23,7 @@ import { ORDER_STATUSES } from "../data/demoAdminData";
 import { ALGERIA_WILAYAS } from "../data/wilayas";
 import { formatDZD } from "../lib/format";
 import type { Order, OrderItem, OrderStatus, Store } from "../types";
-import { saveOrderToDb } from "../lib/supabaseDb";
+import { saveOrderToDb, deleteOrderFromDb } from "../lib/supabaseDb";
 
 const STATUS_COLORS: Record<OrderStatus, { bg: string; text: string; border: string }> = {
   Nouvelle: { bg: "bg-blue-500/10", text: "text-blue-600 dark:text-blue-400", border: "border-blue-500/30" },
@@ -827,6 +827,7 @@ export const AdminOrders: React.FC<{ s: Store }> = ({ s }) => {
     if (!deletingOrder) return;
     const id = deletingOrder.id;
     s.setOrders((prev) => prev.filter((o) => o.id !== id));
+    deleteOrderFromDb(id).catch((e) => console.error("Supabase order delete error", e));
     s.showToast(`Commande ${id} supprimée`);
     setDeletingOrder(null);
     if (selectedOrder && selectedOrder.id === id) {

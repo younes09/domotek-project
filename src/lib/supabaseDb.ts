@@ -298,6 +298,18 @@ export async function saveOrderToDb(order: Order): Promise<boolean> {
   }
 }
 
+export async function deleteOrderFromDb(id: string): Promise<boolean> {
+  if (!isSupabaseConfigured || !supabase) return false;
+  try {
+    const { error } = await supabase.from("orders").delete().eq("id", id);
+    if (error) console.error("Error deleting order from Supabase:", error);
+    return !error;
+  } catch (err) {
+    console.error("Error deleting order:", err);
+    return false;
+  }
+}
+
 export async function seedSupabaseInitialData(): Promise<void> {
   if (!isSupabaseConfigured || !supabase) return;
   try {
