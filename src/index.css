@@ -106,11 +106,25 @@ body {
 }
 .dk-chip-teal {
   background: var(--teal-dim);
-  color: var(--teal);
+  color: #0284c7;
+  border: 1px solid rgba(2, 132, 199, 0.25);
+  font-weight: 700;
+}
+[data-theme="dark"] .dk-chip-teal {
+  background: rgba(56, 189, 248, 0.18);
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.4);
 }
 .dk-chip-amber {
   background: var(--amber-dim);
-  color: var(--amber);
+  color: #b45309;
+  border: 1px solid rgba(180, 83, 9, 0.25);
+  font-weight: 700;
+}
+[data-theme="dark"] .dk-chip-amber {
+  background: rgba(251, 191, 36, 0.18);
+  color: #fbbf24;
+  border-color: rgba(251, 191, 36, 0.4);
 }
 .dk-btn-primary {
   background: var(--teal);

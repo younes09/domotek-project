@@ -145,15 +145,20 @@ export const ProductCard: React.FC<{ product: Product; s: Store }> = ({ product,
         )}
 
         {/* Badges */}
-        <div className="absolute top-2.5 left-2.5 flex flex-col gap-1 pointer-events-none z-10">
+        <div className="absolute top-2.5 left-2.5 flex flex-col items-start gap-1 pointer-events-none z-10">
           {product.isNew && (
-            <span className="bg-cyan-500/20 text-cyan-600 dark:text-cyan-300 border border-cyan-500/30 text-[11px] font-semibold px-2.5 py-0.5 rounded-full backdrop-blur-md">
+            <span className="inline-flex items-center w-fit bg-cyan-600 text-white dark:bg-cyan-400 dark:text-slate-950 font-bold text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full shadow-md border border-white/20 whitespace-nowrap leading-tight">
               Nouveau
             </span>
           )}
           {discount !== null && discount > 0 && (
-            <span className="bg-amber-500/20 text-amber-600 dark:text-amber-300 border border-amber-500/30 text-[11px] font-semibold px-2.5 py-0.5 rounded-full backdrop-blur-md">
+            <span className="inline-flex items-center w-fit bg-amber-500 text-slate-950 dark:bg-amber-400 dark:text-slate-950 font-extrabold text-[10px] sm:text-[11px] px-2 py-0.5 rounded-full shadow-md border border-amber-300/40 whitespace-nowrap leading-tight">
               -{discount}%
+            </span>
+          )}
+          {product.isBestSeller && !product.isNew && (
+            <span className="inline-flex items-center w-fit bg-indigo-600 text-white dark:bg-indigo-500 dark:text-white font-bold text-[10px] sm:text-[11px] px-2 py-0.5 rounded-full shadow-md border border-indigo-400/30 whitespace-nowrap leading-tight">
+              ★ Top Vente
             </span>
           )}
         </div>
@@ -161,8 +166,11 @@ export const ProductCard: React.FC<{ product: Product; s: Store }> = ({ product,
         {product.stock !== "in" && (
           <div className="absolute inset-x-2.5 bottom-2.5 pointer-events-none z-10">
             <span
-              className="block text-center text-[11px] font-medium px-2 py-1 rounded-full backdrop-blur-md shadow-sm"
-              style={{ background: "var(--surface)", border: "1px solid var(--border)", color: product.stock === "out" ? "var(--danger)" : "var(--amber)" }}
+              className={`block text-center text-[11px] font-bold px-2.5 py-1 rounded-full shadow-md backdrop-blur-md ${
+                product.stock === "out"
+                  ? "bg-rose-600/90 text-white dark:bg-rose-600 dark:text-white border border-rose-400/40"
+                  : "bg-amber-500/90 text-slate-950 dark:bg-amber-400 dark:text-slate-950 border border-amber-300/40"
+              }`}
             >
               {product.stock === "out" ? "Rupture de stock" : "Stock limité"}
             </span>

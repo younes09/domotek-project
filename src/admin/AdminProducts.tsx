@@ -1916,7 +1916,7 @@ export const AdminProducts: React.FC<{ s: Store }> = ({ s }) => {
                                 </span>
                               )}
                               {p.isNew && (
-                                <span className="text-[10px] px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-500 font-bold">
+                                <span className="text-[10px] px-1.5 py-0.5 rounded bg-cyan-600 text-white dark:bg-cyan-400 dark:text-slate-950 font-extrabold tracking-wide shadow-sm">
                                   NEW
                                 </span>
                               )}
