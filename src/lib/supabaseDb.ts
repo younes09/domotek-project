@@ -1,7 +1,6 @@
 import { supabase, isSupabaseConfigured } from "./supabase";
 import type { Category, Order, Product } from "../types";
 import { DEFAULT_CATEGORIES, getCategoryIcon } from "../data/categories";
-import { DEMO_ORDERS } from "../data/demoAdminData";
 
 async function withTimeout<T>(promise: PromiseLike<T>, timeoutMs = 4000): Promise<T> {
   return Promise.race([
@@ -259,7 +258,7 @@ export async function fetchOrdersFromDb(): Promise<Order[] | null> {
       console.warn("Supabase orders notice:", error.message);
       return null;
     }
-    if (!data || data.length === 0) return null;
+    if (!data) return [];
 
     return data.map((o: any) => ({
       id: o.id,
@@ -328,17 +327,6 @@ export async function seedSupabaseInitialData(): Promise<void> {
       console.log("Seeding initial categories to Supabase...");
       for (const cat of DEFAULT_CATEGORIES) {
         await saveCategoryToDb(cat);
-      }
-    }
-
-
-
-    // 3. Seed Orders if empty
-    const { data: existingOrders } = await supabase.from("orders").select("id").limit(1);
-    if (!existingOrders || existingOrders.length === 0) {
-      console.log("Seeding initial demo orders to Supabase...");
-      for (const ord of DEMO_ORDERS) {
-        await saveOrderToDb(ord);
       }
     }
   } catch (err) {

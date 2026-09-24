@@ -97,20 +97,26 @@ export const AdminDashboard: React.FC<{ s: Store; onNavigate: (t: AdminTab) => v
             </button>
           </div>
           <div className="space-y-2.5">
-            {s.orders.slice(0, 4).map((o) => (
-              <div key={o.id} className="p-3 rounded-xl dk-surface-2 flex items-center justify-between text-xs">
-                <div>
-                  <p className="font-bold" style={{ color: "var(--text)" }}>{o.customerName} <span className="font-normal" style={{ color: "var(--text-faint)" }}>({o.wilaya})</span></p>
-                  <p className="text-[11px]" style={{ color: "var(--text-dim)" }}>{o.id} • {o.items.length} article(s)</p>
+            {s.orders.length === 0 ? (
+              <p className="text-xs text-center py-6" style={{ color: "var(--text-dim)" }}>
+                Aucune commande enregistrée pour le moment.
+              </p>
+            ) : (
+              s.orders.slice(0, 4).map((o) => (
+                <div key={o.id} className="p-3 rounded-xl dk-surface-2 flex items-center justify-between text-xs">
+                  <div>
+                    <p className="font-bold" style={{ color: "var(--text)" }}>{o.customerName} <span className="font-normal" style={{ color: "var(--text-faint)" }}>({o.wilaya})</span></p>
+                    <p className="text-[11px]" style={{ color: "var(--text-dim)" }}>{o.id} • {o.items.length} article(s)</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-bold font-mono text-cyan-600 dark:text-cyan-400">{formatDZD(o.total)}</p>
+                    <span className="text-[10px] px-2 py-0.5 rounded font-semibold dk-chip-teal">
+                      {o.status}
+                    </span>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <p className="font-bold font-mono text-cyan-600 dark:text-cyan-400">{formatDZD(o.total)}</p>
-                  <span className="text-[10px] px-2 py-0.5 rounded font-semibold dk-chip-teal">
-                    {o.status}
-                  </span>
-                </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
 

@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { ALGERIA_WILAYAS } from "../data/wilayas";
 import { formatDZD } from "../lib/format";
+import { deleteOrderFromDb } from "../lib/supabaseDb";
 import type { Order, Store } from "../types";
 
 export type CustomerTag = "vip" | "pro" | "fidele" | "nouveau" | "prospect";
@@ -735,6 +736,10 @@ export const AdminCustomers: React.FC<{ s: Store }> = ({ s }) => {
 
     // Optionally remove their orders
     if (deleteOrders) {
+      const ordersToDelete = s.orders.filter((o) => o.phone === targetPhone);
+      ordersToDelete.forEach((ord) => {
+        deleteOrderFromDb(ord.id).catch((err) => console.error("Error deleting customer order from Supabase:", err));
+      });
       s.setOrders((prev) => prev.filter((o) => o.phone !== targetPhone));
     }
 

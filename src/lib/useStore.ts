@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { DEFAULT_CATEGORIES, buildCategoryLabel, getCategoryIcon } from "../data/categories";
 import { PRODUCTS } from "../data/products";
-import { DEMO_ORDERS } from "../data/demoAdminData";
 import type { CartItem, Category, CheckoutFormData, Order, Product, ShopFilters, Store, View } from "../types";
 import {
   fetchCategoriesFromDb,
@@ -222,16 +221,16 @@ export function useStore(): Store {
   const [orders, setOrders] = useState<Order[]>(() => {
     try {
       const saved = localStorage.getItem("domotek_orders");
-      if (saved) {
+      if (saved !== null) {
         const parsed: Order[] = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
+        if (Array.isArray(parsed)) {
           return parsed;
         }
       }
     } catch (e) {
       console.error("Failed to parse saved orders", e);
     }
-    return DEMO_ORDERS;
+    return [];
   });
 
   useEffect(() => {
@@ -262,7 +261,7 @@ export function useStore(): Store {
           if (dbProds.status === "fulfilled" && dbProds.value && dbProds.value.length > 0) {
             setProducts(dbProds.value);
           }
-          if (dbOrders.status === "fulfilled" && dbOrders.value && dbOrders.value.length > 0) {
+          if (dbOrders.status === "fulfilled" && dbOrders.value !== null) {
             setOrders(dbOrders.value);
           }
         }
@@ -297,7 +296,7 @@ export function useStore(): Store {
         { event: "*", schema: "public", table: "orders" },
         async () => {
           const freshOrders = await fetchOrdersFromDb();
-          if (freshOrders && isMounted) setOrders(freshOrders);
+          if (freshOrders !== null && isMounted) setOrders(freshOrders);
         }
       )
       .subscribe();
