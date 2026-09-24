@@ -164,8 +164,8 @@ const ProductFormModal: React.FC<{
     if (!rawFile) return;
 
     try {
-      // Automatic client-side compression (converts 5MB-10MB photo to ~50KB-80KB WebP)
-      const { file: optimizedFile, dataUrl } = await compressImageClient(rawFile, 1000, 1000, 0.85);
+      // Automatic client-side compression (converts 5MB-10MB photo to ~30KB-60KB WebP)
+      const { file: optimizedFile, dataUrl } = await compressImageClient(rawFile, 800, 800, 0.75);
 
       // 1. Tenter d'uploader directement sur Supabase Storage
       const publicUrl = await uploadProductImageToSupabase(optimizedFile);
@@ -188,7 +188,7 @@ const ProductFormModal: React.FC<{
       if (publicUrl) {
         showToast?.("Photo optimisée et hébergée sur Supabase avec succès !");
       } else {
-        showToast?.("Photo optimisée et enregistrée localement !");
+        showToast?.("Photo optimisée et enregistrée (Pour l'hébergement cloud, configurez les permissions du bucket 'products').");
       }
     } catch (err) {
       console.error("Error processing photo:", err);
