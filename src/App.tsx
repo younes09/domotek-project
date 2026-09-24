@@ -18,13 +18,29 @@ export default function App() {
   const s = useStore();
   const isVisitor = s.view !== "admin";
 
-  // Raccourci clavier discret pour ouvrir l'espace admin (Ctrl + Shift + A ou Alt + A)
+  // Raccourcis clavier discrets pour ouvrir le portail de connexion / admin :
+  // Ctrl + Shift + L (Login) | Ctrl + Shift + A (Admin) | Alt + L | Alt + A | Cmd + Shift + L/A
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey && e.shiftKey && (e.key === "A" || e.key === "a")) || (e.altKey && (e.key === "a" || e.key === "A"))) {
+      const key = e.key.toLowerCase();
+      const isLOrA = key === "l" || key === "a";
+      const isCtrlOrMeta = e.ctrlKey || e.metaKey;
+
+      const isCombo =
+        (isCtrlOrMeta && e.shiftKey && isLOrA) ||
+        (isCtrlOrMeta && e.altKey && isLOrA) ||
+        (e.altKey && isLOrA);
+
+      if (isCombo) {
         e.preventDefault();
-        s.setView("admin");
-        s.showToast("Accès administrateur demandé");
+        e.stopPropagation();
+        if (s.view !== "admin") {
+          s.setView("admin");
+          s.showToast("Portail de connexion administrateur");
+        } else {
+          s.goHome();
+          s.showToast("Retour à la boutique");
+        }
       }
     };
     window.addEventListener("keydown", handleKeyDown);

@@ -510,9 +510,9 @@ export const AdminSecurity: React.FC<{ s: Store }> = ({ s }) => {
                     className="rounded text-cyan-500 focus:ring-cyan-500 h-4 w-4 mt-0.5 bg-slate-800 border-slate-700"
                   />
                   <div>
-                    <span style={{ color: "var(--text)" }}>Mode Furtif (Masquer l'accès Admin du pied de page public)</span>
+                    <span style={{ color: "var(--text)" }}>Mode Furtif (Accès 100% masqué aux visiteurs)</span>
                     <p className="text-[11px] font-normal mt-0.5" style={{ color: "var(--text-faint)" }}>
-                      Le lien sera retiré du footer. L'accès reste possible via l'URL directe <code className="font-mono bg-black/20 px-1 rounded">#admin</code> ou le raccourci <code className="font-mono bg-black/20 px-1 rounded">Ctrl + Shift + A</code>.
+                      L'accès administrateur est discret : utilisez le raccourci <code className="font-mono bg-black/20 px-1 rounded">Ctrl + Shift + L</code> ou <code className="font-mono bg-black/20 px-1 rounded">Alt + L</code> (ou triple clic sur le copyright).
                     </p>
                   </div>
                 </label>

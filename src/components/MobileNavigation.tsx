@@ -1,5 +1,5 @@
 import React from "react";
-import { X, Settings } from "lucide-react";
+import { X } from "lucide-react";
 import { Logo } from "./Logo";
 import { getCategoryIcon } from "../data/categories";
 import type { Store } from "../types";
@@ -31,14 +31,6 @@ export const MobileNavigation: React.FC<{ s: Store }> = ({ s }) => (
             </button>
           );
         })}
-      </div>
-      <div className="p-4 border-t" style={{ borderColor: "var(--border)" }}>
-        <button
-          onClick={() => { s.setView("admin"); s.setMobileMenuOpen(false); }}
-          className="w-full flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm dk-btn-secondary"
-        >
-          <Settings className="h-4 w-4" /> Espace admin
-        </button>
       </div>
     </div>
   </div>

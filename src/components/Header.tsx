@@ -1,5 +1,5 @@
 import React from "react";
-import { Search, User, ShoppingCart, Menu, Phone } from "lucide-react";
+import { Search, ShoppingCart, Menu, Phone } from "lucide-react";
 import { Logo } from "./Logo";
 import { LampToggle } from "./LampToggle";
 import type { Store } from "../types";
@@ -111,15 +111,6 @@ export const Header: React.FC<{ s: Store }> = ({ s }) => {
             <div className="relative flex items-center justify-center" title={isDark ? "Passer au thème clair" : "Passer au thème sombre"}>
               <LampToggle isDark={isDark} onToggle={s.toggleTheme} />
             </div>
-
-            <button
-              onClick={() => s.setView("admin")}
-              className="hidden sm:flex h-10 w-10 items-center justify-center rounded-xl dk-surface dk-focus"
-              aria-label="Espace Admin"
-              title="Espace Administrateur"
-            >
-              <User className="h-5 w-5" style={{ color: "var(--text-dim)" }} />
-            </button>
 
             <button
               onClick={() => s.setCartOpen(true)}

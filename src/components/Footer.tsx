@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Facebook, Instagram, Settings, Phone, Shield } from "lucide-react";
+import { Facebook, Instagram, Phone } from "lucide-react";
 import { Logo } from "./Logo";
 import { TikTokIcon } from "./ui";
 import type { Store } from "../types";
@@ -73,11 +73,6 @@ export const Footer: React.FC<{ s: Store }> = ({ s }) => {
           <p className="text-xs sm:text-sm leading-relaxed" style={{ color: "var(--text-dim)" }}>
             Une technologie moderne conçue pour simplifier le contrôle de votre maison à distance depuis votre smartphone.
           </p>
-          {!secConfig.stealthMode && (
-            <button onClick={() => s.setView("admin")} className="mt-4 text-xs flex items-center gap-1.5 text-slate-400 hover:text-cyan-400 transition-colors dk-focus rounded" aria-label="Espace admin">
-              <Settings className="h-3.5 w-3.5" /> Espace Administrateur
-            </button>
-          )}
         </div>
       </div>
       <div className="border-t py-5 text-center text-xs flex flex-col sm:flex-row items-center justify-between max-w-6xl mx-auto px-4 sm:px-6 gap-2" style={{ borderColor: "var(--border)", color: "var(--text-faint)" }}>
