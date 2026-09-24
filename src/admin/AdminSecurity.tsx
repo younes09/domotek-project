@@ -16,6 +16,8 @@ import {
   Check,
   X,
   Trash2,
+  MessageSquare,
+  Send,
 } from "lucide-react";
 import type { Store } from "../types";
 import {
@@ -31,6 +33,12 @@ import {
   type SecurityConfig,
   type SecurityLog,
 } from "../lib/authSecurity";
+import {
+  getWhatsAppSettings,
+  saveWhatsAppSettings,
+  sendOrderWhatsAppNotification,
+  type WhatsAppNotificationSettings,
+} from "../lib/notifications";
 
 export const AdminSecurity: React.FC<{ s: Store }> = ({ s }) => {
   const [config, setConfig] = useState<SecurityConfig>(getSecurityConfig);
@@ -60,11 +68,17 @@ export const AdminSecurity: React.FC<{ s: Store }> = ({ s }) => {
   const [stealthMode, setStealthMode] = useState(config.stealthMode);
   const [settingsSaved, setSettingsSaved] = useState(false);
 
+  // WhatsApp Notification settings
+  const [waSettings, setWaSettings] = useState<WhatsAppNotificationSettings>(getWhatsAppSettings);
+  const [waTestStatus, setWaTestStatus] = useState<{ ok: boolean; msg: string } | null>(null);
+  const [waIsTesting, setWaIsTesting] = useState(false);
+
   const passStrength = evaluatePasswordStrength(newPassword);
 
   useEffect(() => {
     setConfig(getSecurityConfig());
     setLogs(getSecurityLogs());
+    setWaSettings(getWhatsAppSettings());
   }, []);
 
   const handleUpdateCredentials = async (e: React.FormEvent) => {
@@ -182,6 +196,44 @@ export const AdminSecurity: React.FC<{ s: Store }> = ({ s }) => {
     setSettingsSaved(true);
     s.showToast("Paramètres de sécurité enregistrés");
     setTimeout(() => setSettingsSaved(false), 3000);
+  };
+
+  const handleSaveWhatsAppSettings = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    saveWhatsAppSettings(waSettings);
+    s.showToast("Configuration WhatsApp enregistrée !");
+  };
+
+  const handleTestWhatsApp = async () => {
+    setWaIsTesting(true);
+    setWaTestStatus(null);
+    saveWhatsAppSettings(waSettings);
+
+    const testOrder = {
+      id: `TEST-${Math.floor(1000 + Math.random() * 9000)}`,
+      customerName: "Test Notification DomoTek",
+      phone: waSettings.phone || "0775302636",
+      wilaya: "16 - Alger",
+      commune: "Bab Ezzouar",
+      address: "Boutique DomoTek (Test Direct)",
+      notes: "Ceci est un test de notification automatique WhatsApp.",
+      items: [
+        { name: "Interrupteur Wi-Fi 2 Voies", qty: 2, price: 3600 },
+        { name: "Prise Intelligente 16A", qty: 1, price: 2500 },
+      ],
+      total: 9700,
+      status: "Nouvelle" as const,
+      date: new Date().toISOString().slice(0, 10),
+    };
+
+    const res = await sendOrderWhatsAppNotification(testOrder);
+    setWaIsTesting(false);
+    if (res.success) {
+      setWaTestStatus({ ok: true, msg: res.message });
+      s.showToast("Message WhatsApp de test envoyé !");
+    } else {
+      setWaTestStatus({ ok: false, msg: res.message });
+    }
   };
 
   const handleClearLogs = () => {
@@ -527,6 +579,190 @@ export const AdminSecurity: React.FC<{ s: Store }> = ({ s }) => {
                 <span>{settingsSaved ? "Paramètres enregistrés !" : "Appliquer les paramètres"}</span>
               </button>
             </div>
+          </div>
+
+          {/* WhatsApp Background Notifications Card */}
+          <div className="dk-surface rounded-2xl p-5 sm:p-6 border space-y-4" style={{ borderColor: "var(--border)" }}>
+            <div className="flex items-center justify-between pb-3 border-b" style={{ borderColor: "var(--border)" }}>
+              <div className="flex items-center gap-2">
+                <MessageSquare className="h-5 w-5 text-emerald-400" />
+                <div>
+                  <h3 className="text-base font-bold" style={{ color: "var(--text)" }}>Notifications WhatsApp en Direct</h3>
+                  <p className="text-[11px]" style={{ color: "var(--text-faint)" }}>
+                    Recevez automatiquement chaque commande client sur votre téléphone.
+                  </p>
+                </div>
+              </div>
+              <span
+                className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
+                  waSettings.enabled
+                    ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                    : "bg-slate-700 text-slate-300"
+                }`}
+              >
+                {waSettings.enabled ? "Activé" : "Désactivé"}
+              </span>
+            </div>
+
+            {waTestStatus && (
+              <div
+                className={`p-3 rounded-xl text-xs flex items-center gap-2 border ${
+                  waTestStatus.ok
+                    ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
+                    : "bg-red-500/10 border-red-500/30 text-red-400"
+                }`}
+              >
+                {waTestStatus.ok ? <Check className="h-4 w-4 shrink-0" /> : <X className="h-4 w-4 shrink-0" />}
+                <span>{waTestStatus.msg}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleSaveWhatsAppSettings} className="space-y-3.5">
+              <label className="flex items-center gap-2 text-xs font-semibold cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={waSettings.enabled}
+                  onChange={(e) => setWaSettings({ ...waSettings, enabled: e.target.checked })}
+                  className="rounded text-emerald-500 focus:ring-emerald-500 h-4 w-4 bg-slate-800 border-slate-700"
+                />
+                <span style={{ color: "var(--text)" }}>Activer l'envoi automatique sur WhatsApp</span>
+              </label>
+
+              <div>
+                <label className="block text-xs font-bold mb-1" style={{ color: "var(--text)" }}>
+                  Numéro WhatsApp destinataire (avec indicatif pays)
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="213775302636"
+                  value={waSettings.phone}
+                  onChange={(e) => setWaSettings({ ...waSettings, phone: e.target.value })}
+                  className="dk-input w-full px-3.5 py-2 rounded-xl text-xs font-mono font-bold"
+                />
+                <p className="text-[10px] mt-1" style={{ color: "var(--text-faint)" }}>
+                  Exemple : <code className="font-mono">213775302636</code> (Algérie +213 sans le 0 au début).
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold mb-1" style={{ color: "var(--text)" }}>
+                  Méthode de livraison WhatsApp
+                </label>
+                <select
+                  value={waSettings.provider}
+                  onChange={(e) =>
+                    setWaSettings({
+                      ...waSettings,
+                      provider: e.target.value as "callmebot" | "webhook" | "greenapi",
+                    })
+                  }
+                  className="dk-input w-full px-3 py-2 rounded-xl text-xs"
+                >
+                  <option value="callmebot">CallMeBot WhatsApp (Gratuit / Immédiat)</option>
+                  <option value="webhook">Webhook / Supabase Edge Function</option>
+                  <option value="greenapi">Green-API WhatsApp</option>
+                </select>
+              </div>
+
+              {waSettings.provider === "callmebot" && (
+                <div className="p-3 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2 text-xs">
+                  <div className="flex items-center justify-between">
+                    <label className="font-bold text-[11px]" style={{ color: "var(--text)" }}>
+                      Clé API CallMeBot (Gratuite)
+                    </label>
+                    <a
+                      href="https://www.callmebot.com/blog/free-api-whatsapp-messages/"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-[10px] text-cyan-400 hover:underline"
+                    >
+                      Comment obtenir ma clé en 1 min ?
+                    </a>
+                  </div>
+                  <input
+                    type="password"
+                    placeholder="Ex : 1234567"
+                    value={waSettings.callmebotApiKey || ""}
+                    onChange={(e) => setWaSettings({ ...waSettings, callmebotApiKey: e.target.value })}
+                    className="dk-input w-full px-3 py-1.5 rounded-lg text-xs font-mono"
+                  />
+                  <p className="text-[10px] text-slate-400 leading-relaxed">
+                    💡 Pour obtenir votre clé gratuite : envoyez le message <code className="font-mono bg-black/40 text-emerald-400 px-1 rounded">I allow callmebot to send me messages</code> par WhatsApp au numéro <code className="font-mono text-cyan-300">+34 644 44 24 53</code>. Le bot vous répondra instantanément avec votre clé API.
+                  </p>
+                </div>
+              )}
+
+              {waSettings.provider === "webhook" && (
+                <div className="p-3 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2 text-xs">
+                  <label className="block font-bold text-[11px]" style={{ color: "var(--text)" }}>
+                    URL du Webhook / Supabase Edge Function
+                  </label>
+                  <input
+                    type="url"
+                    placeholder="https://votre-projet.functions.supabase.co/notify-order-whatsapp"
+                    value={waSettings.webhookUrl || ""}
+                    onChange={(e) => setWaSettings({ ...waSettings, webhookUrl: e.target.value })}
+                    className="dk-input w-full px-3 py-1.5 rounded-lg text-xs font-mono"
+                  />
+                  <p className="text-[10px] text-slate-400">
+                    Déployez la fonction Deno fournie dans <code className="font-mono text-cyan-300">supabase/functions/notify-order-whatsapp</code>.
+                  </p>
+                </div>
+              )}
+
+              {waSettings.provider === "greenapi" && (
+                <div className="p-3 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2 text-xs">
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="block font-bold text-[11px] mb-1" style={{ color: "var(--text)" }}>
+                        Instance ID
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="1101823..."
+                        value={waSettings.greenApiInstanceId || ""}
+                        onChange={(e) => setWaSettings({ ...waSettings, greenApiInstanceId: e.target.value })}
+                        className="dk-input w-full px-3 py-1.5 rounded-lg text-xs font-mono"
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-bold text-[11px] mb-1" style={{ color: "var(--text)" }}>
+                        API Token
+                      </label>
+                      <input
+                        type="password"
+                        placeholder="••••••••••••"
+                        value={waSettings.greenApiToken || ""}
+                        onChange={(e) => setWaSettings({ ...waSettings, greenApiToken: e.target.value })}
+                        className="dk-input w-full px-3 py-1.5 rounded-lg text-xs font-mono"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className="flex items-center gap-2 pt-1">
+                <button
+                  type="submit"
+                  className="flex-1 py-2 px-3 rounded-xl text-xs font-bold dk-btn-primary flex items-center justify-center gap-1.5"
+                >
+                  <Check className="h-4 w-4" />
+                  <span>Enregistrer la config</span>
+                </button>
+
+                <button
+                  type="button"
+                  disabled={waIsTesting}
+                  onClick={handleTestWhatsApp}
+                  className="py-2 px-3.5 rounded-xl text-xs font-bold border border-emerald-500/40 text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 flex items-center gap-1.5 disabled:opacity-50 transition-all"
+                  title="Envoyer un message de test sur votre WhatsApp"
+                >
+                  <Send className="h-3.5 w-3.5" />
+                  <span>{waIsTesting ? "Envoi..." : "Tester"}</span>
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>

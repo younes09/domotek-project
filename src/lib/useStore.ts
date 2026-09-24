@@ -10,6 +10,7 @@ import {
   seedSupabaseInitialData,
 } from "./supabaseDb";
 import { isSupabaseConfigured, supabase } from "./supabase";
+import { sendOrderWhatsAppNotification } from "./notifications";
 
 const EMPTY_FILTERS: ShopFilters = {
   category: "all", minPrice: "", maxPrice: "", availability: "all", sort: "popularite", special: null, query: "",
@@ -373,6 +374,11 @@ export function useStore(): Store {
 
     // Async save to Supabase
     saveOrderToDb(newOrder).catch((err) => console.error("Could not save order to Supabase:", err));
+
+    // Automated WhatsApp background notification dispatch
+    sendOrderWhatsAppNotification(newOrder).catch((err) =>
+      console.warn("WhatsApp background notification notice:", err)
+    );
   };
 
   return {
