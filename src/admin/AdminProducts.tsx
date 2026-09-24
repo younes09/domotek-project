@@ -35,6 +35,7 @@ import { IconTile } from "../components/ui";
 import { formatDZD } from "../lib/format";
 import type { Category, Product, ProductFAQ, ProductSpec, ProductVariant, StockStatus, Store } from "../types";
 import { saveProductToDb, deleteProductFromDb, uploadProductImageToSupabase } from "../lib/supabaseDb";
+import { compressImageClient } from "../lib/imageOptimizer";
 
 interface FormState {
   name: string;
@@ -157,20 +158,25 @@ const ProductFormModal: React.FC<{
   const marginDA = sellingPriceNum - costPriceNum;
   const marginPercent = sellingPriceNum > 0 ? Math.round((marginDA / sellingPriceNum) * 100) : 0;
 
-  // Multi-photo handlers (1 to 3 photos)
+  // Multi-photo handlers (1 to 3 photos) with instant client-side WebP compression
   const handlePhotoUpload = async (slotIndex: number, e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const rawFile = e.target.files?.[0];
+    if (!rawFile) return;
 
-    // 1. Tenter d'uploader directement sur Supabase Storage
-    const publicUrl = await uploadProductImageToSupabase(file);
-    if (publicUrl) {
+    try {
+      // Automatic client-side compression (converts 5MB-10MB photo to ~50KB-80KB WebP)
+      const { file: optimizedFile, dataUrl } = await compressImageClient(rawFile, 1000, 1000, 0.85);
+
+      // 1. Tenter d'uploader directement sur Supabase Storage
+      const publicUrl = await uploadProductImageToSupabase(optimizedFile);
+      const finalUrl = publicUrl || dataUrl;
+
       setForm((prev) => {
         const nextImages = [...(prev.images || [])];
         while (nextImages.length <= slotIndex) {
           nextImages.push("");
         }
-        nextImages[slotIndex] = publicUrl;
+        nextImages[slotIndex] = finalUrl;
         const clean = nextImages.filter(Boolean).slice(0, 3);
         return {
           ...prev,
@@ -178,29 +184,16 @@ const ProductFormModal: React.FC<{
           imageUrl: clean[0] || "",
         };
       });
-      showToast?.("Photo hébergée sur Supabase avec succès !");
-      return;
+
+      if (publicUrl) {
+        showToast?.("Photo optimisée et hébergée sur Supabase avec succès !");
+      } else {
+        showToast?.("Photo optimisée et enregistrée localement !");
+      }
+    } catch (err) {
+      console.error("Error processing photo:", err);
+      showToast?.("Erreur lors du traitement de la photo");
     }
-
-    // 2. Fallback reader si Supabase Storage non configuré
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const dataUrl = reader.result as string;
-      setForm((prev) => {
-        const nextImages = [...(prev.images || [])];
-        while (nextImages.length <= slotIndex) {
-          nextImages.push("");
-        }
-        nextImages[slotIndex] = dataUrl;
-        const clean = nextImages.filter(Boolean).slice(0, 3);
-        return {
-          ...prev,
-          images: clean,
-          imageUrl: clean[0] || "",
-        };
-      });
-    };
-    reader.readAsDataURL(file);
   };
 
   const handlePhotoUrlChange = (slotIndex: number, val: string) => {
