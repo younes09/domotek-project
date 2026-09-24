@@ -34,7 +34,7 @@ import {
 import { IconTile } from "../components/ui";
 import { formatDZD } from "../lib/format";
 import type { Category, Product, ProductFAQ, ProductSpec, ProductVariant, StockStatus, Store } from "../types";
-import { saveProductToDb, deleteProductFromDb, uploadProductImageToSupabase } from "../lib/supabaseDb";
+import { saveProductToDb, deleteProductFromDb, uploadProductImageToSupabase, deleteStorageImage } from "../lib/supabaseDb";
 import { compressImageClient } from "../lib/imageOptimizer";
 
 interface FormState {
@@ -163,32 +163,43 @@ const ProductFormModal: React.FC<{
     const rawFile = e.target.files?.[0];
     if (!rawFile) return;
 
+    // Récupérer l'ancienne photo du même emplacement pour l'écraser
+    const oldUrl = (form.images && form.images[slotIndex]) || (slotIndex === 0 ? form.imageUrl : "") || "";
+
     try {
       // Automatic client-side compression (converts 5MB-10MB photo to ~30KB-60KB WebP)
       const { file: optimizedFile, dataUrl } = await compressImageClient(rawFile, 800, 800, 0.75);
 
-      // 1. Tenter d'uploader directement sur Supabase Storage
-      const publicUrl = await uploadProductImageToSupabase(optimizedFile);
+      // Upload directement sur Supabase Storage en écrasant l'ancienne photo de ce slot
+      const publicUrl = await uploadProductImageToSupabase(
+        optimizedFile,
+        oldUrl,
+        slotIndex,
+        initial?.id || form.sku
+      );
       const finalUrl = publicUrl || dataUrl;
 
       setForm((prev) => {
-        const nextImages = [...(prev.images || [])];
-        while (nextImages.length <= slotIndex) {
-          nextImages.push("");
-        }
-        nextImages[slotIndex] = finalUrl;
-        const clean = nextImages.filter(Boolean).slice(0, 3);
+        // Garantir un tableau stable pour les 3 slots
+        const slots = [
+          prev.images?.[0] || prev.imageUrl || "",
+          prev.images?.[1] || "",
+          prev.images?.[2] || "",
+        ];
+        // Écraser précisément l'ancienne photo à ce slotIndex
+        slots[slotIndex] = finalUrl;
+        const clean = slots.filter(Boolean);
         return {
           ...prev,
           images: clean,
-          imageUrl: clean[0] || "",
+          imageUrl: clean[0] || (slotIndex === 0 ? finalUrl : prev.imageUrl),
         };
       });
 
       if (publicUrl) {
-        showToast?.("Photo optimisée et hébergée sur Supabase avec succès !");
+        showToast?.(`Photo #${slotIndex + 1} mise à jour (ancienne photo écrasée sur Supabase)`);
       } else {
-        showToast?.("Photo optimisée et enregistrée (Pour l'hébergement cloud, configurez les permissions du bucket 'products').");
+        showToast?.(`Photo #${slotIndex + 1} mise à jour localement`);
       }
     } catch (err) {
       console.error("Error processing photo:", err);
@@ -198,29 +209,37 @@ const ProductFormModal: React.FC<{
 
   const handlePhotoUrlChange = (slotIndex: number, val: string) => {
     setForm((prev) => {
-      const nextImages = [...(prev.images || [])];
-      while (nextImages.length <= slotIndex) {
-        nextImages.push("");
-      }
-      nextImages[slotIndex] = val;
-      const clean = nextImages.filter((s) => s && s.trim() !== "").slice(0, 3);
+      const slots = [
+        prev.images?.[0] || prev.imageUrl || "",
+        prev.images?.[1] || "",
+        prev.images?.[2] || "",
+      ];
+      slots[slotIndex] = val;
+      const clean = slots.filter((s) => s && s.trim() !== "");
       return {
         ...prev,
-        images: nextImages.slice(0, 3),
+        images: clean,
         imageUrl: clean[0] || (slotIndex === 0 ? val : prev.imageUrl),
       };
     });
   };
 
-  const handleRemovePhoto = (slotIndex: number) => {
+  const handleRemovePhoto = async (slotIndex: number) => {
+    const oldUrl = (form.images && form.images[slotIndex]) || (slotIndex === 0 ? form.imageUrl : "");
+    if (oldUrl) {
+      deleteStorageImage(oldUrl).catch(() => {});
+    }
+
     setForm((prev) => {
-      const nextImages = (prev.images || []).filter((_, idx) => idx !== slotIndex);
+      const nextImages = [...(prev.images || [])];
+      nextImages.splice(slotIndex, 1);
       return {
         ...prev,
         images: nextImages,
         imageUrl: nextImages[0] || "",
       };
     });
+    showToast?.(`Photo #${slotIndex + 1} supprimée`);
   };
 
   const handleMovePhoto = (fromIndex: number, toIndex: number) => {
@@ -1502,6 +1521,15 @@ export const AdminProducts: React.FC<{ s: Store }> = ({ s }) => {
     const primaryImageUrl = finalImages[0] || undefined;
 
     if (editing) {
+      // Nettoyer dans Supabase Storage les anciennes photos qui ont été écrasées ou retirées
+      const oldPhotos = [editing.imageUrl, ...(editing.images || [])].filter(Boolean);
+      const currentPhotos = [primaryImageUrl, ...finalImages].filter(Boolean);
+      for (const oldP of oldPhotos) {
+        if (!currentPhotos.includes(oldP)) {
+          deleteStorageImage(oldP).catch(() => {});
+        }
+      }
+
       const updatedProduct: Product = {
         ...editing,
         name: form.name,

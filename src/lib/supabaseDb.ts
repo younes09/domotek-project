@@ -154,11 +154,38 @@ export async function saveProductToDb(product: Product): Promise<boolean> {
   }
 }
 
-export async function uploadProductImageToSupabase(file: File): Promise<string | null> {
+export async function deleteStorageImage(imageUrl?: string | null): Promise<void> {
+  if (!isSupabaseConfigured || !supabase || !imageUrl) return;
+  try {
+    if (imageUrl.includes("/storage/v1/object/public/products/")) {
+      const parts = imageUrl.split("/storage/v1/object/public/products/");
+      if (parts[1]) {
+        const filePath = decodeURIComponent(parts[1].split("?")[0]);
+        await supabase.storage.from("products").remove([filePath]);
+      }
+    }
+  } catch (err) {
+    console.warn("Could not delete image from Supabase Storage:", err);
+  }
+}
+
+export async function uploadProductImageToSupabase(
+  file: File,
+  oldImageUrl?: string | null,
+  slotIndex?: number,
+  productId?: number | string
+): Promise<string | null> {
   if (!isSupabaseConfigured || !supabase) return null;
   try {
-    const fileExt = file.name.split(".").pop() || "jpg";
-    const fileName = `product-${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
+    // Si une ancienne photo existait pour cet emplacement, la supprimer pour l'écraser
+    if (oldImageUrl) {
+      await deleteStorageImage(oldImageUrl);
+    }
+
+    const fileExt = file.name.split(".").pop() || "webp";
+    const slotSuffix = typeof slotIndex === "number" ? `-slot${slotIndex + 1}` : "";
+    const prodPrefix = productId ? `prod-${productId}` : `product`;
+    const fileName = `${prodPrefix}${slotSuffix}-${Date.now()}.${fileExt}`;
     const filePath = `uploads/${fileName}`;
 
     // Upload directly to 'products' storage bucket
