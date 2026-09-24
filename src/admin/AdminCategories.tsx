@@ -11,7 +11,6 @@ import {
   Check,
   RotateCcw,
   X,
-  HelpCircle,
   FolderTree,
 } from "lucide-react";
 import { AVAILABLE_CATEGORY_ICONS, DEFAULT_CATEGORIES, getCategoryIcon } from "../data/categories";

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { X, Minus, Plus, ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
 import { IconTile, StockLabel } from "./ui";
-import { CATEGORY_LABEL } from "../data/categories";
 import { formatDZD } from "../lib/format";
 import type { Store } from "../types";
 

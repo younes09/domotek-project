@@ -1,6 +1,6 @@
 import React from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
-import { TrendingUp, ClipboardList, Users, Package, AlertTriangle, ArrowRight, PlusCircle, ShoppingBag } from "lucide-react";
+import { TrendingUp, ClipboardList, Users, Package, AlertTriangle, ArrowRight, ShoppingBag } from "lucide-react";
 import { IconTile } from "../components/ui";
 import { DEMO_SALES } from "../data/demoAdminData";
 import { formatDZD } from "../lib/format";

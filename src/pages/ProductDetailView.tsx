@@ -4,7 +4,6 @@ import { ProductGallery } from "../components/ProductGallery";
 import { ProductReviews } from "../components/ProductReviews";
 import { ProductGrid } from "../components/ProductGrid";
 import { TrustBadges, StockLabel } from "../components/ui";
-import { CATEGORY_LABEL } from "../data/categories";
 import { PLACEHOLDER_TABS, PRODUCT_TABS } from "../data/detailTabs";
 import { formatDZD } from "../lib/format";
 import type { Store } from "../types";

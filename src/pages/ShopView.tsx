@@ -2,7 +2,6 @@ import React, { useMemo, useState } from "react";
 import { ChevronRight, SlidersHorizontal, X } from "lucide-react";
 import { ProductCard } from "../components/ProductCard";
 import { ProductFilters, EMPTY_FILTERS } from "../components/ProductFilters";
-import { CATEGORY_LABEL } from "../data/categories";
 import type { Store } from "../types";
 
 export const ShopView: React.FC<{ s: Store }> = ({ s }) => {

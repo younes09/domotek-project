@@ -4,7 +4,6 @@ import {
   Minimize2,
   PanelLeftClose,
   PanelLeftOpen,
-  LayoutGrid,
 } from "lucide-react";
 import { AdminSidebar, AdminTab } from "./AdminSidebar";
 import { AdminDashboard } from "./AdminDashboard";

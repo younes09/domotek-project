@@ -4,10 +4,8 @@ import {
   Pencil,
   Trash2,
   Search,
-  Filter,
   AlertTriangle,
   CheckCircle2,
-  ShieldAlert,
   Image as ImageIcon,
   Upload,
   X,
@@ -16,7 +14,6 @@ import {
   TrendingUp,
   Package,
   Layers,
-  ArrowUpDown,
   Sparkles,
   Star,
   Check,
@@ -28,15 +25,11 @@ import {
   Percent,
   CheckSquare,
   Square,
-  RefreshCw,
   Cpu,
   FileText,
   HelpCircle,
   Wrench,
   Smartphone,
-  BookOpen,
-  ArrowLeft,
-  ArrowRight,
 } from "lucide-react";
 import { IconTile } from "../components/ui";
 import { formatDZD } from "../lib/format";
@@ -107,7 +100,8 @@ const ProductFormModal: React.FC<{
   categories: Category[];
   onSave: (f: FormState) => void;
   onClose: () => void;
-}> = ({ initial, categories, onSave, onClose }) => {
+  showToast?: (msg: string) => void;
+}> = ({ initial, categories, onSave, onClose, showToast }) => {
   const [activeTab, setActiveTab] = useState<"general" | "pricing" | "stock" | "details" | "media" | "specs">("general");
   const [activeDetailsSection, setActiveDetailsSection] = useState<"desc" | "specs" | "compat" | "install" | "usage" | "faq">("desc");
 
@@ -184,7 +178,7 @@ const ProductFormModal: React.FC<{
           imageUrl: clean[0] || "",
         };
       });
-      s.showToast("Photo hébergée sur Supabase avec succès !");
+      showToast?.("Photo hébergée sur Supabase avec succès !");
       return;
     }
 
@@ -2038,6 +2032,7 @@ export const AdminProducts: React.FC<{ s: Store }> = ({ s }) => {
             setEditing(null);
             setAdding(false);
           }}
+          showToast={s.showToast}
         />
       )}
     </div>

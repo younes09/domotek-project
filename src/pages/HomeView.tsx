@@ -10,19 +10,14 @@ import {
   Lightbulb,
   Plug,
   Zap,
-  Phone,
   ArrowRight,
-  MessageCircle,
   Star,
   CheckCircle2,
   Tv,
   Moon,
   Sun,
   Lock,
-  Wifi,
-  Smartphone,
   Check,
-  ToggleLeft,
   Blinds,
 } from "lucide-react";
 import { TrustBadges, WhatsAppIcon } from "../components/ui";
@@ -33,7 +28,6 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
   const [activeTab, setActiveTab] = useState<string>("all");
 
   // Interactive Live Switch Simulator state
-  const [lightState, setLightState] = useState<boolean>(true);
   const [activeScenario, setActiveScenario] = useState<"cinema" | "night" | "leave" | "morning">("cinema");
 
   // Filter products based on selected tab
@@ -126,66 +120,6 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
       rating: 5,
       date: "Il y a 2 semaines",
       comment: "Les modules volets roulants ont transformé ma maison. Maintenant mes volets se ferment automatiquement le soir. Produits de très bonne facture, fiables.",
-    },
-  ];
-
-  // Hero Hardware Showcase state
-  const [activeDevice, setActiveDevice] = useState<"switch" | "plug" | "shutter" | "sensor">("switch");
-  const [ambienceMode, setAmbienceMode] = useState<"day" | "sunset" | "night">("night");
-  const [activeHotspot, setActiveHotspot] = useState<number | null>(null);
-
-  const devices = {
-    switch: {
-      name: "Interrupteur Tactile WiFi",
-      price: "1 800 DA",
-      specs: "Sans fil neutre nécessaire • Toucher en verre trempé",
-      badge: "Best Seller Éclairage",
-      Icon: ToggleLeft,
-    },
-    plug: {
-      name: "Prise Intelligente WiFi 20A",
-      price: "2 200 DA",
-      specs: "Mesure de consommation d'énergie • Protection 20 Ampères",
-      badge: "Haute Puissance",
-      Icon: Plug,
-    },
-    shutter: {
-      name: "Module Volet Roulant WiFi",
-      price: "2 800 DA",
-      specs: "Réglage d'ouverture au % • Compatible moteurs standards",
-      badge: "Confort Absolu",
-      Icon: Zap,
-    },
-    sensor: {
-      name: "Capteur Sécurité & Mouvement PIR",
-      price: "2 200 DA",
-      specs: "Alerte intrusion mobile • Autonomie batterie 2 ans",
-      badge: "Sécurité 24/7",
-      Icon: ShieldCheck,
-    },
-  };
-
-  const hotspots = [
-    {
-      id: 1,
-      top: "28%",
-      left: "22%",
-      title: "Contrôle Vocal & Mobile",
-      desc: "Pilotez par la voix avec Google Home & Alexa ou via l'application Tuya / Smart Life.",
-    },
-    {
-      id: 2,
-      top: "45%",
-      left: "65%",
-      title: "Installation Rapide (5 min)",
-      desc: "Se branche simplement à la place de vos équipements existants sans gros travaux.",
-    },
-    {
-      id: 3,
-      top: "72%",
-      left: "38%",
-      title: "Économie & Automatisation",
-      desc: "Programmez des minuteurs pour réduire automatiquement votre facture d'électricité.",
     },
   ];
 
