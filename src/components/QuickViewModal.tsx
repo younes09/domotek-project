@@ -40,6 +40,8 @@ export const QuickViewModal: React.FC<{ s: Store }> = ({ s }) => {
             <img
               src={validImages[imgIndex] || validImages[0]}
               alt={`${p.name} - Photo ${imgIndex + 1}`}
+              loading="eager"
+              decoding="async"
               className="max-h-full max-w-full object-contain p-2"
             />
           ) : (

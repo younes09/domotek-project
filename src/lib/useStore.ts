@@ -15,8 +15,37 @@ const EMPTY_FILTERS: ShopFilters = {
   category: "all", minPrice: "", maxPrice: "", availability: "all", sort: "popularite", special: null, query: "",
 };
 
+const VALID_VIEWS: View[] = ["home", "shop", "product", "checkout", "confirmation", "admin"];
+
+function getInitialNavigation(): { view: View; selectedProductId: number | null } {
+  try {
+    const hash = window.location.hash.replace(/^#\/?/, "");
+    if (hash.startsWith("product/")) {
+      const id = Number(hash.replace("product/", ""));
+      if (!isNaN(id) && id > 0) {
+        return { view: "product", selectedProductId: id };
+      }
+    }
+    if (VALID_VIEWS.includes(hash as View)) {
+      return { view: hash as View, selectedProductId: null };
+    }
+    const savedView = localStorage.getItem("domotek_current_view") as View | null;
+    const savedId = localStorage.getItem("domotek_selected_product_id");
+    if (savedView && VALID_VIEWS.includes(savedView)) {
+      return {
+        view: savedView,
+        selectedProductId: savedId ? Number(savedId) : null,
+      };
+    }
+  } catch (e) {
+    console.error("Failed to read initial navigation", e);
+  }
+  return { view: "home", selectedProductId: null };
+}
+
 export function useStore(): Store {
-  const [view, setView] = useState<View>("home");
+  const initialNav = useMemo(() => getInitialNavigation(), []);
+  const [view, setView] = useState<View>(initialNav.view);
 
   // Dynamic Categories with LocalStorage persistence & Supabase sync
   const [categories, setCategories] = useState<Category[]>(() => {
@@ -82,7 +111,104 @@ export function useStore(): Store {
     }
   }, [products]);
 
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  // Instant image preloading into browser cache
+  useEffect(() => {
+    if (!products || products.length === 0) return;
+    const urls: string[] = [];
+    products.forEach((p) => {
+      if (p.imageUrl && typeof p.imageUrl === "string" && p.imageUrl.trim()) {
+        urls.push(p.imageUrl.trim());
+      }
+      if (Array.isArray(p.images)) {
+        p.images.forEach((img) => {
+          if (img && typeof img === "string" && img.trim()) {
+            urls.push(img.trim());
+          }
+        });
+      }
+    });
+
+    Array.from(new Set(urls)).forEach((url) => {
+      const img = new Image();
+      img.decoding = "async";
+      img.src = url;
+    });
+  }, [products]);
+
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(() => {
+    try {
+      if (initialNav.selectedProductId) {
+        const saved = localStorage.getItem("domotek_products");
+        if (saved) {
+          const parsed: Product[] = JSON.parse(saved);
+          if (Array.isArray(parsed)) {
+            const found = parsed.find((p) => p.id === initialNav.selectedProductId);
+            if (found) {
+              return {
+                ...found,
+                icon: getCategoryIcon(found.category),
+              };
+            }
+          }
+        }
+      }
+    } catch (e) {
+      console.error("Failed to restore selected product", e);
+    }
+    return null;
+  });
+
+  // Keep navigation & URL hash in sync with current view and selectedProduct
+  useEffect(() => {
+    try {
+      localStorage.setItem("domotek_current_view", view);
+      if (view === "product" && selectedProduct) {
+        localStorage.setItem("domotek_selected_product_id", String(selectedProduct.id));
+        const targetHash = `#product/${selectedProduct.id}`;
+        if (window.location.hash !== targetHash) {
+          window.history.replaceState(null, "", targetHash);
+        }
+      } else {
+        localStorage.removeItem("domotek_selected_product_id");
+        const targetHash = `#${view}`;
+        if (window.location.hash !== targetHash) {
+          window.history.replaceState(null, "", targetHash);
+        }
+      }
+    } catch (e) {
+      console.error("Failed to sync navigation to storage/hash", e);
+    }
+  }, [view, selectedProduct]);
+
+  // Synchronize selectedProduct if products are updated from database
+  useEffect(() => {
+    if (view === "product" && products.length > 0) {
+      const nav = getInitialNavigation();
+      const targetId = selectedProduct?.id || nav.selectedProductId;
+      if (targetId) {
+        const found = products.find((p) => p.id === targetId);
+        if (found && (!selectedProduct || selectedProduct.id !== found.id)) {
+          setSelectedProduct(found);
+        }
+      }
+    }
+  }, [products, view, selectedProduct]);
+
+  // Support browser Back / Forward buttons & Hash changes
+  useEffect(() => {
+    const onHashChange = () => {
+      const nav = getInitialNavigation();
+      setView(nav.view);
+      if (nav.selectedProductId && products.length > 0) {
+        const found = products.find((p) => p.id === nav.selectedProductId);
+        if (found) setSelectedProduct(found);
+      } else if (nav.view !== "product") {
+        setSelectedProduct(null);
+      }
+    };
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, [products]);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [wishlist, setWishlist] = useState<Set<number>>(new Set());
   const [cartOpen, setCartOpen] = useState(false);

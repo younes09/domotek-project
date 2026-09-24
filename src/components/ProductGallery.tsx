@@ -67,6 +67,8 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ icon, images = [
             <img
               src={currentPhoto}
               alt={`${name || "Produit DomoTek"} - Photo ${active + 1}`}
+              loading="eager"
+              decoding="async"
               className="max-h-full max-w-full object-contain rounded-xl transition-all duration-300 group-hover:scale-105"
             />
           </div>
@@ -139,6 +141,8 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ icon, images = [
                   <img
                     src={img}
                     alt={`Miniature ${i + 1}`}
+                    loading="eager"
+                    decoding="async"
                     className="max-h-full max-w-full object-contain rounded"
                   />
                   <span className="absolute bottom-1 right-1 bg-slate-950/70 text-white text-[9px] font-mono px-1 rounded font-bold leading-tight">
@@ -194,6 +198,8 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ icon, images = [
             <img
               src={currentPhoto}
               alt={name || "Photo plein écran"}
+              loading="eager"
+              decoding="async"
               className="max-h-full max-w-full object-contain rounded-2xl shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             />

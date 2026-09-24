@@ -87,6 +87,8 @@ export const ProductCard: React.FC<{ product: Product; s: Store }> = ({ product,
             <img
               src={validImages[imgIndex] || validImages[0]}
               alt={`${product.name} - Photo ${imgIndex + 1}`}
+              loading="eager"
+              decoding="async"
               className="max-h-full max-w-full object-contain rounded transform group-hover:scale-105 transition-transform duration-300"
             />
           </div>
