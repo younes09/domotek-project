@@ -185,9 +185,27 @@ export async function uploadProductImageToSupabase(file: File): Promise<string |
   }
 }
 
-export async function deleteProductFromDb(id: number): Promise<boolean> {
+export async function deleteProductFromDb(id: number, imagesToDelete?: string[]): Promise<boolean> {
   if (!isSupabaseConfigured || !supabase) return false;
   try {
+    // Nettoyer les photos associées dans Supabase Storage si présentes
+    if (imagesToDelete && imagesToDelete.length > 0) {
+      const storagePaths: string[] = [];
+      for (const url of imagesToDelete) {
+        if (url && url.includes("/storage/v1/object/public/products/")) {
+          const parts = url.split("/storage/v1/object/public/products/");
+          if (parts[1]) storagePaths.push(decodeURIComponent(parts[1]));
+        }
+      }
+      if (storagePaths.length > 0) {
+        try {
+          await supabase.storage.from("products").remove(storagePaths);
+        } catch (storageErr) {
+          console.warn("Could not delete images from storage:", storageErr);
+        }
+      }
+    }
+
     const { error } = await supabase.from("products").delete().eq("id", id);
     if (error) console.error("Error deleting product from Supabase:", error);
     return !error;

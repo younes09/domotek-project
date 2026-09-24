@@ -1356,8 +1356,10 @@ export const AdminProducts: React.FC<{ s: Store }> = ({ s }) => {
   // Delete product
   const handleDelete = (id: number, name: string) => {
     if (window.confirm(`Voulez-vous vraiment supprimer "${name}" du catalogue ?`)) {
+      const target = s.products.find((p) => p.id === id);
+      const imagesToDelete = target ? [target.imageUrl, ...(target.images || [])].filter(Boolean) : [];
       s.setProducts((prev) => prev.filter((p) => p.id !== id));
-      deleteProductFromDb(id).catch((e) => console.error("Supabase delete product error", e));
+      deleteProductFromDb(id, imagesToDelete).catch((e) => console.error("Supabase delete product error", e));
       setSelectedIds((prev) => {
         const next = new Set(prev);
         next.delete(id);
