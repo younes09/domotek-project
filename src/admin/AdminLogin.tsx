@@ -88,19 +88,14 @@ export const AdminLogin: React.FC<{ s: Store; onLogin: () => void }> = ({ s, onL
     try {
       const config = getSecurityConfig();
 
-      // 1. Verify Username
-      const validUsernames = [config.username.toLowerCase(), "admin"];
-      const isUserMatch = validUsernames.includes(username.trim().toLowerCase());
+      // 1. Verify Username (strictly matches the configured username)
+      const isUserMatch = username.trim().toLowerCase() === config.username.toLowerCase();
 
-      // 2. Verify Password via Cryptographic Salted Hash
+      // 2. Verify Password via Cryptographic Salted Hash (strictly matches current passwordHash)
       const inputHash = await hashPassword(password, config.salt);
       const isPasswordMatch = inputHash === config.passwordHash;
 
-      // Also allow default fallback if first boot and not changed
-      const defaultHash = await hashPassword("admin123", config.salt);
-      const isInitialMasterMatch = isUserMatch && inputHash === defaultHash;
-
-      if (!isUserMatch || (!isPasswordMatch && !isInitialMasterMatch)) {
+      if (!isUserMatch || !isPasswordMatch) {
         const result = recordFailedAttempt();
         logSecurityEvent("LOGIN_FAILED", `Tentative échouée pour l'utilisateur: "${username}"`);
 
@@ -154,8 +149,14 @@ export const AdminLogin: React.FC<{ s: Store; onLogin: () => void }> = ({ s, onL
   };
 
   const handleFillInitialDemo = () => {
-    setUsername("admin");
-    setPassword("admin123");
+    const config = getSecurityConfig();
+    if (config.requirePasswordChange) {
+      setUsername("admin");
+      setPassword("admin123");
+    } else {
+      setUsername(config.username);
+      setPassword("");
+    }
     setError("");
   };
 
@@ -342,22 +343,39 @@ export const AdminLogin: React.FC<{ s: Store; onLogin: () => void }> = ({ s, onL
 
             {showDemoHelp && (
               <div className="p-3 rounded-xl bg-[var(--surface-2)] border text-left text-xs space-y-2" style={{ borderColor: "var(--border)" }}>
-                <p className="text-[11px] leading-relaxed" style={{ color: "var(--text-dim)" }}>
-                  Identifiants maîtres initiaux du système :
-                </p>
-                <div className="flex items-center justify-between bg-black/20 p-2 rounded-lg font-mono text-xs">
-                  <span>admin / admin123</span>
-                  <button
-                    type="button"
-                    onClick={handleFillInitialDemo}
-                    className="text-[10px] text-cyan-400 hover:underline font-bold font-sans"
-                  >
-                    Remplir
-                  </button>
-                </div>
-                <p className="text-[10px] text-amber-400/90 leading-tight">
-                  🔒 Une fois connecté, vous pourrez personnaliser votre nom d'utilisateur, créer un mot de passe fort et activer le code PIN depuis l'onglet <strong>Sécurité</strong>.
-                </p>
+                {getSecurityConfig().requirePasswordChange ? (
+                  <>
+                    <p className="text-[11px] leading-relaxed" style={{ color: "var(--text-dim)" }}>
+                      Identifiants maîtres initiaux du système :
+                    </p>
+                    <div className="flex items-center justify-between bg-black/20 p-2 rounded-lg font-mono text-xs">
+                      <span>admin / admin123</span>
+                      <button
+                        type="button"
+                        onClick={handleFillInitialDemo}
+                        className="text-[10px] text-cyan-400 hover:underline font-bold font-sans"
+                      >
+                        Remplir
+                      </button>
+                    </div>
+                    <p className="text-[10px] text-amber-400/90 leading-tight">
+                      🔒 Une fois connecté, vous pourrez personnaliser votre nom d'utilisateur, créer un mot de passe fort et activer le code PIN depuis l'onglet <strong>Sécurité</strong>.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-[11px] leading-relaxed" style={{ color: "var(--text-dim)" }}>
+                      Des identifiants personnalisés ont été définis pour le compte administrateur : <strong className="text-cyan-400 font-mono">{getSecurityConfig().username}</strong>.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={handleFillInitialDemo}
+                      className="text-[10px] text-cyan-400 hover:underline font-bold font-sans"
+                    >
+                      Remplir le nom d'utilisateur ({getSecurityConfig().username})
+                    </button>
+                  </>
+                )}
               </div>
             )}
           </div>
