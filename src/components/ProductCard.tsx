@@ -9,7 +9,9 @@ export const ProductCard: React.FC<{ product: Product; s: Store }> = ({ product,
   const [imgIndex, setImgIndex] = useState(0);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
 
-  const discount = product.oldPrice ? Math.round((100 * (product.oldPrice - product.price)) / product.oldPrice) : null;
+  const discount = (product.oldPrice && product.oldPrice > product.price)
+    ? Math.round((100 * (product.oldPrice - product.price)) / product.oldPrice)
+    : null;
   const inWishlist = s.wishlist.has(product.id);
 
   // Consolidate valid images (1 to 3)
@@ -149,7 +151,7 @@ export const ProductCard: React.FC<{ product: Product; s: Store }> = ({ product,
               Nouveau
             </span>
           )}
-          {discount && (
+          {discount !== null && discount > 0 && (
             <span className="bg-amber-500/20 text-amber-600 dark:text-amber-300 border border-amber-500/30 text-[11px] font-semibold px-2.5 py-0.5 rounded-full backdrop-blur-md">
               -{discount}%
             </span>
