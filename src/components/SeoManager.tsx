@@ -9,7 +9,7 @@ export const SeoManager: React.FC<{ s: Store }> = ({ s }) => {
     let description =
       "DomoTek est la boutique leader en Algérie pour la domotique et la maison intelligente (interrupteurs tactiles, prises connectées, caméras WiFi, capteurs Zigbee). Livraison 58 wilayas & paiement à la livraison.";
     let canonicalUrl = "https://www.domotek-dz.com/";
-    let ogImage = "https://www.domotek-dz.com/favicon.png";
+    let ogImage = "https://www.domotek-dz.com/images/banner.png";
     let jsonLdData: any = null;
 
     if (view === "product" && selectedProduct) {
