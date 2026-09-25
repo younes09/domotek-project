@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { ShieldCheck } from "lucide-react";
 import { ALGERIA_WILAYAS } from "../data/wilayas";
+import { ProductTile } from "../components/ui";
 import { formatDZD } from "../lib/format";
 import type { CheckoutFormData, Store } from "../types";
 
@@ -38,11 +39,31 @@ export const CheckoutForm: React.FC<{ s: Store }> = ({ s }) => {
 
       <div className="dk-surface rounded-2xl p-4 mb-6">
         <p className="text-sm font-medium mb-3" style={{ color: "var(--text)" }}>Récapitulatif</p>
-        <div className="space-y-2">
+        <div className="space-y-3">
           {items.map((i) => (
-            <div key={i.key} className="flex items-center justify-between text-sm">
-              <span style={{ color: "var(--text-dim)" }}>{i.product.name} {i.variant ? `(${i.variant})` : ""} × {i.qty}</span>
-              <span style={{ color: "var(--text)" }}>{formatDZD(i.product.price * i.qty)}</span>
+            <div key={i.key} className="flex items-center justify-between gap-3 text-sm">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="h-12 w-12 shrink-0">
+                  <ProductTile
+                    Icon={i.product.icon}
+                    imageUrl={i.product.imageUrl}
+                    images={i.product.images}
+                    name={i.product.name}
+                    variant={2}
+                  />
+                </div>
+                <div className="min-w-0">
+                  <p className="font-medium truncate" style={{ color: "var(--text)" }}>
+                    {i.product.name} {i.variant ? `(${i.variant})` : ""}
+                  </p>
+                  <p className="text-xs" style={{ color: "var(--text-dim)" }}>
+                    Qté : {i.qty} × {formatDZD(i.product.price)}
+                  </p>
+                </div>
+              </div>
+              <span className="font-semibold shrink-0" style={{ color: "var(--text)" }}>
+                {formatDZD(i.product.price * i.qty)}
+              </span>
             </div>
           ))}
         </div>

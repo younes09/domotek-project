@@ -1,6 +1,6 @@
 import React from "react";
 import { X, ShoppingCart, Minus, Plus, Trash2 } from "lucide-react";
-import { IconTile } from "./ui";
+import { ProductTile } from "./ui";
 import { formatDZD } from "../lib/format";
 import type { Store } from "../types";
 
@@ -31,7 +31,15 @@ export const CartDrawer: React.FC<{ s: Store }> = ({ s }) => {
           ) : (
             items.map((i) => (
               <div key={i.key} className="flex gap-3 dk-surface-2 rounded-xl p-3">
-                <div className="h-16 w-16 shrink-0"><IconTile Icon={i.product.icon} variant={2} /></div>
+                <div className="h-16 w-16 shrink-0">
+                  <ProductTile
+                    Icon={i.product.icon}
+                    imageUrl={i.product.imageUrl}
+                    images={i.product.images}
+                    name={i.product.name}
+                    variant={2}
+                  />
+                </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium truncate" style={{ color: "var(--text)" }}>{i.product.name}</p>
                   {i.variant && <p className="text-xs" style={{ color: "var(--text-faint)" }}>{i.variant}</p>}

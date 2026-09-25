@@ -1,6 +1,6 @@
 import React from "react";
 import { Search, X } from "lucide-react";
-import { IconTile } from "./ui";
+import { IconTile, ProductTile } from "./ui";
 import { getCategoryIcon } from "../data/categories";
 import { formatDZD } from "../lib/format";
 import type { Store } from "../types";
@@ -89,7 +89,9 @@ export const SearchBar: React.FC<{ s: Store }> = ({ s }) => {
               <div className="space-y-1">
                 {matchedProducts.map((p) => (
                   <button key={p.id} onClick={() => { s.addRecentSearch(p.name); s.openProduct(p); s.setSearchOpen(false); }} className="w-full flex items-center gap-3 py-2 dk-focus rounded">
-                    <div className="h-11 w-11 shrink-0"><IconTile Icon={p.icon} variant={2} /></div>
+                    <div className="h-11 w-11 shrink-0">
+                      <ProductTile Icon={p.icon} imageUrl={p.imageUrl} images={p.images} name={p.name} variant={2} />
+                    </div>
                     <div className="min-w-0 text-left">
                       <p className="text-sm truncate" style={{ color: "var(--text)" }}>{p.name}</p>
                       <p className="text-xs" style={{ color: "var(--text-dim)" }}>{formatDZD(p.price)}</p>
@@ -107,7 +109,9 @@ export const SearchBar: React.FC<{ s: Store }> = ({ s }) => {
               <div className="space-y-1">
                 {recommended.map((p) => (
                   <button key={p.id} onClick={() => { s.openProduct(p); s.setSearchOpen(false); }} className="w-full flex items-center gap-3 py-2 dk-focus rounded">
-                    <div className="h-11 w-11 shrink-0"><IconTile Icon={p.icon} variant={2} /></div>
+                    <div className="h-11 w-11 shrink-0">
+                      <ProductTile Icon={p.icon} imageUrl={p.imageUrl} images={p.images} name={p.name} variant={2} />
+                    </div>
                     <div className="min-w-0 text-left">
                       <p className="text-sm truncate" style={{ color: "var(--text)" }}>{p.name}</p>
                       <p className="text-xs" style={{ color: "var(--text-dim)" }}>{formatDZD(p.price)}</p>
