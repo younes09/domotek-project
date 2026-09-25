@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ChevronRight, Minus, Plus, ShoppingCart } from "lucide-react";
+import { ArrowLeft, ChevronRight, Minus, Plus, ShoppingCart } from "lucide-react";
 import { ProductGallery } from "../components/ProductGallery";
 import { ProductReviews } from "../components/ProductReviews";
 import { ProductGrid } from "../components/ProductGrid";
@@ -28,10 +28,10 @@ export const ProductDetailView: React.FC<{ s: Store }> = ({ s }) => {
           Ce produit n'est plus disponible ou a été déplacé.
         </p>
         <button
-          onClick={() => s.goShop({})}
+          onClick={() => s.goBack()}
           className="px-6 py-2.5 rounded-xl font-bold text-xs dk-btn-primary"
         >
-          Découvrir le catalogue
+          Retour aux achats
         </button>
       </div>
     );
@@ -40,12 +40,21 @@ export const ProductDetailView: React.FC<{ s: Store }> = ({ s }) => {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 pb-28 sm:pb-10">
-      <div className="flex items-center gap-2 text-xs mb-4" style={{ color: "var(--text-faint)" }}>
-        <button onClick={() => s.goHome()} className="dk-focus rounded">Accueil</button>
+      <div className="flex items-center gap-2 text-xs mb-4 flex-wrap" style={{ color: "var(--text-faint)" }}>
+        <button
+          onClick={() => s.goBack()}
+          className="flex items-center gap-1.5 font-semibold dk-focus rounded-lg px-2.5 py-1 dk-surface border hover:opacity-80 transition-all mr-1"
+          style={{ borderColor: "var(--border)", color: "var(--text)" }}
+          aria-label="Retour à la page précédente"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" style={{ color: "var(--teal)" }} />
+          <span>Retour</span>
+        </button>
+        <button onClick={() => s.goHome()} className="dk-focus rounded hover:underline">Accueil</button>
         <ChevronRight className="h-3 w-3" />
-        <button onClick={() => s.goShop({ category: p.category })} className="dk-focus rounded">{s.categoryLabel[p.category] || p.category}</button>
+        <button onClick={() => s.goShop({ category: p.category })} className="dk-focus rounded hover:underline">{s.categoryLabel[p.category] || p.category}</button>
         <ChevronRight className="h-3 w-3" />
-        <span style={{ color: "var(--text-dim)" }}>{p.name}</span>
+        <span style={{ color: "var(--text-dim)" }} className="truncate max-w-[150px] sm:max-w-xs">{p.name}</span>
       </div>
 
       <div className="grid md:grid-cols-2 gap-8">

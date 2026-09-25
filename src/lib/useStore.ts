@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { DEFAULT_CATEGORIES, buildCategoryLabel, getCategoryIcon } from "../data/categories";
 import { PRODUCTS } from "../data/products";
 import type { CartItem, Category, CheckoutFormData, Order, Product, ShopFilters, Store, View } from "../types";
@@ -18,9 +18,9 @@ const EMPTY_FILTERS: ShopFilters = {
 
 const VALID_VIEWS: View[] = ["home", "shop", "product", "checkout", "confirmation", "admin"];
 
-function getInitialNavigation(): { view: View; selectedProductId: number | null } {
+function parseNavigation(rawHash: string): { view: View; selectedProductId: number | null } {
   try {
-    const hash = window.location.hash.replace(/^#\/?/, "");
+    const hash = rawHash.replace(/^#\/?/, "");
     if (hash.startsWith("product/")) {
       const id = Number(hash.replace("product/", ""));
       if (!isNaN(id) && id > 0) {
@@ -30,23 +30,15 @@ function getInitialNavigation(): { view: View; selectedProductId: number | null 
     if (VALID_VIEWS.includes(hash as View)) {
       return { view: hash as View, selectedProductId: null };
     }
-    const savedView = localStorage.getItem("domotek_current_view") as View | null;
-    const savedId = localStorage.getItem("domotek_selected_product_id");
-    if (savedView && VALID_VIEWS.includes(savedView)) {
-      return {
-        view: savedView,
-        selectedProductId: savedId ? Number(savedId) : null,
-      };
-    }
   } catch (e) {
-    console.error("Failed to read initial navigation", e);
+    console.error("Failed to parse navigation", e);
   }
   return { view: "home", selectedProductId: null };
 }
 
 export function useStore(): Store {
-  const initialNav = useMemo(() => getInitialNavigation(), []);
-  const [view, setView] = useState<View>(initialNav.view);
+  const initialNav = useMemo(() => parseNavigation(window.location.hash), []);
+  const [view, setViewInternal] = useState<View>(initialNav.view);
 
   // Dynamic Categories with LocalStorage persistence & Supabase sync
   const [categories, setCategories] = useState<Category[]>(() => {
@@ -159,57 +151,6 @@ export function useStore(): Store {
     return null;
   });
 
-  // Keep navigation & URL hash in sync with current view and selectedProduct
-  useEffect(() => {
-    try {
-      localStorage.setItem("domotek_current_view", view);
-      if (view === "product" && selectedProduct) {
-        localStorage.setItem("domotek_selected_product_id", String(selectedProduct.id));
-        const targetHash = `#product/${selectedProduct.id}`;
-        if (window.location.hash !== targetHash) {
-          window.history.replaceState(null, "", targetHash);
-        }
-      } else {
-        localStorage.removeItem("domotek_selected_product_id");
-        const targetHash = `#${view}`;
-        if (window.location.hash !== targetHash) {
-          window.history.replaceState(null, "", targetHash);
-        }
-      }
-    } catch (e) {
-      console.error("Failed to sync navigation to storage/hash", e);
-    }
-  }, [view, selectedProduct]);
-
-  // Synchronize selectedProduct if products are updated from database
-  useEffect(() => {
-    if (view === "product" && products.length > 0) {
-      const nav = getInitialNavigation();
-      const targetId = selectedProduct?.id || nav.selectedProductId;
-      if (targetId) {
-        const found = products.find((p) => p.id === targetId);
-        if (found && (!selectedProduct || selectedProduct.id !== found.id)) {
-          setSelectedProduct(found);
-        }
-      }
-    }
-  }, [products, view, selectedProduct]);
-
-  // Support browser Back / Forward buttons & Hash changes
-  useEffect(() => {
-    const onHashChange = () => {
-      const nav = getInitialNavigation();
-      setView(nav.view);
-      if (nav.selectedProductId && products.length > 0) {
-        const found = products.find((p) => p.id === nav.selectedProductId);
-        if (found) setSelectedProduct(found);
-      } else if (nav.view !== "product") {
-        setSelectedProduct(null);
-      }
-    };
-    window.addEventListener("hashchange", onHashChange);
-    return () => window.removeEventListener("hashchange", onHashChange);
-  }, [products]);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [wishlist, setWishlist] = useState<Set<number>>(new Set());
   const [cartOpen, setCartOpen] = useState(false);
@@ -219,6 +160,76 @@ export function useStore(): Store {
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [shopFilters, setShopFilters] = useState<ShopFilters>(EMPTY_FILTERS);
   const [toast, setToast] = useState<string | null>(null);
+  const [lastOrder, setLastOrder] = useState<Order | null>(null);
+  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+
+  // Navigate to view with native browser history support
+  const navigateTo = useCallback(
+    (targetView: View, productId?: number | null) => {
+      const targetHash = targetView === "product" && productId ? `#product/${productId}` : `#${targetView}`;
+
+      setCartOpen(false);
+      setMobileMenuOpen(false);
+      setSearchOpen(false);
+      setQuickViewProduct(null);
+
+      if (window.location.hash !== targetHash) {
+        window.location.hash = targetHash;
+      } else {
+        setViewInternal(targetView);
+        if (targetView === "product" && productId) {
+          const found = products.find((p) => p.id === productId) || PRODUCTS.find((p) => p.id === productId);
+          if (found) setSelectedProduct(found);
+        } else if (targetView !== "product") {
+          setSelectedProduct(null);
+        }
+      }
+    },
+    [products]
+  );
+
+  // Support browser Back / Forward buttons & Hash changes
+  useEffect(() => {
+    const onLocationChange = () => {
+      const nav = parseNavigation(window.location.hash);
+      setViewInternal(nav.view);
+
+      if (nav.view === "product" && nav.selectedProductId) {
+        const found =
+          products.find((p) => p.id === nav.selectedProductId) ||
+          PRODUCTS.find((p) => p.id === nav.selectedProductId);
+        if (found) {
+          setSelectedProduct(found);
+        }
+      } else if (nav.view !== "product") {
+        setSelectedProduct(null);
+      }
+
+      setMobileMenuOpen(false);
+      setSearchOpen(false);
+      setQuickViewProduct(null);
+    };
+
+    window.addEventListener("hashchange", onLocationChange);
+    window.addEventListener("popstate", onLocationChange);
+
+    return () => {
+      window.removeEventListener("hashchange", onLocationChange);
+      window.removeEventListener("popstate", onLocationChange);
+    };
+  }, [products]);
+
+  // Synchronize selectedProduct if products are updated from database
+  useEffect(() => {
+    const nav = parseNavigation(window.location.hash);
+    if (nav.view === "product" && nav.selectedProductId && products.length > 0) {
+      const found = products.find((p) => p.id === nav.selectedProductId);
+      if (found && (!selectedProduct || selectedProduct.id !== found.id)) {
+        setSelectedProduct(found);
+      }
+    }
+  }, [products, selectedProduct]);
+
   const [orders, setOrders] = useState<Order[]>(() => {
     try {
       const saved = localStorage.getItem("domotek_orders");
@@ -307,14 +318,11 @@ export function useStore(): Store {
       supabase.removeChannel(channel);
     };
   }, []);
-
-  const [lastOrder, setLastOrder] = useState<Order | null>(null);
-  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
   const [theme, setTheme] = useState<"light" | "dark">(() => {
     return (localStorage.getItem("domotek_theme") as "light" | "dark") || "light";
   });
 
-  useEffect(() => { window.scrollTo(0, 0); }, [view]);
+  useEffect(() => { window.scrollTo(0, 0); }, [view, selectedProduct?.id]);
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
     document.documentElement.classList.toggle("dark", theme === "dark");
@@ -327,9 +335,35 @@ export function useStore(): Store {
   }, [toast]);
 
   const showToast = (msg: string) => setToast(msg);
-  const goHome = () => { setView("home"); setSelectedProduct(null); };
-  const goShop = (patch: Partial<ShopFilters>) => { setShopFilters({ ...EMPTY_FILTERS, ...patch }); setView("shop"); };
-  const openProduct = (p: Product) => { setSelectedProduct(p); setView("product"); };
+  const goHome = useCallback(() => {
+    navigateTo("home");
+  }, [navigateTo]);
+
+  const goShop = useCallback((patch: Partial<ShopFilters> = {}) => {
+    setShopFilters((prev) => ({ ...EMPTY_FILTERS, ...prev, ...patch }));
+    navigateTo("shop");
+  }, [navigateTo]);
+
+  const openProduct = useCallback((p: Product) => {
+    setSelectedProduct(p);
+    navigateTo("product", p.id);
+  }, [navigateTo]);
+
+  const setView = useCallback((v: View) => {
+    if (v === "product" && selectedProduct) {
+      navigateTo("product", selectedProduct.id);
+    } else {
+      navigateTo(v);
+    }
+  }, [navigateTo, selectedProduct]);
+
+  const goBack = useCallback(() => {
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      navigateTo("home");
+    }
+  }, [navigateTo]);
 
   const addToCart = (product: Product, qty = 1, variant: string | null = null) => {
     const key = product.id + (variant ? `-${variant}` : "");
@@ -370,7 +404,7 @@ export function useStore(): Store {
     setOrders((prev) => [newOrder, ...prev]);
     setLastOrder(newOrder);
     setCart([]);
-    setView("confirmation");
+    navigateTo("confirmation");
 
     // Async save to Supabase
     saveOrderToDb(newOrder).catch((err) => console.error("Could not save order to Supabase:", err));
@@ -382,7 +416,7 @@ export function useStore(): Store {
   };
 
   return {
-    view, setView, goHome, goShop, openProduct,
+    view, setView, goHome, goShop, openProduct, goBack,
     categories, setCategories, categoryLabel,
     products, setProducts, selectedProduct,
     cart, addToCart, removeFromCart, updateQty, cartItemsDetailed, cartCount, cartTotal,

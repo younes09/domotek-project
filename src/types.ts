@@ -124,6 +124,7 @@ export interface Store {
   goHome: () => void;
   goShop: (patch: Partial<ShopFilters>) => void;
   openProduct: (p: Product) => void;
+  goBack: () => void;
 
   categories: Category[];
   setCategories: React.Dispatch<React.SetStateAction<Category[]>>;

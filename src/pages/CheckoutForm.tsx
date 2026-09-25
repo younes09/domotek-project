@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ShieldCheck } from "lucide-react";
+import { ArrowLeft, ShieldCheck } from "lucide-react";
 import { ALGERIA_WILAYAS } from "../data/wilayas";
 import { ProductTile } from "../components/ui";
 import { formatDZD } from "../lib/format";
@@ -35,7 +35,18 @@ export const CheckoutForm: React.FC<{ s: Store }> = ({ s }) => {
 
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
-      <h1 className="dk-heading text-2xl font-semibold mb-6" style={{ color: "var(--text)" }}>Confirmer la commande</h1>
+      <div className="flex items-center gap-3 mb-6">
+        <button
+          onClick={() => s.goBack()}
+          className="h-9 px-3 rounded-xl flex items-center gap-1.5 text-xs font-semibold dk-surface border dk-focus hover:opacity-80 transition-all"
+          style={{ borderColor: "var(--border)", color: "var(--text)" }}
+          aria-label="Retour"
+        >
+          <ArrowLeft className="h-4 w-4" style={{ color: "var(--teal)" }} />
+          <span>Retour</span>
+        </button>
+        <h1 className="dk-heading text-2xl font-semibold" style={{ color: "var(--text)" }}>Confirmer la commande</h1>
+      </div>
 
       <div className="dk-surface rounded-2xl p-4 mb-6">
         <p className="text-sm font-medium mb-3" style={{ color: "var(--text)" }}>Récapitulatif</p>

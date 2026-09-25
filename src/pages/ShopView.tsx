@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { ChevronRight, SlidersHorizontal, X } from "lucide-react";
+import { ArrowLeft, ChevronRight, SlidersHorizontal, X } from "lucide-react";
 import { ProductCard } from "../components/ProductCard";
 import { ProductFilters, EMPTY_FILTERS } from "../components/ProductFilters";
 import type { Store } from "../types";
@@ -37,8 +37,17 @@ export const ShopView: React.FC<{ s: Store }> = ({ s }) => {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6">
-      <div className="flex items-center gap-2 text-xs mb-3" style={{ color: "var(--text-faint)" }}>
-        <button onClick={() => s.goHome()} className="dk-focus rounded">Accueil</button>
+      <div className="flex items-center gap-2 text-xs mb-3 flex-wrap" style={{ color: "var(--text-faint)" }}>
+        <button
+          onClick={() => s.goBack()}
+          className="flex items-center gap-1.5 font-semibold dk-focus rounded-lg px-2.5 py-1 dk-surface border hover:opacity-80 transition-all mr-1"
+          style={{ borderColor: "var(--border)", color: "var(--text)" }}
+          aria-label="Retour à la page précédente"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" style={{ color: "var(--teal)" }} />
+          <span>Retour</span>
+        </button>
+        <button onClick={() => s.goHome()} className="dk-focus rounded hover:underline">Accueil</button>
         <ChevronRight className="h-3 w-3" />
         <span style={{ color: "var(--text-dim)" }}>Boutique</span>
       </div>
