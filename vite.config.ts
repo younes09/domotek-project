@@ -4,14 +4,25 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   build: {
-    chunkSizeWarningLimit: 600,
+    chunkSizeWarningLimit: 1000,
+    modulePreload: {
+      // Éviter de précharger les modules lourds de l'administration sur la page d'accueil visiteur
+      resolveDependencies(filename, deps) {
+        return deps.filter((dep) => !dep.includes("Admin") && !dep.includes("charts"));
+      },
+    },
     rollupOptions: {
       output: {
-        manualChunks: {
-          "react-vendor": ["react", "react-dom"],
-          "supabase-vendor": ["@supabase/supabase-js"],
-          "icons": ["lucide-react"],
-          "charts": ["recharts"],
+        manualChunks(id) {
+          if (id.includes("node_modules/recharts")) {
+            return "charts";
+          }
+          if (id.includes("node_modules/@supabase")) {
+            return "supabase-vendor";
+          }
+          if (id.includes("node_modules/lucide-react")) {
+            return "icons";
+          }
         },
       },
     },
