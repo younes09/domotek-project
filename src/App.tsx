@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { Header } from "./components/Header";
 import { MobileNavigation } from "./components/MobileNavigation";
 import { SearchBar } from "./components/SearchBar";
@@ -8,12 +8,23 @@ import { Footer } from "./components/Footer";
 import { Toast } from "./components/ui";
 import { SeoManager } from "./components/SeoManager";
 import { HomeView } from "./pages/HomeView";
-import { ShopView } from "./pages/ShopView";
-import { ProductDetailView } from "./pages/ProductDetailView";
-import { CheckoutForm } from "./pages/CheckoutForm";
-import { ConfirmationView } from "./pages/ConfirmationView";
-import { AdminView } from "./admin/AdminView";
 import { useStore } from "./lib/useStore";
+
+// Découpage dynamique du bundle (Code Splitting) pour des performances optimales
+const ShopView = lazy(() => import("./pages/ShopView").then((m) => ({ default: m.ShopView })));
+const ProductDetailView = lazy(() => import("./pages/ProductDetailView").then((m) => ({ default: m.ProductDetailView })));
+const CheckoutForm = lazy(() => import("./pages/CheckoutForm").then((m) => ({ default: m.CheckoutForm })));
+const ConfirmationView = lazy(() => import("./pages/ConfirmationView").then((m) => ({ default: m.ConfirmationView })));
+const AdminView = lazy(() => import("./admin/AdminView").then((m) => ({ default: m.AdminView })));
+
+function ViewFallback() {
+  return (
+    <div className="min-h-[50vh] flex flex-col items-center justify-center p-8 space-y-3">
+      <div className="w-8 h-8 border-2 border-cyan-500/20 border-t-cyan-500 rounded-full animate-spin" />
+      <span className="text-xs text-slate-400 font-mono tracking-wider">Chargement...</span>
+    </div>
+  );
+}
 
 export default function App() {
   const s = useStore();
@@ -101,11 +112,13 @@ export default function App() {
 
       <main>
         {s.view === "home" && <HomeView s={s} />}
-        {s.view === "shop" && <ShopView s={s} />}
-        {s.view === "product" && <ProductDetailView s={s} />}
-        {s.view === "checkout" && <CheckoutForm s={s} />}
-        {s.view === "confirmation" && <ConfirmationView s={s} />}
-        {s.view === "admin" && <AdminView s={s} />}
+        <Suspense fallback={<ViewFallback />}>
+          {s.view === "shop" && <ShopView s={s} />}
+          {s.view === "product" && <ProductDetailView s={s} />}
+          {s.view === "checkout" && <CheckoutForm s={s} />}
+          {s.view === "confirmation" && <ConfirmationView s={s} />}
+          {s.view === "admin" && <AdminView s={s} />}
+        </Suspense>
       </main>
 
       {s.view !== "admin" && <Footer s={s} />}

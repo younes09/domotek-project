@@ -22,6 +22,8 @@ import {
   recordFailedAttempt,
   resetFailedAttempts,
   logSecurityEvent,
+  verifyAdminUsername,
+  verifyAdminPassword,
 } from "../lib/authSecurity";
 
 export const AdminLogin: React.FC<{ s: Store; onLogin: () => void }> = ({ s, onLogin }) => {
@@ -85,12 +87,11 @@ export const AdminLogin: React.FC<{ s: Store; onLogin: () => void }> = ({ s, onL
     try {
       const config = getSecurityConfig();
 
-      // 1. Verify Username (strictly matches the configured username)
-      const isUserMatch = username.trim().toLowerCase() === config.username.toLowerCase();
+      // 1. Verify Username
+      const isUserMatch = verifyAdminUsername(username);
 
-      // 2. Verify Password via Cryptographic Salted Hash (strictly matches current passwordHash)
-      const inputHash = await hashPassword(password, config.salt);
-      const isPasswordMatch = inputHash === config.passwordHash;
+      // 2. Verify Password (supports production VITE_ADMIN_PASSWORD & salted hash)
+      const isPasswordMatch = await verifyAdminPassword(password);
 
       if (!isUserMatch || !isPasswordMatch) {
         const result = recordFailedAttempt();

@@ -100,19 +100,23 @@ export function generateRandomString(length = 32): string {
   return res;
 }
 
-// Sel et hash SHA-256 précalculé pour identifiant initial (admin / admin123)
+// Configuration d'authentification environnementale (ex: Vercel / .env)
+const ENV_ADMIN_USERNAME = (import.meta.env.VITE_ADMIN_USERNAME || "").trim();
+const ENV_ADMIN_PASSWORD = (import.meta.env.VITE_ADMIN_PASSWORD || "").trim();
+
+// Sel et hash SHA-256 précalculé pour identifiant initial si aucune variable d'environnement n'est fournie
 const DEFAULT_SALT = "domotek_master_salt_init";
 const DEFAULT_PASS_HASH = "7d68cafe28b8a0096d64e7e91aa3edd8b126c75dbb1976e380794abf8173910b";
 
 const INITIAL_CONFIG: SecurityConfig = {
-  username: "admin",
+  username: ENV_ADMIN_USERNAME || "admin",
   passwordHash: DEFAULT_PASS_HASH,
   salt: DEFAULT_SALT,
   pinEnabled: false,
   stealthMode: false,
   sessionDurationMinutes: 240, // 4 heures
   inactivityTimeoutMinutes: 45, // 45 minutes
-  requirePasswordChange: true, // Recommander de changer les identifiants par défaut
+  requirePasswordChange: !ENV_ADMIN_PASSWORD, // Recommander de changer les identifiants si pas de variable env définie
 };
 
 /**
@@ -123,7 +127,11 @@ export function getSecurityConfig(): SecurityConfig {
     const saved = localStorage.getItem(STORAGE_KEYS.CONFIG);
     if (saved) {
       const parsed = JSON.parse(saved);
-      return { ...INITIAL_CONFIG, ...parsed };
+      return {
+        ...INITIAL_CONFIG,
+        ...parsed,
+        username: ENV_ADMIN_USERNAME || parsed.username || INITIAL_CONFIG.username,
+      };
     }
   } catch (e) {
     console.error("Erreur lecture configuration sécurité:", e);
@@ -140,6 +148,31 @@ export function saveSecurityConfig(config: SecurityConfig): void {
   } catch (e) {
     console.error("Erreur sauvegarde configuration sécurité:", e);
   }
+}
+
+/**
+ * Vérifie si l'identifiant administrateur est valide
+ */
+export function verifyAdminUsername(inputUsername: string): boolean {
+  const config = getSecurityConfig();
+  const targetUser = (ENV_ADMIN_USERNAME || config.username || "admin").toLowerCase().trim();
+  return inputUsername.toLowerCase().trim() === targetUser;
+}
+
+/**
+ * Vérifie si le mot de passe administrateur est valide
+ * (supporte la variable d'environnement de production Vercel ET le hachage sécurisé)
+ */
+export async function verifyAdminPassword(inputPassword: string): Promise<boolean> {
+  // 1. Si une variable d'environnement de mot de passe est configurée (ex: Vercel)
+  if (ENV_ADMIN_PASSWORD && inputPassword === ENV_ADMIN_PASSWORD) {
+    return true;
+  }
+
+  // 2. Vérification contre le hash salé SHA-256 stocké dans la configuration
+  const config = getSecurityConfig();
+  const inputHash = await hashPassword(inputPassword, config.salt);
+  return inputHash === config.passwordHash;
 }
 
 /**
