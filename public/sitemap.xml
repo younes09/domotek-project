@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- Page d'accueil -->
+  <url>
+    <loc>https://www.domotek.dz/</loc>
+    <lastmod>2026-09-25</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Boutique & Catalogue -->
+  <url>
+    <loc>https://www.domotek.dz/#shop</loc>
+    <lastmod>2026-09-25</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Catégories de produits -->
+  <url>
+    <loc>https://www.domotek.dz/#shop?category=interrupteurs</loc>
+    <lastmod>2026-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.domotek.dz/#shop?category=prises</loc>
+    <lastmod>2026-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.domotek.dz/#shop?category=securite</loc>
+    <lastmod>2026-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.domotek.dz/#shop?category=capteurs</loc>
+    <lastmod>2026-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.domotek.dz/#shop?category=eclairage</loc>
+    <lastmod>2026-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.domotek.dz/#shop?category=hubs</loc>
+    <lastmod>2026-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Produits Individuels -->
+  <url>
+    <loc>https://www.domotek.dz/#product/1</loc>
+    <lastmod>2026-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://www.domotek.dz/favicon.png</image:loc>
+      <image:title>Interrupteur WiFi intelligent 1 voie</image:title>
+      <image:caption>Interrupteur tactile mural connecté en verre trempé compatible Tuya et Alexa en Algérie</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.domotek.dz/#product/2</loc>
+    <lastmod>2026-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://www.domotek.dz/favicon.png</image:loc>
+      <image:title>Interrupteur WiFi intelligent 2 voies</image:title>
+      <image:caption>Interrupteur double circuit indépendant en verre tactile</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.domotek.dz/#product/3</loc>
+    <lastmod>2026-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://www.domotek.dz/favicon.png</image:loc>
+      <image:title>Interrupteur WiFi intelligent 3 voies</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.domotek.dz/#product/4</loc>
+    <lastmod>2026-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://www.domotek.dz/favicon.png</image:loc>
+      <image:title>Prise connectée WiFi 16A avec mesure d'énergie</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.domotek.dz/#product/5</loc>
+    <lastmod>2026-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://www.domotek.dz/favicon.png</image:loc>
+      <image:title>Passerelle Hub Zigbee 3.0 &amp; Bluetooth</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.domotek.dz/#product/6</loc>
+    <lastmod>2026-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://www.domotek.dz/favicon.png</image:loc>
+      <image:title>Capteur d'ouverture de porte &amp; fenêtre Zigbee</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.domotek.dz/#product/7</loc>
+    <lastmod>2026-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://www.domotek.dz/favicon.png</image:loc>
+      <image:title>Détecteur de mouvement PIR intelligent Zigbee</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.domotek.dz/#product/8</loc>
+    <lastmod>2026-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://www.domotek.dz/favicon.png</image:loc>
+      <image:title>Caméra de surveillance WiFi 360° 2K</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.domotek.dz/#product/9</loc>
+    <lastmod>2026-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://www.domotek.dz/favicon.png</image:loc>
+      <image:title>Sonnette vidéo connectée avec carillon sans fil</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.domotek.dz/#product/10</loc>
+    <lastmod>2026-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://www.domotek.dz/favicon.png</image:loc>
+      <image:title>Ampoule connectée RGB+CCT 9W E27</image:title>
+    </image:image>
+  </url>
+</urlset>

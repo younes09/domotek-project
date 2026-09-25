@@ -1,0 +1,72 @@
+# DomoTek — Smart Home & Domotique en Algérie
+
+> DomoTek est la boutique en ligne de référence en Algérie spécialisée dans la domotique, les objets connectés (IoT), la sécurité intelligente et l'électricité moderne. Nous proposons des équipements compatibles Tuya, Smart Life, Zigbee, Wi-Fi, Amazon Alexa et Google Assistant, avec livraison rapide dans les 58 wilayas d'Algérie et paiement sécurisé à la livraison (Cash on Delivery).
+
+## Informations Principales & Services
+- **Site web officiel** : https://www.domotek.dz
+- **Pays & Territoire** : Algérie (Livraison dans les 58 wilayas)
+- **Modalités de paiement** : Paiement en espèces à la livraison (Main à main)
+- **Garantie** : 12 mois d'assistance et remplacement à neuf sur tous les équipements
+- **Support & Commande** : Assistance technique gratuite en français et en arabe par téléphone et WhatsApp (+213 550 00 00 00)
+- **Écosystèmes compatibles** : Tuya Smart, Smart Life, Amazon Alexa, Google Home / Assistant, Home Assistant, Zigbee 3.0, Wi-Fi 2.4 GHz
+
+---
+
+## Catégories de Produits
+- **Interrupteurs connectés** : Interrupteurs tactiles muraux en verre trempé (1 voie, 2 voies, 3 voies), avec ou sans fil neutre, pilotables par smartphone et commande vocale.
+- **Prises & Énergie** : Prises intelligentes avec mesure de consommation en temps réel (16A/20A), multiprises connectées et disjoncteurs différentiels intelligents.
+- **Sécurité & Caméras** : Caméras de surveillance WiFi 360° motorisées intérieur/extérieur, sonnettes vidéo connectées avec interphone, sirènes d'alarme 110dB.
+- **Capteurs & Détecteurs** : Capteurs d'ouverture de porte/fenêtre Zigbee, détecteurs de mouvement infrarouge PIR, capteurs d'inondation / fuite d'eau, thermomètres / hygromètres connectés.
+- **Éclairage intelligent** : Ampoules connectées RGB+CCT (16 millions de couleurs), bandeaux LED synchronisés musique, contrôleurs de ruban LED.
+- **Passerelles & Hubs** : Passerelles multimodes Zigbee 3.0 + Bluetooth Mesh pour une portée étendue et une réactivité instantanée hors ligne.
+
+---
+
+## Catalogue des Équipements Phares (Tarifs en Dinars Algériens — DZD)
+
+1. **Interrupteur WiFi intelligent 1 voie** (Réf: DK-SW-WIFI1)
+   - *Prix* : 2 800 DZD
+   - *Fonctions* : Commande tactile en verre trempé, compatible avec/sans neutre (condensateur inclus), contrôle vocal Alexa/Google.
+
+2. **Interrupteur WiFi intelligent 2 voies** (Réf: DK-SW-WIFI2)
+   - *Prix* : 3 600 DZD
+   - *Fonctions* : Double commande indépendante, façade verre anti-rayures, planification horaire.
+
+3. **Interrupteur WiFi intelligent 3 voies** (Réf: DK-SW-WIFI3)
+   - *Prix* : 4 200 DZD
+   - *Fonctions* : Triple commande pour grands salons ou couloirs, gestion de scénarios groupés.
+
+4. **Prise connectée WiFi 16A avec mesure d'énergie** (Réf: DK-PLUG-16A)
+   - *Prix* : 2 400 DZD
+   - *Fonctions* : Mesure en temps réel des kWh consommés, programmateur journalier/hebdomadaire, protection surchauffe.
+
+5. **Passerelle Passerelle Hub Zigbee 3.0 & Bluetooth** (Réf: DK-HUB-ZIG)
+   - *Prix* : 4 500 DZD
+   - *Fonctions* : Connecte jusqu'à 128 appareils Zigbee, automatisation locale ultrarapide même en cas de coupure Internet.
+
+6. **Capteur d'ouverture de porte & fenêtre Zigbee** (Réf: DK-SENS-DOOR)
+   - *Prix* : 1 900 DZD
+   - *Fonctions* : Alerte instantanée sur smartphone en cas d'intrusion, autonomie pile 2 ans, déclencheur de lumières.
+
+7. **Détecteur de mouvement PIR intelligent Zigbee** (Réf: DK-SENS-PIR)
+   - *Prix* : 2 300 DZD
+   - *Fonctions* : Angle 120°, portée 7 mètres, allumage automatique des couloirs et escaliers.
+
+8. **Caméra de surveillance WiFi 360° 2K / 3MP** (Réf: DK-CAM-360)
+   - *Prix* : 6 900 DZD
+   - *Fonctions* : Rotation panoramique 360°, vision nocturne infrarouge, audio bidirectionnel, suivi intelligent de silhouette humaine, sans abonnement.
+
+9. **Sonnette vidéo connectée avec carillon sans fil** (Réf: DK-BELL-VD)
+   - *Prix* : 8 500 DZD
+   - *Fonctions* : Caméra HD grand angle 166°, notification d'appel en direct sur smartphone, batterie rechargeable longue durée.
+
+10. **Ampoule connectée RGB+CCT 9W E27** (Réf: DK-BULB-RGB)
+    - *Prix* : 1 600 DZD
+    - *Fonctions* : 16 millions de couleurs + blanc chaud à blanc froid (2700K-6500K), synchronisation rythme musical.
+
+---
+
+## Liens Utiles
+- Catalogue complet des produits : https://www.domotek.dz/#shop
+- Guide d'installation et d'utilisation : https://www.domotek.dz/#shop
+- Fichier complet pour modèles d'IA (LLMs Full) : https://www.domotek.dz/llms-full.txt

@@ -1,4 +1,50 @@
+# Robots.txt for DomoTek Algérie (https://www.domotek.dz)
+# Optimized for Google Search, Bing, and AI Search Crawlers
+
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /#admin
 
+# Search & AI Crawlers explicitly welcomed
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Anthropic-ai
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+# Sitemaps & Machine-readable AI Context
 Sitemap: https://www.domotek.dz/sitemap.xml
+# LLM & AI Search context files:
+# https://www.domotek.dz/llms.txt
+# https://www.domotek.dz/llms-full.txt

@@ -6,6 +6,7 @@ import { QuickViewModal } from "./components/QuickViewModal";
 import { CartDrawer } from "./components/CartDrawer";
 import { Footer } from "./components/Footer";
 import { Toast } from "./components/ui";
+import { SeoManager } from "./components/SeoManager";
 import { HomeView } from "./pages/HomeView";
 import { ShopView } from "./pages/ShopView";
 import { ProductDetailView } from "./pages/ProductDetailView";
@@ -92,6 +93,7 @@ export default function App() {
       className={`min-h-screen ${isVisitor ? "visitor-protected" : ""}`}
       style={{ background: "var(--bg)", fontFamily: "var(--font-body)" }}
     >
+      <SeoManager s={s} />
       <Header s={s} />
       {s.mobileMenuOpen && <MobileNavigation s={s} />}
       {s.searchOpen && <SearchBar s={s} />}
