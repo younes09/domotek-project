@@ -1,4 +1,4 @@
-# Robots.txt for DomoTek Algérie (https://www.domotek.dz)
+# Robots.txt for DomoTek Algérie (https://www.domotek-dz.com)
 # Optimized for Google Search, Bing, and AI Search Crawlers
 
 User-agent: *
@@ -44,7 +44,7 @@ User-agent: OAI-SearchBot
 Allow: /
 
 # Sitemaps & Machine-readable AI Context
-Sitemap: https://www.domotek.dz/sitemap.xml
+Sitemap: https://www.domotek-dz.com/sitemap.xml
 # LLM & AI Search context files:
-# https://www.domotek.dz/llms.txt
-# https://www.domotek.dz/llms-full.txt
+# https://www.domotek-dz.com/llms.txt
+# https://www.domotek-dz.com/llms-full.txt

@@ -8,8 +8,8 @@ export const SeoManager: React.FC<{ s: Store }> = ({ s }) => {
     let title = "DomoTek — Smart Home, Domotique & Objets Connectés en Algérie";
     let description =
       "DomoTek est la boutique leader en Algérie pour la domotique et la maison intelligente (interrupteurs tactiles, prises connectées, caméras WiFi, capteurs Zigbee). Livraison 58 wilayas & paiement à la livraison.";
-    let canonicalUrl = "https://www.domotek.dz/";
-    let ogImage = "https://www.domotek.dz/favicon.png";
+    let canonicalUrl = "https://www.domotek-dz.com/";
+    let ogImage = "https://www.domotek-dz.com/favicon.png";
     let jsonLdData: any = null;
 
     if (view === "product" && selectedProduct) {
@@ -17,10 +17,10 @@ export const SeoManager: React.FC<{ s: Store }> = ({ s }) => {
       const catName = categoryLabel[p.category] || "Domotique";
       title = `${p.name} — ${p.price.toLocaleString("fr-DZ")} DZD | DomoTek Algérie`;
       description = `${p.shortDesc} Disponible en Algérie au prix de ${p.price.toLocaleString("fr-DZ")} DZD. Livraison rapide 58 wilayas & garantie 12 mois.`;
-      canonicalUrl = `https://www.domotek.dz/#product/${p.id}`;
+      canonicalUrl = `https://www.domotek-dz.com/#product/${p.id}`;
 
       const primaryImg = (p.images && p.images.length > 0 && p.images[0]) || p.imageUrl || ogImage;
-      ogImage = primaryImg.startsWith("http") ? primaryImg : `https://www.domotek.dz${primaryImg.startsWith("/") ? "" : "/"}${primaryImg}`;
+      ogImage = primaryImg.startsWith("http") ? primaryImg : `https://www.domotek-dz.com${primaryImg.startsWith("/") ? "" : "/"}${primaryImg}`;
 
       const productSchema: any = {
         "@context": "https://schema.org",
@@ -98,19 +98,19 @@ export const SeoManager: React.FC<{ s: Store }> = ({ s }) => {
             "@type": "ListItem",
             "position": 1,
             "name": "Accueil",
-            "item": "https://www.domotek.dz/"
+            "item": "https://www.domotek-dz.com/"
           },
           {
             "@type": "ListItem",
             "position": 2,
             "name": "Boutique",
-            "item": "https://www.domotek.dz/#shop"
+            "item": "https://www.domotek-dz.com/#shop"
           },
           {
             "@type": "ListItem",
             "position": 3,
             "name": catName,
-            "item": `https://www.domotek.dz/#shop?category=${p.category}`
+            "item": `https://www.domotek-dz.com/#shop?category=${p.category}`
           },
           {
             "@type": "ListItem",
@@ -146,14 +146,14 @@ export const SeoManager: React.FC<{ s: Store }> = ({ s }) => {
       if (catLabel) {
         title = `${catLabel} Connectés en Algérie — Prix & Modèles | DomoTek`;
         description = `Découvrez notre gamme de ${catLabel.toLowerCase()} intelligents pour la maison connectée en Algérie. Livraison 58 wilayas et paiement à la livraison.`;
-        canonicalUrl = `https://www.domotek.dz/#shop?category=${activeCat}`;
+        canonicalUrl = `https://www.domotek-dz.com/#shop?category=${activeCat}`;
       } else if (searchQuery) {
         title = `Recherche « ${searchQuery} » — DomoTek Domotique Algérie`;
         description = `Résultats de recherche pour ${searchQuery} chez DomoTek Algérie.`;
       } else {
         title = "Boutique Domotique & Maison Connectée Algérie — Catalogue | DomoTek";
         description = "Tous nos équipements domotiques, interrupteurs WiFi/Zigbee, prises intelligentes, caméras et capteurs au meilleur prix en Algérie.";
-        canonicalUrl = "https://www.domotek.dz/#shop";
+        canonicalUrl = "https://www.domotek-dz.com/#shop";
       }
     } else if (view === "checkout") {
       title = "Commander vos équipements domotiques — DomoTek Algérie";

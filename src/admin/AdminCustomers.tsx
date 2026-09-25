@@ -173,7 +173,7 @@ const CreateCustomerModal: React.FC<{
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="client@domotek.dz"
+                placeholder="client@domotek-dz.com"
                 className="dk-input rounded-xl px-3.5 py-2.5 w-full text-xs"
               />
             </div>
@@ -385,7 +385,7 @@ const EditCustomerModal: React.FC<{
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="client@domotek.dz"
+                placeholder="client@domotek-dz.com"
                 className="dk-input rounded-xl px-3.5 py-2.5 w-full text-xs"
               />
             </div>

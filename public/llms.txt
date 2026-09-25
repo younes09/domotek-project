@@ -3,7 +3,7 @@
 > DomoTek est la boutique en ligne de référence en Algérie spécialisée dans la domotique, les objets connectés (IoT), la sécurité intelligente et l'électricité moderne. Nous proposons des équipements compatibles Tuya, Smart Life, Zigbee, Wi-Fi, Amazon Alexa et Google Assistant, avec livraison rapide dans les 58 wilayas d'Algérie et paiement sécurisé à la livraison (Cash on Delivery).
 
 ## Informations Principales & Services
-- **Site web officiel** : https://www.domotek.dz
+- **Site web officiel** : https://www.domotek-dz.com
 - **Pays & Territoire** : Algérie (Livraison dans les 58 wilayas)
 - **Modalités de paiement** : Paiement en espèces à la livraison (Main à main)
 - **Garantie** : 12 mois d'assistance et remplacement à neuf sur tous les équipements
@@ -67,6 +67,6 @@
 ---
 
 ## Liens Utiles
-- Catalogue complet des produits : https://www.domotek.dz/#shop
-- Guide d'installation et d'utilisation : https://www.domotek.dz/#shop
-- Fichier complet pour modèles d'IA (LLMs Full) : https://www.domotek.dz/llms-full.txt
+- Catalogue complet des produits : https://www.domotek-dz.com/#shop
+- Guide d'installation et d'utilisation : https://www.domotek-dz.com/#shop
+- Fichier complet pour modèles d'IA (LLMs Full) : https://www.domotek-dz.com/llms-full.txt
