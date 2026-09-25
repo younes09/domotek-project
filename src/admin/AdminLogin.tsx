@@ -10,9 +10,7 @@ import {
   Eye,
   EyeOff,
   Smartphone,
-  CheckCircle2,
   RefreshCw,
-  HelpCircle,
 } from "lucide-react";
 import { Logo } from "../components/Logo";
 import type { Store } from "../types";
@@ -41,7 +39,6 @@ export const AdminLogin: React.FC<{ s: Store; onLogin: () => void }> = ({ s, onL
   // Anti-bot captcha challenge when failed attempts >= 2
   const [botChallenge, setBotChallenge] = useState<{ num1: number; num2: number; answer: number } | null>(null);
   const [userCaptcha, setUserCaptcha] = useState("");
-  const [showDemoHelp, setShowDemoHelp] = useState(false);
 
   const generateCaptcha = () => {
     const num1 = Math.floor(Math.random() * 9) + 2;
@@ -146,18 +143,6 @@ export const AdminLogin: React.FC<{ s: Store; onLogin: () => void }> = ({ s, onL
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleFillInitialDemo = () => {
-    const config = getSecurityConfig();
-    if (config.requirePasswordChange) {
-      setUsername("admin");
-      setPassword("admin123");
-    } else {
-      setUsername(config.username);
-      setPassword("");
-    }
-    setError("");
   };
 
   return (
@@ -329,56 +314,6 @@ export const AdminLogin: React.FC<{ s: Store; onLogin: () => void }> = ({ s, onL
               <span>{loading ? "Vérification cryptographique..." : requiresPin ? "Valider le code PIN" : "S'identifier"}</span>
             </button>
           </form>
-
-          {/* Collapsible First-time setup / Demo info */}
-          <div className="pt-3 border-t text-center space-y-2" style={{ borderColor: "var(--border)" }}>
-            <button
-              type="button"
-              onClick={() => setShowDemoHelp(!showDemoHelp)}
-              className="inline-flex items-center gap-1.5 text-[11px] text-slate-400 hover:text-cyan-400 transition-colors"
-            >
-              <HelpCircle className="h-3.5 w-3.5" />
-              <span>Première configuration ou aide à l'accès ?</span>
-            </button>
-
-            {showDemoHelp && (
-              <div className="p-3 rounded-xl bg-[var(--surface-2)] border text-left text-xs space-y-2" style={{ borderColor: "var(--border)" }}>
-                {getSecurityConfig().requirePasswordChange ? (
-                  <>
-                    <p className="text-[11px] leading-relaxed" style={{ color: "var(--text-dim)" }}>
-                      Identifiants maîtres initiaux du système :
-                    </p>
-                    <div className="flex items-center justify-between bg-black/20 p-2 rounded-lg font-mono text-xs">
-                      <span>admin / admin123</span>
-                      <button
-                        type="button"
-                        onClick={handleFillInitialDemo}
-                        className="text-[10px] text-cyan-400 hover:underline font-bold font-sans"
-                      >
-                        Remplir
-                      </button>
-                    </div>
-                    <p className="text-[10px] text-amber-400/90 leading-tight">
-                      🔒 Une fois connecté, vous pourrez personnaliser votre nom d'utilisateur, créer un mot de passe fort et activer le code PIN depuis l'onglet <strong>Sécurité</strong>.
-                    </p>
-                  </>
-                ) : (
-                  <>
-                    <p className="text-[11px] leading-relaxed" style={{ color: "var(--text-dim)" }}>
-                      Des identifiants personnalisés ont été définis pour le compte administrateur : <strong className="text-cyan-400 font-mono">{getSecurityConfig().username}</strong>.
-                    </p>
-                    <button
-                      type="button"
-                      onClick={handleFillInitialDemo}
-                      className="text-[10px] text-cyan-400 hover:underline font-bold font-sans"
-                    >
-                      Remplir le nom d'utilisateur ({getSecurityConfig().username})
-                    </button>
-                  </>
-                )}
-              </div>
-            )}
-          </div>
         </div>
 
         {/* Back to store */}
