@@ -200,47 +200,47 @@ export const ProductCard: React.FC<{ product: Product; s: Store }> = ({ product,
       </div>
 
       {/* Card Content */}
-      <div className="flex flex-1 flex-col p-4">
+      <div className="flex flex-1 flex-col p-3 sm:p-4">
         <button
           onClick={() => s.openProduct(product)}
-          className="text-left text-base font-bold leading-snug dk-heading dk-focus rounded group-hover:text-cyan-500 transition-colors line-clamp-1"
+          className="text-left text-xs sm:text-sm font-bold leading-snug dk-heading dk-focus rounded group-hover:text-cyan-500 transition-colors line-clamp-1"
           style={{ color: "var(--text)" }}
         >
           {product.name}
         </button>
 
-        <p className="text-xs mt-1 leading-relaxed line-clamp-2 min-h-[32px]" style={{ color: "var(--text-dim)" }}>
+        <p className="text-[11px] sm:text-xs mt-1 leading-relaxed line-clamp-2 min-h-[28px] sm:min-h-[32px]" style={{ color: "var(--text-dim)" }}>
           {product.shortDesc}
         </p>
 
-        <div className="mt-3 flex items-baseline gap-2">
-          <span className="text-xl font-extrabold dk-heading tracking-tight" style={{ color: "var(--text)" }}>
+        <div className="mt-2 sm:mt-3 flex items-baseline gap-2">
+          <span className="text-base sm:text-xl font-extrabold dk-heading tracking-tight" style={{ color: "var(--text)" }}>
             {formatDZD(product.price)}
           </span>
           {product.oldPrice && (
-            <span className="text-xs line-through" style={{ color: "var(--text-faint)" }}>
+            <span className="text-[10px] sm:text-xs line-through" style={{ color: "var(--text-faint)" }}>
               {formatDZD(product.oldPrice)}
             </span>
           )}
         </div>
 
         {/* Compatibility info pill */}
-        <div className="mt-2.5">
+        <div className="mt-2">
           <button
             onClick={(e) => { e.stopPropagation(); s.setQuickViewProduct(product); }}
-            className="w-full inline-flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium dk-chip-teal hover:opacity-80 transition-all"
+            className="w-full inline-flex items-center justify-center gap-1.5 px-2 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-medium dk-chip-teal hover:opacity-80 transition-all truncate"
           >
-            <Info className="h-3.5 w-3.5 shrink-0" style={{ color: "var(--teal)" }} />
-            <span>Compatibilité à vérifier</span>
+            <Info className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0" style={{ color: "var(--teal)" }} />
+            <span className="truncate">Compatibilité à vérifier</span>
           </button>
         </div>
 
         {/* Actions: Direct Add to Cart + Product details view */}
-        <div className="mt-3 flex items-center gap-2">
+        <div className="mt-3 flex items-center gap-1.5 sm:gap-2">
           <button
             onClick={handleAddToCart}
             disabled={product.stock === "out"}
-            className={`flex-1 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-1.5 transition-all duration-200 ${
+            className={`flex-1 min-w-0 py-2 sm:py-2.5 px-2 sm:px-3 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-1 sm:gap-1.5 transition-all duration-200 ${
               added
                 ? "bg-emerald-500 text-white shadow-md shadow-emerald-500/20 scale-[1.02]"
                 : "dk-btn-primary"
@@ -249,14 +249,19 @@ export const ProductCard: React.FC<{ product: Product; s: Store }> = ({ product,
           >
             {added ? (
               <>
-                <Check className="h-4 w-4 stroke-[2.5] shrink-0" />
-                <span>Ajouté !</span>
+                <Check className="h-3.5 w-3.5 sm:h-4 sm:w-4 stroke-[2.5] shrink-0" />
+                <span className="truncate">Ajouté !</span>
               </>
             ) : (
               <>
-                <ShoppingCart className="h-4 w-4 shrink-0" />
+                <ShoppingCart className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" />
                 <span className="truncate">
-                  {product.stock === "out" ? "Rupture" : "Ajouter au panier"}
+                  {product.stock === "out" ? "Rupture" : (
+                    <>
+                      <span>Ajouter</span>
+                      <span className="hidden sm:inline"> au panier</span>
+                    </>
+                  )}
                 </span>
               </>
             )}
@@ -264,12 +269,12 @@ export const ProductCard: React.FC<{ product: Product; s: Store }> = ({ product,
 
           <button
             onClick={() => s.openProduct(product)}
-            className="py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1 transition-all shrink-0 border hover:border-cyan-500/50 hover:text-cyan-500"
+            className="h-8 w-8 sm:h-10 sm:w-10 rounded-xl text-xs font-semibold flex items-center justify-center transition-all shrink-0 border hover:border-cyan-500/50 hover:text-cyan-500"
             style={{ background: "var(--surface-2)", borderColor: "var(--border)", color: "var(--text-dim)" }}
             title="Voir les détails du produit"
             aria-label="Voir le produit"
           >
-            <ArrowRight className="h-4 w-4" />
+            <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
           </button>
         </div>
       </div>
