@@ -275,7 +275,7 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
               }`}
             >
               <div
-                className={`glass-card-hover rounded-2xl p-2.5 sm:p-3.5 flex items-center gap-2.5 sm:gap-3.5 border backdrop-blur-md min-w-0 ${
+                className={`glass-card-hover rounded-2xl p-3 sm:p-3.5 flex items-center gap-2.5 sm:gap-3.5 border backdrop-blur-md min-w-0 ${
                   isDark
                     ? "border-slate-700/60 bg-slate-950/50"
                     : "border-slate-200/80 bg-white/80 shadow-sm"
@@ -285,17 +285,17 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
                   <Heart className="h-4 w-4 sm:h-5 sm:w-5 text-cyan-500" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h4 className={`text-xs sm:text-sm font-bold truncate sm:whitespace-normal ${isDark ? "text-white" : "text-slate-900"}`}>
+                  <h4 className={`text-xs sm:text-sm font-bold leading-tight ${isDark ? "text-white" : "text-slate-900"}`}>
                     Plus de confort
                   </h4>
-                  <p className={`text-[10px] sm:text-[11px] leading-tight line-clamp-1 sm:line-clamp-none ${isDark ? "text-slate-300" : "text-slate-500"}`}>
+                  <p className={`text-[10px] sm:text-[11px] leading-snug mt-0.5 ${isDark ? "text-slate-300" : "text-slate-500"}`}>
                     Contrôlez sans vous lever
                   </p>
                 </div>
               </div>
 
               <div
-                className={`glass-card-hover rounded-2xl p-2.5 sm:p-3.5 flex items-center gap-2.5 sm:gap-3.5 border backdrop-blur-md min-w-0 ${
+                className={`glass-card-hover rounded-2xl p-3 sm:p-3.5 flex items-center gap-2.5 sm:gap-3.5 border backdrop-blur-md min-w-0 ${
                   isDark
                     ? "border-slate-700/60 bg-slate-950/50"
                     : "border-slate-200/80 bg-white/80 shadow-sm"
@@ -305,17 +305,17 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
                   <Leaf className="h-4 w-4 sm:h-5 sm:w-5 text-cyan-500" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h4 className={`text-xs sm:text-sm font-bold truncate sm:whitespace-normal ${isDark ? "text-white" : "text-slate-900"}`}>
+                  <h4 className={`text-xs sm:text-sm font-bold leading-tight ${isDark ? "text-white" : "text-slate-900"}`}>
                     Maison économe
                   </h4>
-                  <p className={`text-[10px] sm:text-[11px] leading-tight line-clamp-1 sm:line-clamp-none ${isDark ? "text-slate-300" : "text-slate-500"}`}>
+                  <p className={`text-[10px] sm:text-[11px] leading-snug mt-0.5 ${isDark ? "text-slate-300" : "text-slate-500"}`}>
                     Jusqu'à -30% d'énergie
                   </p>
                 </div>
               </div>
 
               <div
-                className={`glass-card-hover rounded-2xl p-2.5 sm:p-3.5 flex items-center gap-2.5 sm:gap-3.5 border backdrop-blur-md min-w-0 ${
+                className={`glass-card-hover rounded-2xl p-3 sm:p-3.5 flex items-center gap-2.5 sm:gap-3.5 border backdrop-blur-md min-w-0 ${
                   isDark
                     ? "border-slate-700/60 bg-slate-950/50"
                     : "border-slate-200/80 bg-white/80 shadow-sm"
@@ -325,17 +325,17 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
                   <ShieldCheck className="h-4 w-4 sm:h-5 sm:w-5 text-cyan-500" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h4 className={`text-xs sm:text-sm font-bold truncate sm:whitespace-normal ${isDark ? "text-white" : "text-slate-900"}`}>
+                  <h4 className={`text-xs sm:text-sm font-bold leading-tight ${isDark ? "text-white" : "text-slate-900"}`}>
                     Sécurité renforcée
                   </h4>
-                  <p className={`text-[10px] sm:text-[11px] leading-tight line-clamp-1 sm:line-clamp-none ${isDark ? "text-slate-300" : "text-slate-500"}`}>
+                  <p className={`text-[10px] sm:text-[11px] leading-snug mt-0.5 ${isDark ? "text-slate-300" : "text-slate-500"}`}>
                     Alertes directes mobile
                   </p>
                 </div>
               </div>
 
               <div
-                className={`glass-card-hover rounded-2xl p-2.5 sm:p-3.5 flex items-center gap-2.5 sm:gap-3.5 border backdrop-blur-md min-w-0 ${
+                className={`glass-card-hover rounded-2xl p-3 sm:p-3.5 flex items-center gap-2.5 sm:gap-3.5 border backdrop-blur-md min-w-0 ${
                   isDark
                     ? "border-slate-700/60 bg-slate-950/50"
                     : "border-slate-200/80 bg-white/80 shadow-sm"
@@ -345,10 +345,10 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
                   <Settings className="h-4 w-4 sm:h-5 sm:w-5 text-cyan-500" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h4 className={`text-xs sm:text-sm font-bold truncate sm:whitespace-normal ${isDark ? "text-white" : "text-slate-900"}`}>
+                  <h4 className={`text-xs sm:text-sm font-bold leading-tight ${isDark ? "text-white" : "text-slate-900"}`}>
                     Installation facile
                   </h4>
-                  <p className={`text-[10px] sm:text-[11px] leading-tight line-clamp-1 sm:line-clamp-none ${isDark ? "text-slate-300" : "text-slate-500"}`}>
+                  <p className={`text-[10px] sm:text-[11px] leading-snug mt-0.5 ${isDark ? "text-slate-300" : "text-slate-500"}`}>
                     Guidé pas-à-pas
                   </p>
                 </div>
