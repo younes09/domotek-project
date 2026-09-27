@@ -20,7 +20,7 @@ declare global {
 }
 
 const STORAGE_GA_KEY = "domotek_ga_measurement_id";
-const DEFAULT_GA_ID = ""; // Laisser vide par défaut jusqu'à ce que l'utilisateur fournisse son ID G-XXXXXXXXXX
+const DEFAULT_GA_ID = "G-RPE5Y217ZT";
 
 /**
  * Récupère l'ID Google Analytics 4 configuré (depuis .env ou localStorage)
