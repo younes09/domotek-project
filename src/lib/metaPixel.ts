@@ -20,15 +20,16 @@ declare global {
 }
 
 const STORAGE_PIXEL_KEY = "domotek_meta_pixel_id";
+const DEFAULT_PIXEL_ID = "1565801628121226";
 
 /**
- * Récupère l'ID du Pixel Meta configuré (depuis .env ou localStorage)
+ * Récupère l'ID du Pixel Meta configuré (depuis .env, localStorage ou ID par défaut)
  */
 export function getMetaPixelId(): string {
-  if (typeof window === "undefined") return "";
+  if (typeof window === "undefined") return DEFAULT_PIXEL_ID;
   const envId = (import.meta.env.VITE_META_PIXEL_ID || "").trim();
   const savedId = (localStorage.getItem(STORAGE_PIXEL_KEY) || "").trim();
-  return savedId || envId;
+  return savedId || envId || DEFAULT_PIXEL_ID;
 }
 
 /**
