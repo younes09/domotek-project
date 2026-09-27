@@ -18,6 +18,7 @@ import {
   Trash2,
   MessageSquare,
   Send,
+  BarChart3,
 } from "lucide-react";
 import type { Store } from "../types";
 import {
@@ -39,6 +40,7 @@ import {
   sendOrderWhatsAppNotification,
   type WhatsAppNotificationSettings,
 } from "../lib/notifications";
+import { getMetaPixelId, setMetaPixelId, trackPageView } from "../lib/metaPixel";
 
 export const AdminSecurity: React.FC<{ s: Store }> = ({ s }) => {
   const [config, setConfig] = useState<SecurityConfig>(getSecurityConfig);
@@ -73,13 +75,38 @@ export const AdminSecurity: React.FC<{ s: Store }> = ({ s }) => {
   const [waTestStatus, setWaTestStatus] = useState<{ ok: boolean; msg: string } | null>(null);
   const [waIsTesting, setWaIsTesting] = useState(false);
 
+  // Meta Pixel Tracking settings
+  const [pixelId, setPixelIdState] = useState(getMetaPixelId);
+  const [pixelSaved, setPixelSaved] = useState(false);
+  const [pixelTested, setPixelTested] = useState<string | null>(null);
+
   const passStrength = evaluatePasswordStrength(newPassword);
 
   useEffect(() => {
     setConfig(getSecurityConfig());
     setLogs(getSecurityLogs());
     setWaSettings(getWhatsAppSettings());
+    setPixelIdState(getMetaPixelId());
   }, []);
+
+  const handleSavePixel = (e: React.FormEvent) => {
+    e.preventDefault();
+    setMetaPixelId(pixelId);
+    setPixelSaved(true);
+    s.showToast("Pixel Meta mis à jour");
+    setTimeout(() => setPixelSaved(false), 3000);
+  };
+
+  const handleTestPixel = () => {
+    if (!pixelId.trim()) {
+      setPixelTested("Veuillez saisir un ID de Pixel d'abord.");
+      return;
+    }
+    trackPageView("AdminTest");
+    setPixelTested("Événement de test 'PageView' envoyé avec succès au Pixel !");
+    s.showToast("Test Meta Pixel envoyé");
+    setTimeout(() => setPixelTested(null), 4000);
+  };
 
   const handleUpdateCredentials = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -760,6 +787,89 @@ export const AdminSecurity: React.FC<{ s: Store }> = ({ s }) => {
                 >
                   <Send className="h-3.5 w-3.5" />
                   <span>{waIsTesting ? "Envoi..." : "Tester"}</span>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          {/* Meta Pixel Tracking Card */}
+          <div className="dk-surface rounded-2xl p-5 sm:p-6 border space-y-4" style={{ borderColor: "var(--border)" }}>
+            <div className="flex items-center justify-between pb-3 border-b" style={{ borderColor: "var(--border)" }}>
+              <div className="flex items-center gap-2">
+                <BarChart3 className="h-5 w-5 text-blue-400" />
+                <div>
+                  <h3 className="text-base font-bold" style={{ color: "var(--text)" }}>Pixel Meta (Facebook & Instagram Ads)</h3>
+                  <p className="text-[11px]" style={{ color: "var(--text-faint)" }}>
+                    Suivez vos conversions, visiteurs et rentabilité publicitaire automatiquement.
+                  </p>
+                </div>
+              </div>
+              <span
+                className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
+                  pixelId.trim()
+                    ? "bg-blue-500/20 text-blue-400 border border-blue-500/30"
+                    : "bg-slate-700 text-slate-300"
+                }`}
+              >
+                {pixelId.trim() ? "Connecté" : "Non configuré"}
+              </span>
+            </div>
+
+            {pixelTested && (
+              <div className="p-3 rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs flex items-center gap-2">
+                <Check className="h-4 w-4 shrink-0" />
+                <span>{pixelTested}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleSavePixel} className="space-y-3.5">
+              <div>
+                <label className="block text-xs font-semibold mb-1" style={{ color: "var(--text)" }}>
+                  Identifiant du Pixel Meta (Dataset / Pixel ID)
+                </label>
+                <input
+                  type="text"
+                  placeholder="Ex : 123456789012345"
+                  value={pixelId}
+                  onChange={(e) => setPixelIdState(e.target.value)}
+                  className="dk-input w-full px-3.5 py-2.5 rounded-xl text-xs font-mono"
+                />
+                <p className="text-[11px] mt-1 text-slate-400 leading-relaxed">
+                  💡 Trouvez cet identifiant dans votre <strong>Meta Business Suite</strong> &gt; <strong>Gestionnaire d'événements (Events Manager)</strong>.
+                </p>
+              </div>
+
+              {/* Supported Events Badges */}
+              <div className="p-3 rounded-xl bg-[var(--surface-2)] border space-y-1.5" style={{ borderColor: "var(--border)" }}>
+                <p className="text-[11px] font-bold" style={{ color: "var(--text)" }}>
+                  Événements e-commerce trackés automatiquement :
+                </p>
+                <div className="flex flex-wrap gap-1.5 text-[10px] font-mono">
+                  <span className="px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">PageView</span>
+                  <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">ViewContent (Fiche produit)</span>
+                  <span className="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">AddToCart (Panier)</span>
+                  <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">InitiateCheckout (Commande)</span>
+                  <span className="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">Purchase (Achat validé en DZD)</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 pt-1">
+                <button
+                  type="submit"
+                  className="flex-1 py-2 px-3 rounded-xl text-xs font-bold dk-btn-primary flex items-center justify-center gap-1.5"
+                >
+                  {pixelSaved ? <Check className="h-4 w-4" /> : null}
+                  <span>{pixelSaved ? "Pixel enregistré !" : "Enregistrer le Pixel"}</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleTestPixel}
+                  className="py-2 px-3.5 rounded-xl text-xs font-bold border border-blue-500/40 text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 flex items-center gap-1.5 transition-all"
+                  title="Envoyer un événement de test"
+                >
+                  <BarChart3 className="h-3.5 w-3.5" />
+                  <span>Tester</span>
                 </button>
               </div>
             </form>

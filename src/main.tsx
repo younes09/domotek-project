@@ -2,6 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
+import { initMetaPixel } from "./lib/metaPixel";
+
+// Initialisation automatique du Pixel Meta s'il est configuré
+initMetaPixel();
 
 // Nettoyage automatique des anciens Service Workers (PWA) sur localhost
 if ("serviceWorker" in navigator) {

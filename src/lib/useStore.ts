@@ -11,6 +11,13 @@ import {
 } from "./supabaseDb";
 import { isSupabaseConfigured, supabase } from "./supabase";
 import { sendOrderWhatsAppNotification } from "./notifications";
+import {
+  trackAddToCart,
+  trackInitiateCheckout,
+  trackPageView,
+  trackPurchase,
+  trackViewContent,
+} from "./metaPixel";
 
 const EMPTY_FILTERS: ShopFilters = {
   category: "all", minPrice: "", maxPrice: "", availability: "all", sort: "popularite", special: null, query: "",
@@ -346,6 +353,7 @@ export function useStore(): Store {
 
   const openProduct = useCallback((p: Product) => {
     setSelectedProduct(p);
+    trackViewContent(p);
     navigateTo("product", p.id);
   }, [navigateTo]);
 
@@ -372,6 +380,7 @@ export function useStore(): Store {
       if (existing) return prev.map((i) => (i.key === key ? { ...i, qty: i.qty + qty } : i));
       return [...prev, { key, productId: product.id, variant, qty }];
     });
+    trackAddToCart(product, qty, variant);
     showToast(`${product.name} ajouté au panier`);
   };
   const removeFromCart = (key: string) => setCart((prev) => prev.filter((i) => i.key !== key));
@@ -394,6 +403,14 @@ export function useStore(): Store {
   const cartCount = cart.reduce((sum, i) => sum + i.qty, 0);
   const cartTotal = cartItemsDetailed.reduce((sum, i) => sum + i.product.price * i.qty, 0);
 
+  // Meta Pixel PageView and InitiateCheckout tracking
+  useEffect(() => {
+    trackPageView(view);
+    if (view === "checkout") {
+      trackInitiateCheckout(cartItemsDetailed, cartTotal);
+    }
+  }, [view, cartItemsDetailed, cartTotal]);
+
   const placeOrder = (form: CheckoutFormData) => {
     const newOrder: Order = {
       id: `CMD-${1000 + orders.length + 1}`,
@@ -405,6 +422,9 @@ export function useStore(): Store {
     setLastOrder(newOrder);
     setCart([]);
     navigateTo("confirmation");
+
+    // Track Meta Pixel Purchase event
+    trackPurchase(newOrder);
 
     // Async save to Supabase
     saveOrderToDb(newOrder).catch((err) => console.error("Could not save order to Supabase:", err));
