@@ -3,9 +3,11 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
 import { initMetaPixel } from "./lib/metaPixel";
+import { initGoogleAnalytics } from "./lib/googleAnalytics";
 
-// Initialisation automatique du Pixel Meta s'il est configuré
+// Initialisation automatique des pixels et trackers de mesure
 initMetaPixel();
+initGoogleAnalytics();
 
 // Nettoyage automatique des anciens Service Workers (PWA) sur localhost
 if ("serviceWorker" in navigator) {

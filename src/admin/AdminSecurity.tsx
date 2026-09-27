@@ -41,6 +41,7 @@ import {
   type WhatsAppNotificationSettings,
 } from "../lib/notifications";
 import { getMetaPixelId, setMetaPixelId, trackPageView } from "../lib/metaPixel";
+import { getGoogleAnalyticsId, setGoogleAnalyticsId, trackGAPageView } from "../lib/googleAnalytics";
 
 export const AdminSecurity: React.FC<{ s: Store }> = ({ s }) => {
   const [config, setConfig] = useState<SecurityConfig>(getSecurityConfig);
@@ -80,6 +81,11 @@ export const AdminSecurity: React.FC<{ s: Store }> = ({ s }) => {
   const [pixelSaved, setPixelSaved] = useState(false);
   const [pixelTested, setPixelTested] = useState<string | null>(null);
 
+  // Google Analytics 4 settings
+  const [gaId, setGaIdState] = useState(getGoogleAnalyticsId);
+  const [gaSaved, setGaSaved] = useState(false);
+  const [gaTested, setGaTested] = useState<string | null>(null);
+
   const passStrength = evaluatePasswordStrength(newPassword);
 
   useEffect(() => {
@@ -87,6 +93,7 @@ export const AdminSecurity: React.FC<{ s: Store }> = ({ s }) => {
     setLogs(getSecurityLogs());
     setWaSettings(getWhatsAppSettings());
     setPixelIdState(getMetaPixelId());
+    setGaIdState(getGoogleAnalyticsId());
   }, []);
 
   const handleSavePixel = (e: React.FormEvent) => {
@@ -106,6 +113,25 @@ export const AdminSecurity: React.FC<{ s: Store }> = ({ s }) => {
     setPixelTested("Événement de test 'PageView' envoyé avec succès au Pixel !");
     s.showToast("Test Meta Pixel envoyé");
     setTimeout(() => setPixelTested(null), 4000);
+  };
+
+  const handleSaveGA = (e: React.FormEvent) => {
+    e.preventDefault();
+    setGoogleAnalyticsId(gaId);
+    setGaSaved(true);
+    s.showToast("Google Analytics mis à jour");
+    setTimeout(() => setGaSaved(false), 3000);
+  };
+
+  const handleTestGA = () => {
+    if (!gaId.trim()) {
+      setGaTested("Veuillez saisir un ID de mesure GA4 (G-XXXXXXXXXX) d'abord.");
+      return;
+    }
+    trackGAPageView("admin_test", "Test Google Analytics Admin");
+    setGaTested("Événement de test 'page_view' envoyé à Google Analytics !");
+    s.showToast("Test Google Analytics envoyé");
+    setTimeout(() => setGaTested(null), 4000);
   };
 
   const handleUpdateCredentials = async (e: React.FormEvent) => {
@@ -867,6 +893,89 @@ export const AdminSecurity: React.FC<{ s: Store }> = ({ s }) => {
                   onClick={handleTestPixel}
                   className="py-2 px-3.5 rounded-xl text-xs font-bold border border-blue-500/40 text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 flex items-center gap-1.5 transition-all"
                   title="Envoyer un événement de test"
+                >
+                  <BarChart3 className="h-3.5 w-3.5" />
+                  <span>Tester</span>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          {/* Google Analytics 4 (GA4) Card */}
+          <div className="dk-surface rounded-2xl p-5 sm:p-6 border space-y-4" style={{ borderColor: "var(--border)" }}>
+            <div className="flex items-center justify-between pb-3 border-b" style={{ borderColor: "var(--border)" }}>
+              <div className="flex items-center gap-2">
+                <BarChart3 className="h-5 w-5 text-amber-400" />
+                <div>
+                  <h3 className="text-base font-bold" style={{ color: "var(--text)" }}>Google Analytics 4 (GA4)</h3>
+                  <p className="text-[11px]" style={{ color: "var(--text-faint)" }}>
+                    Analysez l'audience globale, l'origine de votre trafic et l'entonnoir d'achat.
+                  </p>
+                </div>
+              </div>
+              <span
+                className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
+                  gaId.trim()
+                    ? "bg-amber-500/20 text-amber-400 border border-amber-500/30"
+                    : "bg-slate-700 text-slate-300"
+                }`}
+              >
+                {gaId.trim() ? "Connecté" : "Non configuré"}
+              </span>
+            </div>
+
+            {gaTested && (
+              <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs flex items-center gap-2">
+                <Check className="h-4 w-4 shrink-0" />
+                <span>{gaTested}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleSaveGA} className="space-y-3.5">
+              <div>
+                <label className="block text-xs font-semibold mb-1" style={{ color: "var(--text)" }}>
+                  ID de mesure Google Analytics (Measurement ID)
+                </label>
+                <input
+                  type="text"
+                  placeholder="Ex : G-XXXXXXXXXX"
+                  value={gaId}
+                  onChange={(e) => setGaIdState(e.target.value)}
+                  className="dk-input w-full px-3.5 py-2.5 rounded-xl text-xs font-mono"
+                />
+                <p className="text-[11px] mt-1 text-slate-400 leading-relaxed">
+                  💡 Trouvez cet identifiant dans <strong>Google Analytics</strong> &gt; <strong>Administration</strong> &gt; <strong>Flux de données (Data Streams)</strong> &gt; <strong>ID de mesure (G-...)</strong>.
+                </p>
+              </div>
+
+              {/* Supported Events Badges */}
+              <div className="p-3 rounded-xl bg-[var(--surface-2)] border space-y-1.5" style={{ borderColor: "var(--border)" }}>
+                <p className="text-[11px] font-bold" style={{ color: "var(--text)" }}>
+                  Événements GA4 e-commerce suivis en direct :
+                </p>
+                <div className="flex flex-wrap gap-1.5 text-[10px] font-mono">
+                  <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">page_view</span>
+                  <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">view_item (Produit)</span>
+                  <span className="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">add_to_cart (Panier)</span>
+                  <span className="px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">begin_checkout</span>
+                  <span className="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">purchase (Montant DZD)</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 pt-1">
+                <button
+                  type="submit"
+                  className="flex-1 py-2 px-3 rounded-xl text-xs font-bold dk-btn-primary flex items-center justify-center gap-1.5"
+                >
+                  {gaSaved ? <Check className="h-4 w-4" /> : null}
+                  <span>{gaSaved ? "Google Analytics enregistré !" : "Enregistrer Google Analytics"}</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleTestGA}
+                  className="py-2 px-3.5 rounded-xl text-xs font-bold border border-amber-500/40 text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 flex items-center gap-1.5 transition-all"
+                  title="Envoyer un événement de test GA4"
                 >
                   <BarChart3 className="h-3.5 w-3.5" />
                   <span>Tester</span>

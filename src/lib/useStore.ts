@@ -18,6 +18,13 @@ import {
   trackPurchase,
   trackViewContent,
 } from "./metaPixel";
+import {
+  trackGAAddToCart,
+  trackGABeginCheckout,
+  trackGAPageView,
+  trackGAPurchase,
+  trackGAViewItem,
+} from "./googleAnalytics";
 
 const EMPTY_FILTERS: ShopFilters = {
   category: "all", minPrice: "", maxPrice: "", availability: "all", sort: "popularite", special: null, query: "",
@@ -354,6 +361,7 @@ export function useStore(): Store {
   const openProduct = useCallback((p: Product) => {
     setSelectedProduct(p);
     trackViewContent(p);
+    trackGAViewItem(p);
     navigateTo("product", p.id);
   }, [navigateTo]);
 
@@ -381,6 +389,7 @@ export function useStore(): Store {
       return [...prev, { key, productId: product.id, variant, qty }];
     });
     trackAddToCart(product, qty, variant);
+    trackGAAddToCart(product, qty, variant);
     showToast(`${product.name} ajouté au panier`);
   };
   const removeFromCart = (key: string) => setCart((prev) => prev.filter((i) => i.key !== key));
@@ -403,11 +412,13 @@ export function useStore(): Store {
   const cartCount = cart.reduce((sum, i) => sum + i.qty, 0);
   const cartTotal = cartItemsDetailed.reduce((sum, i) => sum + i.product.price * i.qty, 0);
 
-  // Meta Pixel PageView and InitiateCheckout tracking
+  // Pixel Meta & Google Analytics PageView and Checkout tracking
   useEffect(() => {
     trackPageView(view);
+    trackGAPageView(view);
     if (view === "checkout") {
       trackInitiateCheckout(cartItemsDetailed, cartTotal);
+      trackGABeginCheckout(cartItemsDetailed, cartTotal);
     }
   }, [view, cartItemsDetailed, cartTotal]);
 
@@ -423,8 +434,9 @@ export function useStore(): Store {
     setCart([]);
     navigateTo("confirmation");
 
-    // Track Meta Pixel Purchase event
+    // Track Meta Pixel & Google Analytics Purchase events
     trackPurchase(newOrder);
+    trackGAPurchase(newOrder);
 
     // Async save to Supabase
     saveOrderToDb(newOrder).catch((err) => console.error("Could not save order to Supabase:", err));
