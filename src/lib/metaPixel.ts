@@ -22,6 +22,9 @@ declare global {
 const STORAGE_PIXEL_KEY = "domotek_meta_pixel_id";
 const DEFAULT_PIXEL_ID = "1565801628121226";
 
+// Ensemble des IDs de pixel déjà initialisés dans la session pour éviter les doublons
+const initializedPixelIds = new Set<string>();
+
 /**
  * Récupère l'ID du Pixel Meta configuré (depuis .env, localStorage ou ID par défaut)
  */
@@ -47,7 +50,7 @@ export function setMetaPixelId(pixelId: string): void {
 }
 
 /**
- * Initialise le script Meta Pixel de manière asynchrone et sécurisée
+ * Initialise le script Meta Pixel de manière asynchrone et sécurisée sans doublon
  */
 export function initMetaPixel(customId?: string): void {
   if (typeof window === "undefined") return;
@@ -55,13 +58,24 @@ export function initMetaPixel(customId?: string): void {
   const pixelId = customId || getMetaPixelId();
   if (!pixelId) return;
 
-  // Si fbq est déjà initialisé
+  // Si cet ID a déjà été initialisé par index.html ou un appel précédent, on ne ré-initialise pas
+  if (initializedPixelIds.has(pixelId)) {
+    return;
+  }
+
+  // Si window.fbq est déjà chargé
   if (window.fbq) {
+    // Si c'est l'ID par défaut et que index.html l'a déjà injecté
+    if (pixelId === DEFAULT_PIXEL_ID && initializedPixelIds.size === 0) {
+      initializedPixelIds.add(pixelId);
+      return;
+    }
+
     try {
       window.fbq("init", pixelId);
-      window.fbq("track", "PageView");
+      initializedPixelIds.add(pixelId);
     } catch (e) {
-      console.warn("Meta Pixel déjà initialisé:", e);
+      console.warn("Meta Pixel init notice:", e);
     }
     return;
   }
@@ -85,9 +99,9 @@ export function initMetaPixel(customId?: string): void {
   })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
   /* eslint-enable */
 
-  if (window.fbq) {
+  if (window.fbq && !initializedPixelIds.has(pixelId)) {
     window.fbq("init", pixelId);
-    window.fbq("track", "PageView");
+    initializedPixelIds.add(pixelId);
   }
 }
 
