@@ -485,6 +485,19 @@ export const CheckoutForm: React.FC<{ s: Store }> = ({ s }) => {
           <span>•</span>
           <span className="font-mono">{formatDZD(grandTotal)}</span>
         </button>
+
+        {/* Reassurance Return & Guarantee link */}
+        <div className="flex items-center justify-center gap-2 text-xs" style={{ color: "var(--text-dim)" }}>
+          <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" />
+          <span>Garantie 12 mois & retours acceptés sous 7 jours.</span>
+          <button
+            type="button"
+            onClick={() => s.setReturnPolicyOpen(true)}
+            className="text-cyan-500 hover:underline font-semibold"
+          >
+            Voir les conditions
+          </button>
+        </div>
       </form>
     </div>
   );

@@ -1,5 +1,5 @@
 import React from "react";
-import { Search, ShoppingCart, Menu, Phone } from "lucide-react";
+import { Search, ShoppingCart, Menu, Phone, ShieldCheck } from "lucide-react";
 import { Logo } from "./Logo";
 import { LampToggle } from "./LampToggle";
 import type { Store } from "../types";
@@ -9,7 +9,6 @@ export const Header: React.FC<{ s: Store }> = ({ s }) => {
     { label: "Boutique", action: () => s.goShop({}) },
     { label: "Éclairage", action: () => s.goShop({ category: "interrupteurs" }) },
     { label: "Confort", action: () => s.goShop({ category: "prises" }) },
-    { label: "Sécurité", action: () => s.goShop({ category: "capteurs" }) },
   ];
 
   const isDark = s.theme === "dark";
@@ -54,7 +53,7 @@ export const Header: React.FC<{ s: Store }> = ({ s }) => {
         <div className="h-20 flex items-center justify-between gap-4">
           <div className="flex items-center gap-8">
             <Logo onClick={() => s.goHome()} className="h-12 sm:h-14 md:h-16" theme={s.theme} />
-            <nav className="hidden lg:flex items-center gap-6">
+            <nav className="hidden lg:flex items-center gap-5">
               {navItems.map((item) => (
                 <button
                   key={item.label}
@@ -67,6 +66,21 @@ export const Header: React.FC<{ s: Store }> = ({ s }) => {
                   {item.label}
                 </button>
               ))}
+
+              {/* ✨ Distinctive Highlighted Policy & Returns Button */}
+              <button
+                onClick={() => s.setView("policy")}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 border dk-focus shadow-sm ${
+                  s.view === "policy"
+                    ? "bg-cyan-500 text-white border-cyan-400 shadow-md shadow-cyan-500/20 scale-105"
+                    : "bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 border-cyan-500/30 hover:border-cyan-500/50 hover:scale-[1.02]"
+                }`}
+                title="Consulter notre politique de retour sous 7 jours et garantie 12 mois"
+              >
+                <ShieldCheck className="h-3.5 w-3.5 shrink-0" />
+                <span>Politique & Retours</span>
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              </button>
             </nav>
           </div>
 

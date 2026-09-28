@@ -1,5 +1,5 @@
 import React from "react";
-import { X } from "lucide-react";
+import { X, ShieldCheck } from "lucide-react";
 import { Logo } from "./Logo";
 import { getCategoryIcon } from "../data/categories";
 import type { Store } from "../types";
@@ -20,6 +20,24 @@ export const MobileNavigation: React.FC<{ s: Store }> = ({ s }) => (
         </button>
         <button onClick={() => { s.goShop({}); s.setMobileMenuOpen(false); }} className="w-full text-left py-2.5 text-sm font-medium dk-focus rounded" style={{ color: "var(--text)" }}>
           Boutique
+        </button>
+
+        {/* Distinctive highlighted Policy & Returns card */}
+        <button
+          onClick={() => { s.setView("policy"); s.setMobileMenuOpen(false); }}
+          className={`w-full my-2 flex items-center justify-between p-2.5 rounded-xl text-xs font-bold border transition-all ${
+            s.view === "policy"
+              ? "bg-cyan-500 text-white border-cyan-400 shadow-md shadow-cyan-500/20"
+              : "bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 border-cyan-500/30"
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="h-4 w-4 shrink-0 text-cyan-500" />
+            <span>Politique & Retours</span>
+          </div>
+          <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 font-mono">
+            7j / 12 mois
+          </span>
         </button>
         <p className="pt-3 pb-1 text-xs" style={{ color: "var(--text-faint)" }}>Catégories</p>
         {s.categories.map((c) => {

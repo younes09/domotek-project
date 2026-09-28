@@ -30,7 +30,7 @@ const EMPTY_FILTERS: ShopFilters = {
   category: "all", minPrice: "", maxPrice: "", availability: "all", sort: "popularite", special: null, query: "",
 };
 
-const VALID_VIEWS: View[] = ["home", "shop", "product", "checkout", "confirmation", "admin"];
+const VALID_VIEWS: View[] = ["home", "shop", "product", "checkout", "confirmation", "policy", "admin"];
 
 function parseNavigation(rawHash: string): { view: View; selectedProductId: number | null } {
   try {
@@ -222,6 +222,7 @@ export function useStore(): Store {
   const [toast, setToast] = useState<string | null>(null);
   const [lastOrder, setLastOrder] = useState<Order | null>(null);
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+  const [returnPolicyOpen, setReturnPolicyOpen] = useState(false);
 
   // Navigate to view with native browser history support
   const navigateTo = useCallback(
@@ -233,6 +234,7 @@ export function useStore(): Store {
       setSearchOpen(false);
       setQuickViewProduct(null);
       setFirstItemNotice(null);
+      setReturnPolicyOpen(false);
 
       if (window.location.hash !== targetHash) {
         window.location.hash = targetHash;
@@ -548,6 +550,7 @@ export function useStore(): Store {
     toast, showToast,
     orders, setOrders, placeOrder, lastOrder,
     quickViewProduct, setQuickViewProduct,
+    returnPolicyOpen, setReturnPolicyOpen,
     theme, toggleTheme: () => setTheme((t) => (t === "light" ? "dark" : "light")),
   };
 }

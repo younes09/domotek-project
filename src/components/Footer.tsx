@@ -57,7 +57,13 @@ export const Footer: React.FC<{ s: Store }> = ({ s }) => {
           <div className="space-y-2.5 text-xs sm:text-sm" style={{ color: "var(--text-dim)" }}>
             <p className="flex items-center gap-1.5"><strong style={{ color: "var(--text)" }}>Wilayas :</strong> 58 Wilayas en Algérie</p>
             <p className="flex items-center gap-1.5"><strong style={{ color: "var(--text)" }}>Paiement :</strong> À la livraison</p>
-            <p className="flex items-center gap-1.5"><strong style={{ color: "var(--text)" }}>Garantie :</strong> Produits vérifiés</p>
+            <p className="flex items-center gap-1.5"><strong style={{ color: "var(--text)" }}>Garantie :</strong> 12 Mois & Retours 7j</p>
+            <button
+              onClick={() => s.setReturnPolicyOpen(true)}
+              className="inline-flex items-center gap-1.5 text-xs text-left hover:text-cyan-400 transition-colors font-medium text-cyan-600 dark:text-cyan-400 dk-focus rounded"
+            >
+              <span>📦 Consulter la politique de retour</span>
+            </button>
             <a
               href="https://wa.me/213775302636"
               target="_blank"
@@ -83,7 +89,16 @@ export const Footer: React.FC<{ s: Store }> = ({ s }) => {
         >
           © 2026 DomoTek — Tous droits réservés.
         </span>
-        <span>Conçu pour la maison connectée en Algérie 🇩🇿</span>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => s.setReturnPolicyOpen(true)}
+            className="hover:underline hover:text-cyan-400 transition-colors"
+          >
+            Politique de retour & garantie
+          </button>
+          <span>•</span>
+          <span>Conçu pour la maison connectée en Algérie 🇩🇿</span>
+        </div>
       </div>
     </footer>
   );

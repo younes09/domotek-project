@@ -130,7 +130,7 @@ export interface FirstItemNoticeData {
   variant: string | null;
 }
 
-export type View = "home" | "shop" | "product" | "checkout" | "confirmation" | "admin";
+export type View = "home" | "shop" | "product" | "checkout" | "confirmation" | "policy" | "admin";
 
 /** The single store object passed down to every component — created by useStore(). */
 export interface Store {
@@ -190,6 +190,9 @@ export interface Store {
 
   quickViewProduct: Product | null;
   setQuickViewProduct: (p: Product | null) => void;
+
+  returnPolicyOpen: boolean;
+  setReturnPolicyOpen: (v: boolean) => void;
 
   theme: "light" | "dark";
   toggleTheme: () => void;

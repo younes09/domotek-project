@@ -5,6 +5,7 @@ import { SearchBar } from "./components/SearchBar";
 import { QuickViewModal } from "./components/QuickViewModal";
 import { CartDrawer } from "./components/CartDrawer";
 import { FirstItemNotice } from "./components/FirstItemNotice";
+import { ReturnPolicyModal } from "./components/ReturnPolicyModal";
 import { Footer } from "./components/Footer";
 import { Toast } from "./components/ui";
 import { SeoManager } from "./components/SeoManager";
@@ -16,6 +17,7 @@ const ShopView = lazy(() => import("./pages/ShopView").then((m) => ({ default: m
 const ProductDetailView = lazy(() => import("./pages/ProductDetailView").then((m) => ({ default: m.ProductDetailView })));
 const CheckoutForm = lazy(() => import("./pages/CheckoutForm").then((m) => ({ default: m.CheckoutForm })));
 const ConfirmationView = lazy(() => import("./pages/ConfirmationView").then((m) => ({ default: m.ConfirmationView })));
+const PolicyView = lazy(() => import("./pages/PolicyView").then((m) => ({ default: m.PolicyView })));
 const AdminView = lazy(() => import("./admin/AdminView").then((m) => ({ default: m.AdminView })));
 
 function ViewFallback() {
@@ -118,6 +120,7 @@ export default function App() {
           {s.view === "product" && <ProductDetailView s={s} />}
           {s.view === "checkout" && <CheckoutForm s={s} />}
           {s.view === "confirmation" && <ConfirmationView s={s} />}
+          {s.view === "policy" && <PolicyView s={s} />}
           {s.view === "admin" && <AdminView s={s} />}
         </Suspense>
       </main>
@@ -125,6 +128,7 @@ export default function App() {
       {s.view !== "admin" && <Footer s={s} />}
       <CartDrawer s={s} />
       <FirstItemNotice s={s} />
+      {s.returnPolicyOpen && <ReturnPolicyModal s={s} />}
       {s.toast && <Toast message={s.toast} />}
     </div>
   );
