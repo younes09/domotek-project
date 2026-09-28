@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { DEFAULT_CATEGORIES, buildCategoryLabel, getCategoryIcon } from "../data/categories";
 import { PRODUCTS } from "../data/products";
-import type { CartItem, Category, CheckoutFormData, Order, Product, ShopFilters, Store, View } from "../types";
+import type { CartItem, Category, CheckoutFormData, FirstItemNoticeData, Order, Product, ShopFilters, Store, View } from "../types";
 import {
   fetchCategoriesFromDb,
   fetchOrdersFromDb,
@@ -165,9 +165,55 @@ export function useStore(): Store {
     return null;
   });
 
-  const [cart, setCart] = useState<CartItem[]>([]);
-  const [wishlist, setWishlist] = useState<Set<number>>(new Set());
+  const [cart, setCart] = useState<CartItem[]>(() => {
+    try {
+      const saved = localStorage.getItem("domotek_cart");
+      if (saved) {
+        const parsed: CartItem[] = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          return parsed.filter((item) => item && typeof item.productId === "number" && item.qty > 0);
+        }
+      }
+    } catch (e) {
+      console.error("Failed to parse saved cart", e);
+    }
+    return [];
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("domotek_cart", JSON.stringify(cart));
+    } catch (e) {
+      console.error("Failed to persist cart", e);
+    }
+  }, [cart]);
+
+  const [wishlist, setWishlist] = useState<Set<number>>(() => {
+    try {
+      const saved = localStorage.getItem("domotek_wishlist");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          return new Set(parsed);
+        }
+      }
+    } catch (e) {
+      console.error("Failed to parse saved wishlist", e);
+    }
+    return new Set();
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("domotek_wishlist", JSON.stringify(Array.from(wishlist)));
+    } catch (e) {
+      console.error("Failed to persist wishlist", e);
+    }
+  }, [wishlist]);
+
   const [cartOpen, setCartOpen] = useState(false);
+  const [cartPulsing, setCartPulsing] = useState(false);
+  const [firstItemNotice, setFirstItemNotice] = useState<FirstItemNoticeData | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -186,6 +232,7 @@ export function useStore(): Store {
       setMobileMenuOpen(false);
       setSearchOpen(false);
       setQuickViewProduct(null);
+      setFirstItemNotice(null);
 
       if (window.location.hash !== targetHash) {
         window.location.hash = targetHash;
@@ -348,6 +395,25 @@ export function useStore(): Store {
     return () => clearTimeout(t);
   }, [toast]);
 
+  useEffect(() => {
+    if (cartOpen) {
+      setCartPulsing(false);
+      setFirstItemNotice(null);
+    }
+  }, [cartOpen]);
+
+  useEffect(() => {
+    if (!cartPulsing) return;
+    const t = setTimeout(() => setCartPulsing(false), 9000);
+    return () => clearTimeout(t);
+  }, [cartPulsing]);
+
+  useEffect(() => {
+    if (!firstItemNotice) return;
+    const t = setTimeout(() => setFirstItemNotice(null), 8500);
+    return () => clearTimeout(t);
+  }, [firstItemNotice]);
+
   const showToast = (msg: string) => setToast(msg);
   const goHome = useCallback(() => {
     navigateTo("home");
@@ -382,6 +448,7 @@ export function useStore(): Store {
   }, [navigateTo]);
 
   const addToCart = (product: Product, qty = 1, variant: string | null = null) => {
+    const isFirstItem = cart.length === 0;
     const key = product.id + (variant ? `-${variant}` : "");
     setCart((prev) => {
       const existing = prev.find((i) => i.key === key);
@@ -390,7 +457,13 @@ export function useStore(): Store {
     });
     trackAddToCart(product, qty, variant);
     trackGAAddToCart(product, qty, variant);
-    showToast(`${product.name} ajouté au panier`);
+
+    if (isFirstItem) {
+      setFirstItemNotice({ product, qty, variant });
+      setCartPulsing(true);
+    } else {
+      showToast(`${product.name} ajouté au panier`);
+    }
   };
   const removeFromCart = (key: string) => setCart((prev) => prev.filter((i) => i.key !== key));
   const updateQty = (key: string, qty: number) => {
@@ -466,6 +539,8 @@ export function useStore(): Store {
     products, setProducts, selectedProduct,
     cart, addToCart, removeFromCart, updateQty, cartItemsDetailed, cartCount, cartTotal,
     cartOpen, setCartOpen,
+    cartPulsing, setCartPulsing,
+    firstItemNotice, setFirstItemNotice,
     wishlist, toggleWishlist,
     mobileMenuOpen, setMobileMenuOpen,
     searchOpen, setSearchOpen, searchQuery, setSearchQuery, recentSearches, addRecentSearch,

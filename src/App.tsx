@@ -4,6 +4,7 @@ import { MobileNavigation } from "./components/MobileNavigation";
 import { SearchBar } from "./components/SearchBar";
 import { QuickViewModal } from "./components/QuickViewModal";
 import { CartDrawer } from "./components/CartDrawer";
+import { FirstItemNotice } from "./components/FirstItemNotice";
 import { Footer } from "./components/Footer";
 import { Toast } from "./components/ui";
 import { SeoManager } from "./components/SeoManager";
@@ -123,6 +124,7 @@ export default function App() {
 
       {s.view !== "admin" && <Footer s={s} />}
       <CartDrawer s={s} />
+      <FirstItemNotice s={s} />
       {s.toast && <Toast message={s.toast} />}
     </div>
   );

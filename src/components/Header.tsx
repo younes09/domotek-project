@@ -112,21 +112,47 @@ export const Header: React.FC<{ s: Store }> = ({ s }) => {
               <LampToggle isDark={isDark} onToggle={s.toggleTheme} />
             </div>
 
-            <button
-              onClick={() => s.setCartOpen(true)}
-              className="relative h-10 w-10 flex items-center justify-center rounded-xl dk-surface dk-focus"
-              aria-label="Panier"
-            >
-              <ShoppingCart className="h-5 w-5" style={{ color: "var(--text-dim)" }} />
-              {s.cartCount > 0 && (
-                <span
-                  className="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full text-xs font-bold flex items-center justify-center shadow-lg"
-                  style={{ background: "var(--teal)", color: "white" }}
-                >
-                  {s.cartCount}
-                </span>
+            {/* 🛒 Cart Button with Attention Grabber */}
+            <div className="relative">
+              {s.cartPulsing && (
+                <>
+                  <span className="absolute -inset-1 rounded-2xl bg-cyan-400/50 animate-ping pointer-events-none" />
+                  <span className="absolute -inset-1.5 rounded-2xl border-2 border-cyan-400/60 animate-pulse pointer-events-none" />
+                </>
               )}
-            </button>
+
+              <button
+                onClick={() => {
+                  s.setCartOpen(true);
+                  s.setCartPulsing(false);
+                  s.setFirstItemNotice(null);
+                }}
+                className={`relative h-10 w-10 flex items-center justify-center rounded-xl dk-surface dk-focus transition-all duration-300 ${
+                  s.cartPulsing
+                    ? "ring-2 ring-cyan-400 shadow-lg shadow-cyan-400/40 scale-105"
+                    : ""
+                }`}
+                aria-label="Panier"
+                title={s.cartPulsing ? "Cliquez pour consulter votre panier" : "Panier"}
+              >
+                <ShoppingCart
+                  className={`h-5 w-5 transition-all duration-300 ${
+                    s.cartPulsing ? "text-cyan-500 scale-110 animate-bounce" : ""
+                  }`}
+                  style={{ color: s.cartPulsing ? "var(--teal)" : "var(--text-dim)" }}
+                />
+                {s.cartCount > 0 && (
+                  <span
+                    className={`absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full text-xs font-bold flex items-center justify-center shadow-lg transition-transform ${
+                      s.cartPulsing ? "scale-110 ring-2 ring-white dark:ring-slate-900 animate-pulse" : ""
+                    }`}
+                    style={{ background: "var(--teal)", color: "white" }}
+                  >
+                    {s.cartCount}
+                  </span>
+                )}
+              </button>
+            </div>
 
             <button
               onClick={() => s.setMobileMenuOpen(true)}

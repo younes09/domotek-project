@@ -124,6 +124,12 @@ export interface CheckoutFormData {
   deliveryDelay?: string;
 }
 
+export interface FirstItemNoticeData {
+  product: Product;
+  qty: number;
+  variant: string | null;
+}
+
 export type View = "home" | "shop" | "product" | "checkout" | "confirmation" | "admin";
 
 /** The single store object passed down to every component — created by useStore(). */
@@ -153,6 +159,10 @@ export interface Store {
 
   cartOpen: boolean;
   setCartOpen: (v: boolean) => void;
+  cartPulsing: boolean;
+  setCartPulsing: (v: boolean) => void;
+  firstItemNotice: FirstItemNoticeData | null;
+  setFirstItemNotice: (notice: FirstItemNoticeData | null) => void;
 
   wishlist: Set<number>;
   toggleWishlist: (id: number) => void;
