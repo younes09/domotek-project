@@ -92,6 +92,8 @@ export interface OrderItem {
   variant?: string | null;
 }
 
+export type DeliveryType = "home" | "desk";
+
 export interface Order {
   id: string;
   customerName: string;
@@ -101,6 +103,10 @@ export interface Order {
   address: string;
   notes?: string;
   items: OrderItem[];
+  subtotal?: number;
+  shippingFee?: number;
+  deliveryType?: DeliveryType;
+  deliveryDelay?: string;
   total: number;
   status: OrderStatus;
   date: string;
@@ -113,6 +119,9 @@ export interface CheckoutFormData {
   commune: string;
   address: string;
   notes: string;
+  deliveryType: DeliveryType;
+  shippingFee?: number;
+  deliveryDelay?: string;
 }
 
 export type View = "home" | "shop" | "product" | "checkout" | "confirmation" | "admin";

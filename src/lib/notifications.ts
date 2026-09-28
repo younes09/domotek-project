@@ -53,6 +53,10 @@ export function formatOrderWhatsAppMessage(order: Order): string {
     .join("\n");
 
   const notesText = order.notes && order.notes.trim() ? `\n📝 *Notes :* ${order.notes.trim()}` : "";
+  const deliveryModeText = order.deliveryType === "desk" ? "Point Relais / Bureau (Stopdesk)" : "À domicile";
+  const shippingFee = order.shippingFee ?? 0;
+  const delayText = order.deliveryDelay ? ` [Délai: ${order.deliveryDelay}]` : "";
+  const subtotal = order.subtotal ?? (order.total - shippingFee);
 
   return [
     `⚡ *NOUVELLE COMMANDE DOMOTEK*`,
@@ -65,12 +69,15 @@ export function formatOrderWhatsAppMessage(order: Order): string {
     `📍 *Wilaya :* ${order.wilaya}`,
     `🏙️ *Commune :* ${order.commune}`,
     `🏠 *Adresse :* ${order.address}${notesText}`,
+    `🚚 *Mode de livraison :* Anderson Logistics - ${deliveryModeText}${delayText}`,
     `━━━━━━━━━━━━━━━━━━━`,
     `🛒 *Articles commandés :*`,
     itemsText,
     `━━━━━━━━━━━━━━━━━━━`,
-    `💰 *TOTAL :* *${formatDZD(order.total)}*`,
-    `🚚 *Paiement :* À la livraison (Cash on Delivery)`,
+    `💵 *Sous-total :* ${formatDZD(subtotal)}`,
+    `🚚 *Livraison (Anderson) :* ${shippingFee > 0 ? formatDZD(shippingFee) : "Gratuite"}`,
+    `💰 *TOTAL À PAYER :* *${formatDZD(order.total)}*`,
+    `🛡️ *Paiement :* Espèces à la livraison (Cash on Delivery)`,
   ].join("\n");
 }
 

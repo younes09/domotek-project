@@ -423,11 +423,24 @@ export function useStore(): Store {
   }, [view, cartItemsDetailed, cartTotal]);
 
   const placeOrder = (form: CheckoutFormData) => {
+    const shippingFee = Number(form.shippingFee) || 0;
+    const finalTotal = cartTotal + shippingFee;
     const newOrder: Order = {
       id: `CMD-${1000 + orders.length + 1}`,
-      customerName: form.name, phone: form.phone, wilaya: form.wilaya, commune: form.commune, address: form.address, notes: form.notes,
+      customerName: form.name,
+      phone: form.phone,
+      wilaya: form.wilaya,
+      commune: form.commune,
+      address: form.address,
+      notes: form.notes,
       items: cartItemsDetailed.map((i) => ({ name: i.product.name, qty: i.qty, price: i.product.price, variant: i.variant })),
-      total: cartTotal, status: "Nouvelle", date: new Date().toISOString().slice(0, 10),
+      subtotal: cartTotal,
+      shippingFee,
+      deliveryType: form.deliveryType,
+      deliveryDelay: form.deliveryDelay,
+      total: finalTotal,
+      status: "Nouvelle",
+      date: new Date().toISOString().slice(0, 10),
     };
     setOrders((prev) => [newOrder, ...prev]);
     setLastOrder(newOrder);

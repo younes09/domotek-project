@@ -8,10 +8,15 @@ import {
   ArrowRight,
   ShieldCheck,
   FileText,
+  Truck,
+  Building2,
+  Home,
+  Clock,
 } from "lucide-react";
 import { WhatsAppIcon } from "../components/ui";
 import { formatDZD } from "../lib/format";
 import { formatOrderWhatsAppMessage } from "../lib/notifications";
+import { AndersonLogo } from "../components/AndersonLogo";
 import type { Store } from "../types";
 
 export const ConfirmationView: React.FC<{ s: Store }> = ({ s }) => {
@@ -124,22 +129,45 @@ export const ConfirmationView: React.FC<{ s: Store }> = ({ s }) => {
           </span>
         </div>
 
-        {/* Customer Information */}
+        {/* Customer Information & Delivery Details */}
         <div className="grid sm:grid-cols-2 gap-3 text-xs">
-          <div className="p-3 rounded-xl dk-surface-2 space-y-1">
-            <p className="font-semibold text-slate-400">Client :</p>
+          <div className="p-3.5 rounded-2xl dk-surface-2 space-y-1 border" style={{ borderColor: "var(--border)" }}>
+            <p className="font-bold uppercase tracking-wider text-slate-400 text-[10px]">Destinataire</p>
             <p className="font-bold text-sm" style={{ color: "var(--text)" }}>{o.customerName}</p>
             <p className="flex items-center gap-1.5 text-cyan-600 dark:text-cyan-400 font-mono font-medium">
               <Phone className="h-3 w-3" /> {o.phone}
             </p>
-          </div>
-
-          <div className="p-3 rounded-xl dk-surface-2 space-y-1">
-            <p className="font-semibold text-slate-400">Livraison :</p>
-            <p className="font-bold" style={{ color: "var(--text)" }}>
+            <p className="text-[11px] pt-1" style={{ color: "var(--text-dim)" }}>
               {o.commune}, {o.wilaya}
             </p>
-            <p className="text-[11px]" style={{ color: "var(--text-dim)" }}>
+          </div>
+
+          <div className="p-3.5 rounded-2xl dk-surface-2 space-y-2 border" style={{ borderColor: "var(--border)" }}>
+            <div className="flex items-center justify-between">
+              <span className="font-bold uppercase tracking-wider text-slate-400 text-[10px]">
+                Mode de livraison
+              </span>
+              <AndersonLogo size="sm" showTagline={false} />
+            </div>
+
+            <div className="flex items-center gap-2">
+              <div className={`p-1.5 rounded-lg ${o.deliveryType === "desk" ? "bg-indigo-500/15 text-indigo-500" : "bg-cyan-500/15 text-cyan-500"}`}>
+                {o.deliveryType === "desk" ? <Building2 className="h-4 w-4" /> : <Home className="h-4 w-4" />}
+              </div>
+              <div>
+                <p className="font-bold text-xs" style={{ color: "var(--text)" }}>
+                  {o.deliveryType === "desk" ? "Bureau / Stopdesk Anderson" : "Livraison à domicile"}
+                </p>
+                {o.deliveryDelay && (
+                  <p className="text-[11px] text-amber-600 dark:text-amber-400 flex items-center gap-1 font-mono">
+                    <Clock className="h-3 w-3" />
+                    Délai estimé : {o.deliveryDelay}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <p className="text-[11px] pt-1 border-t truncate" style={{ borderColor: "var(--border)", color: "var(--text-dim)" }}>
               {o.address}
             </p>
           </div>
@@ -174,9 +202,28 @@ export const ConfirmationView: React.FC<{ s: Store }> = ({ s }) => {
           </div>
         </div>
 
-        {/* Total & Payment Method */}
-        <div className="pt-3 border-t flex flex-col gap-2" style={{ borderColor: "var(--border)" }}>
-          <div className="flex items-center justify-between text-base font-extrabold">
+        {/* Pricing Breakdown & Total */}
+        <div className="pt-3 border-t space-y-2 text-xs sm:text-sm" style={{ borderColor: "var(--border)" }}>
+          <div className="flex items-center justify-between">
+            <span style={{ color: "var(--text-dim)" }}>Sous-total articles</span>
+            <span className="font-semibold font-mono" style={{ color: "var(--text)" }}>
+              {formatDZD(o.subtotal || o.total - (o.shippingFee || 0))}
+            </span>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1.5">
+              <Truck className="h-3.5 w-3.5 text-red-500" />
+              <span style={{ color: "var(--text-dim)" }}>
+                Livraison (Anderson Logistics - {o.deliveryType === "desk" ? "Stopdesk" : "À domicile"})
+              </span>
+            </div>
+            <span className="font-semibold font-mono text-cyan-600 dark:text-cyan-400">
+              {o.shippingFee && o.shippingFee > 0 ? `+ ${formatDZD(o.shippingFee)}` : "Gratuite"}
+            </span>
+          </div>
+
+          <div className="flex items-center justify-between text-base font-extrabold pt-2 border-t" style={{ borderColor: "var(--border)" }}>
             <span style={{ color: "var(--text)" }}>Total de la commande :</span>
             <span className="text-xl dk-heading text-cyan-500 font-mono">{formatDZD(o.total)}</span>
           </div>

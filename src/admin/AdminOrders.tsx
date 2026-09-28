@@ -18,6 +18,7 @@ import {
   ShoppingBag,
   Plus,
   Minus,
+  Truck,
 } from "lucide-react";
 import { ORDER_STATUSES } from "../data/demoAdminData";
 import { ALGERIA_WILAYAS } from "../data/wilayas";
@@ -987,11 +988,25 @@ export const AdminOrders: React.FC<{ s: Store }> = ({ s }) => {
                       </td>
                       <td className="px-4 py-3.5 whitespace-nowrap" style={{ color: "var(--text-dim)" }}>
                         <p className="font-semibold" style={{ color: "var(--text)" }}>{o.wilaya}</p>
-                        <p className="text-[11px]" style={{ color: "var(--text-faint)" }}>{o.commune || "Centre"}</p>
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                          <span className="text-[11px]" style={{ color: "var(--text-faint)" }}>{o.commune || "Centre"}</span>
+                          {o.deliveryType && (
+                            <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${
+                              o.deliveryType === "desk"
+                                ? "bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 border-indigo-500/30"
+                                : "bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 border-cyan-500/30"
+                            }`}>
+                              {o.deliveryType === "desk" ? "Stopdesk" : "Domicile"}
+                            </span>
+                          )}
+                        </div>
                       </td>
                       <td className="px-4 py-3.5 whitespace-nowrap font-mono">
                         <p className="font-bold text-sm" style={{ color: "var(--text)" }}>{formatDZD(o.total)}</p>
-                        <p className="text-[11px]" style={{ color: "var(--text-faint)" }}>{o.items.length} article{o.items.length !== 1 ? "s" : ""}</p>
+                        <p className="text-[11px]" style={{ color: "var(--text-faint)" }}>
+                          {o.items.length} article{o.items.length !== 1 ? "s" : ""}
+                          {o.shippingFee ? ` • Liv: ${formatDZD(o.shippingFee)}` : ""}
+                        </p>
                       </td>
                       <td className="px-4 py-3.5 whitespace-nowrap">
                         <select
@@ -1097,6 +1112,12 @@ export const AdminOrders: React.FC<{ s: Store }> = ({ s }) => {
                 <p className="flex items-center gap-2">
                   <MapPin className="h-3.5 w-3.5" style={{ color: "var(--text-faint)" }} /> Wilaya de {selectedOrder.wilaya} ({selectedOrder.commune || "Centre"})
                 </p>
+                {selectedOrder.deliveryType && (
+                  <p className="flex items-center gap-2 text-cyan-600 dark:text-cyan-400 font-semibold">
+                    <Truck className="h-3.5 w-3.5" /> Anderson Logistics : {selectedOrder.deliveryType === "desk" ? "Point Relais / Bureau (Stopdesk)" : "Livraison à domicile"}
+                    {selectedOrder.deliveryDelay ? ` • Délai: ${selectedOrder.deliveryDelay}` : ""}
+                  </p>
+                )}
                 {selectedOrder.address && (
                   <p className="pt-1 border-t" style={{ borderColor: "var(--border)" }}>
                     Adresse : {selectedOrder.address}
@@ -1131,14 +1152,28 @@ export const AdminOrders: React.FC<{ s: Store }> = ({ s }) => {
               </div>
             </div>
 
-            {/* Order Total */}
-            <div className="pt-3 border-t flex items-center justify-between" style={{ borderColor: "var(--border)" }}>
-              <span className="text-xs font-bold" style={{ color: "var(--text)" }}>
-                Total à encaisser (Paiement à la livraison)
-              </span>
-              <span className="text-lg font-black font-mono text-cyan-600 dark:text-cyan-400">
-                {formatDZD(selectedOrder.total)}
-              </span>
+            {/* Order Total & Delivery Breakdown */}
+            <div className="pt-3 border-t space-y-1.5 text-xs" style={{ borderColor: "var(--border)" }}>
+              {selectedOrder.shippingFee !== undefined && (
+                <>
+                  <div className="flex items-center justify-between" style={{ color: "var(--text-dim)" }}>
+                    <span>Sous-total articles</span>
+                    <span className="font-mono font-semibold">{formatDZD(selectedOrder.subtotal || (selectedOrder.total - selectedOrder.shippingFee))}</span>
+                  </div>
+                  <div className="flex items-center justify-between" style={{ color: "var(--text-dim)" }}>
+                    <span>Frais de livraison Anderson ({selectedOrder.deliveryType === "desk" ? "Stopdesk" : "Domicile"})</span>
+                    <span className="font-mono font-semibold text-cyan-600 dark:text-cyan-400">+ {formatDZD(selectedOrder.shippingFee)}</span>
+                  </div>
+                </>
+              )}
+              <div className="pt-2 border-t flex items-center justify-between">
+                <span className="text-xs font-bold" style={{ color: "var(--text)" }}>
+                  Total à encaisser (Paiement à la livraison)
+                </span>
+                <span className="text-lg font-black font-mono text-cyan-600 dark:text-cyan-400">
+                  {formatDZD(selectedOrder.total)}
+                </span>
+              </div>
             </div>
 
             {/* Actions */}
