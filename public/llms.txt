@@ -1,72 +1,37 @@
 # DomoTek — Smart Home & Domotique en Algérie
 
-> DomoTek est la boutique en ligne de référence en Algérie spécialisée dans la domotique, les objets connectés (IoT), la sécurité intelligente et l'électricité moderne. Nous proposons des équipements compatibles Tuya, Smart Life, Zigbee, Wi-Fi, Amazon Alexa et Google Assistant, avec livraison rapide dans les 58 wilayas d'Algérie et paiement sécurisé à la livraison (Cash on Delivery).
+> DomoTek est la boutique en ligne leader en Algérie spécialisée dans la domotique, les objets connectés (IoT), la sécurité résidentielle et l'électricité moderne. Nous distribuons des équipements certifiés compatibles Tuya, Smart Life, Zigbee, Wi-Fi, Amazon Alexa et Google Assistant, avec livraison express dans les 58 wilayas d'Algérie et paiement sécurisé en espèces à la livraison (Cash on Delivery).
 
-## Informations Principales & Services
-- **Site web officiel** : https://www.domotek-dz.com
-- **Pays & Territoire** : Algérie (Livraison dans les 58 wilayas)
-- **Modalités de paiement** : Paiement en espèces à la livraison (Main à main)
-- **Garantie** : 12 mois d'assistance et remplacement à neuf sur tous les équipements
-- **Support & Commande** : Assistance technique gratuite en français et en arabe par téléphone et WhatsApp (+213 775 30 26 36)
-- **Écosystèmes compatibles** : Tuya Smart, Smart Life, Amazon Alexa, Google Home / Assistant, Home Assistant, Zigbee 3.0, Wi-Fi 2.4 GHz
+## Informations Générales & Services
 
----
+- [Site Officiel DomoTek Algérie](https://www.domotek-dz.com/): Boutique officielle en ligne pour l'achat de matériel domotique en Algérie.
+- [Boutique & Catalogue Complet](https://www.domotek-dz.com/#shop): Accès direct à l'ensemble des équipements et modules intelligents en stock.
+- [Modalités de Livraison 58 Wilayas](https://www.domotek-dz.com/): Expédition à domicile ou en point de retrait sous 24h à 72h.
+- [Paiement à la Livraison](https://www.domotek-dz.com/): Paiement en espèces (Main à main) après réception et vérification du colis.
+- [Garantie & Support Client](https://www.domotek-dz.com/): Garantie de 12 mois avec remplacement à neuf et assistance technique en français et arabe via WhatsApp (+213 775 30 26 36).
 
 ## Catégories de Produits
-- **Interrupteurs connectés** : Interrupteurs tactiles muraux en verre trempé (1 voie, 2 voies, 3 voies), avec ou sans fil neutre, pilotables par smartphone et commande vocale.
-- **Prises & Énergie** : Prises intelligentes avec mesure de consommation en temps réel (16A/20A), multiprises connectées et disjoncteurs différentiels intelligents.
-- **Sécurité & Caméras** : Caméras de surveillance WiFi 360° motorisées intérieur/extérieur, sonnettes vidéo connectées avec interphone, sirènes d'alarme 110dB.
-- **Capteurs & Détecteurs** : Capteurs d'ouverture de porte/fenêtre Zigbee, détecteurs de mouvement infrarouge PIR, capteurs d'inondation / fuite d'eau, thermomètres / hygromètres connectés.
-- **Éclairage intelligent** : Ampoules connectées RGB+CCT (16 millions de couleurs), bandeaux LED synchronisés musique, contrôleurs de ruban LED.
-- **Passerelles & Hubs** : Passerelles multimodes Zigbee 3.0 + Bluetooth Mesh pour une portée étendue et une réactivité instantanée hors ligne.
 
----
+- [Interrupteurs Connectés](https://www.domotek-dz.com/#shop?category=interrupteurs): Interrupteurs muraux tactiles en verre trempé (1, 2 et 3 voies), avec ou sans fil neutre, pilotables par smartphone et commandes vocales.
+- [Prises & Gestion d'Énergie](https://www.domotek-dz.com/#shop?category=prises): Prises intelligentes WiFi avec suivi de consommation électrique en temps réel (16A/20A) et programmation horaire.
+- [Sécurité & Caméras de Surveillance](https://www.domotek-dz.com/#shop?category=securite): Caméras WiFi motorisées 360° 2K, sonnettes vidéo connectées avec interphone et sirènes d'alarme.
+- [Capteurs & Détecteurs Intelligents](https://www.domotek-dz.com/#shop?category=capteurs): Capteurs d'ouverture de porte/fenêtre Zigbee, détecteurs de mouvement PIR, capteurs d'inondation et thermo-hygromètres.
+- [Éclairage Connecté](https://www.domotek-dz.com/#shop?category=eclairage): Ampoules connectées RGB+CCT 16 millions de couleurs, rubans LED et contrôleurs d'ambiance.
+- [Passerelles & Hubs Zigbee](https://www.domotek-dz.com/#shop?category=hubs): Passerelles centrales Zigbee 3.0 + Bluetooth Mesh pour automatisation locale sans coupure.
 
-## Catalogue des Équipements Phares (Tarifs en Dinars Algériens — DZD)
+## Équipements Phares du Catalogue (Tarifs en DZD)
 
-1. **Interrupteur WiFi intelligent 1 voie** (Réf: DK-SW-WIFI1)
-   - *Prix* : 2 800 DZD
-   - *Fonctions* : Commande tactile en verre trempé, compatible avec/sans neutre (condensateur inclus), contrôle vocal Alexa/Google.
+- [Interrupteur WiFi tactile 1 voie (DK-SW-WIFI1)](https://www.domotek-dz.com/#product/1): 2 800 DZD — Commande tactile en verre trempé, compatible installation avec ou sans neutre (condensateur inclus), contrôle vocal Alexa & Google Home.
+- [Interrupteur WiFi tactile 2 voies (DK-SW-WIFI2)](https://www.domotek-dz.com/#product/2): 3 600 DZD — Double allumage indépendant en verre trempé, planification horaire et minuterie.
+- [Interrupteur WiFi tactile 3 voies (DK-SW-WIFI3)](https://www.domotek-dz.com/#product/3): 4 200 DZD — Triple commande pour grands salons, couloirs et scénarios groupés.
+- [Prise connectée WiFi 16A avec mesure d'énergie (DK-PLUG-16A)](https://www.domotek-dz.com/#product/4): 2 400 DZD — Mesure en temps réel des kWh consommés, minuterie et protection anti-surchauffe.
+- [Passerelle Hub Zigbee 3.0 & Bluetooth (DK-HUB-ZIG)](https://www.domotek-dz.com/#product/5): 4 500 DZD — Hub centralisé pour connecter jusqu'à 128 périphériques Zigbee avec réactivité locale instantanée.
+- [Capteur d'ouverture porte et fenêtre Zigbee (DK-SENS-DOOR)](https://www.domotek-dz.com/#product/6): 1 900 DZD — Alerte immédiate sur smartphone en cas d'ouverture, pile 2 ans d'autonomie.
+- [Détecteur de mouvement PIR intelligent Zigbee (DK-SENS-PIR)](https://www.domotek-dz.com/#product/7): 2 300 DZD — Détecteur grand angle 120° portée 7 mètres pour sécurité et allumage automatique.
+- [Caméra de surveillance WiFi 360° 2K (DK-CAM-360)](https://www.domotek-dz.com/#product/8): 6 900 DZD — Rotation panoramique motorisée 360°, vision nocturne infrarouge, audio bidirectionnel et suivi IA humain.
+- [Sonnette vidéo connectée sans fil (DK-BELL-VD)](https://www.domotek-dz.com/#product/9): 8 500 DZD — Caméra HD grand angle 166°, appel vidéo direct sur smartphone avec carillon intérieur inclus.
+- [Ampoule connectée RGB+CCT 9W E27 (DK-BULB-RGB)](https://www.domotek-dz.com/#product/10): 1 600 DZD — 16 millions de couleurs et nuances de blanc chaud à froid (2700K-6500K).
 
-2. **Interrupteur WiFi intelligent 2 voies** (Réf: DK-SW-WIFI2)
-   - *Prix* : 3 600 DZD
-   - *Fonctions* : Double commande indépendante, façade verre anti-rayures, planification horaire.
+## Optional
 
-3. **Interrupteur WiFi intelligent 3 voies** (Réf: DK-SW-WIFI3)
-   - *Prix* : 4 200 DZD
-   - *Fonctions* : Triple commande pour grands salons ou couloirs, gestion de scénarios groupés.
-
-4. **Prise connectée WiFi 16A avec mesure d'énergie** (Réf: DK-PLUG-16A)
-   - *Prix* : 2 400 DZD
-   - *Fonctions* : Mesure en temps réel des kWh consommés, programmateur journalier/hebdomadaire, protection surchauffe.
-
-5. **Passerelle Passerelle Hub Zigbee 3.0 & Bluetooth** (Réf: DK-HUB-ZIG)
-   - *Prix* : 4 500 DZD
-   - *Fonctions* : Connecte jusqu'à 128 appareils Zigbee, automatisation locale ultrarapide même en cas de coupure Internet.
-
-6. **Capteur d'ouverture de porte & fenêtre Zigbee** (Réf: DK-SENS-DOOR)
-   - *Prix* : 1 900 DZD
-   - *Fonctions* : Alerte instantanée sur smartphone en cas d'intrusion, autonomie pile 2 ans, déclencheur de lumières.
-
-7. **Détecteur de mouvement PIR intelligent Zigbee** (Réf: DK-SENS-PIR)
-   - *Prix* : 2 300 DZD
-   - *Fonctions* : Angle 120°, portée 7 mètres, allumage automatique des couloirs et escaliers.
-
-8. **Caméra de surveillance WiFi 360° 2K / 3MP** (Réf: DK-CAM-360)
-   - *Prix* : 6 900 DZD
-   - *Fonctions* : Rotation panoramique 360°, vision nocturne infrarouge, audio bidirectionnel, suivi intelligent de silhouette humaine, sans abonnement.
-
-9. **Sonnette vidéo connectée avec carillon sans fil** (Réf: DK-BELL-VD)
-   - *Prix* : 8 500 DZD
-   - *Fonctions* : Caméra HD grand angle 166°, notification d'appel en direct sur smartphone, batterie rechargeable longue durée.
-
-10. **Ampoule connectée RGB+CCT 9W E27** (Réf: DK-BULB-RGB)
-    - *Prix* : 1 600 DZD
-    - *Fonctions* : 16 millions de couleurs + blanc chaud à blanc froid (2700K-6500K), synchronisation rythme musical.
-
----
-
-## Liens Utiles
-- Catalogue complet des produits : https://www.domotek-dz.com/#shop
-- Guide d'installation et d'utilisation : https://www.domotek-dz.com/#shop
-- Fichier complet pour modèles d'IA (LLMs Full) : https://www.domotek-dz.com/llms-full.txt
+- [Documentation Technique Complète LLMs (llms-full.txt)](https://www.domotek-dz.com/llms-full.txt): Spécifications techniques détaillées, schémas de câblage, compatibilités et FAQ technique pour agents IA et LLMs.

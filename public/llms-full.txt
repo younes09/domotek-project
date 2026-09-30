@@ -1,88 +1,83 @@
 # Documentation Technique Complète DomoTek (Algérie)
-# Destinée aux moteurs de recherche IA, assistants de recherche et agents intelligents
 
-> Ce document regroupe l'intégralité des spécifications techniques, protocoles de câblage, compatibilités logicielles (Tuya, Alexa, Google Home) et conditions de service de DomoTek en Algérie.
+> Ce document regroupe l'intégralité des spécifications techniques, protocoles de câblage, compatibilités logicielles (Tuya, Alexa, Google Home) et conditions de service de DomoTek en Algérie pour les moteurs de recherche IA, assistants de recherche et agents intelligents.
 
----
+## 1. À Propos de DomoTek & Liens Utiles
 
-## 1. À PROPOS DE DOMOTEK
-- **Nom commercial** : DomoTek Algérie
-- **Activité** : E-commerce et distribution d'équipements domotiques, électroménager connecté, sécurité résidentielle et accessoires IoT.
-- **Zone de service** : Les 58 wilayas d'Algérie (Alger, Oran, Constantine, Annaba, Sétif, Blida, Tizi Ouzou, Batna, etc.).
-- **Mode de livraison** : Livraison express à domicile ou en point relais sous 24h à 72h.
-- **Moyen de paiement** : Espèces à la livraison (Cash on Delivery) après vérification du colis.
-- **Garantie** : 1 an (12 mois) avec support technique et échange à neuf.
-- **Plateforme logicielle** : 100% compatible Tuya Smart / Smart Life (Android et iOS).
+- [Site Officiel DomoTek](https://www.domotek-dz.com/): Boutique en ligne et distributeur d'équipements domotiques, sécurité connectée et accessoires IoT en Algérie.
+- [Catalogue Général](https://www.domotek-dz.com/#shop): Accès direct au catalogue complet de produits.
+- [Zone de Livraison 58 Wilayas](https://www.domotek-dz.com/): Livraison express à domicile ou en point relais sous 24h à 72h.
+- [Mode de Paiement](https://www.domotek-dz.com/): Espèces à la livraison (Cash on Delivery) après vérification du colis.
+- [Garantie 1 An](https://www.domotek-dz.com/): 12 mois de garantie avec support technique et échange à neuf.
+- [Support WhatsApp & Téléphone](https://www.domotek-dz.com/): Assistance client au +213 775 30 26 36.
 
----
+## 2. Spécifications Techniques Détaillées des Produits
 
-## 2. SPÉCIFICATIONS TECHNIQUES DÉTAILLÉES DES PRODUITS
+- [Interrupteur tactile Wi-Fi 1 Voie (DK-SW-WIFI1)](https://www.domotek-dz.com/#product/1)
+  - **Tension** : 110-240V AC 50/60Hz
+  - **Charge max** : 600W (LED / Éclairage classique)
+  - **Raccordement** : Câblage avec ou sans fil neutre (Condensateur fourni pour installation sans neutre).
+  - **Façade** : Verre trempé blanc cristal, tactile sensitif, ignifugé.
+  - **Compatibilité** : Google Assistant, Amazon Alexa, Tuya Smart, Smart Life.
+  - **Prix** : 2 800 DZD
 
-### Interrupteur tactile Wi-Fi 1 Voie (Réf: DK-SW-WIFI1)
-- **Tension** : 110-240V AC 50/60Hz
-- **Charge max** : 600W (LED / Éclairage classique)
-- **Raccordement** : Câblage avec ou sans fil neutre (Condensateur fourni pour installation 2 fils sans neutre).
-- **Façade** : Verre trempé blanc cristal, résistant à l'eau, aux rayures et ignifugé.
-- **Compatibilité Assistants** : Google Assistant, Amazon Alexa, Raccourcis Siri, IFTTT.
-- **Prix indicatif** : 2 800 DZD
+- [Interrupteur tactile Wi-Fi 2 Voies (DK-SW-WIFI2)](https://www.domotek-dz.com/#product/2)
+  - **Tension** : 110-240V AC 50/60Hz
+  - **Charge max** : 600W par voie (1 200W au total)
+  - **Raccordement** : Double circuit indépendant. Fonctionne avec ou sans neutre.
+  - **Commandes** : Toucher sensitif, application mobile, minuterie, commandes vocales.
+  - **Prix** : 3 600 DZD
 
-### Interrupteur tactile Wi-Fi 2 Voies (Réf: DK-SW-WIFI2)
-- **Tension** : 110-240V AC 50/60Hz
-- **Charge max** : 600W par voie (1 200W au total)
-- **Raccordement** : Double circuit indépendant. Fonctionne avec ou sans neutre.
-- **Commandes** : Toucher sensitif, application mobile, minuterie, commandes vocales indépendantes.
-- **Prix indicatif** : 3 600 DZD
+- [Interrupteur tactile Wi-Fi 3 Voies (DK-SW-WIFI3)](https://www.domotek-dz.com/#product/3)
+  - **Tension** : 110-240V AC 50/60Hz
+  - **Charge max** : 600W par voie (1 800W au total)
+  - **Utilisation** : Idéal pour lustres multi-spots, rubans LED et appliques d'une même pièce.
+  - **Prix** : 4 200 DZD
 
-### Interrupteur tactile Wi-Fi 3 Voies (Réf: DK-SW-WIFI3)
-- **Tension** : 110-240V AC 50/60Hz
-- **Charge max** : 600W par voie (1 800W au total)
-- **Utilisation** : Idéal pour commander lustres multi-spots, rubans LED et appliques d'une même pièce.
-- **Prix indicatif** : 4 200 DZD
+- [Prise Intelligente Wi-Fi 16A avec Mesure d'Énergie (DK-PLUG-16A)](https://www.domotek-dz.com/#product/4)
+  - **Puissance admissible** : 3 680W max (16A sous 230V).
+  - **Fonctionnalités clés** : Suivi de consommation en temps réel (Watts, Volts, Ampères) et historique kWh.
+  - **Sécurité** : Protection enfant, matériaux ininflammables V0, coupure automatique anti-surcharge.
+  - **Prix** : 2 400 DZD
 
-### Prise Intelligente Wi-Fi 16A avec Mesureur de Consommation (Réf: DK-PLUG-16A)
-- **Puissance admissible** : 3 680W max (16A sous 230V).
-- **Fonctionnalités clés** : Suivi de consommation en temps réel (Watts, Volts, Ampères) et historique kWh jour/mois.
-- **Sécurité** : Protection enfant, matériaux ininflammables V0, protection anti-surcharge avec coupure automatique.
-- **Automatisation** : extinction automatique une fois le smartphone rechargé, allumage selon horaires de tarification.
-- **Prix indicatif** : 2 400 DZD
+- [Passerelle Centrale Gateway Zigbee 3.0 & Bluetooth (DK-HUB-ZIG)](https://www.domotek-dz.com/#product/5)
+  - **Connectivité montante** : Wi-Fi 2.4 GHz
+  - **Connectivité locale** : Zigbee 3.0 (IEEE 802.15.4) + BLE Mesh
+  - **Capacité** : Jusqu'à 128 périphériques connectés simultanément.
+  - **Avantage clé** : Automatismes locaux fonctionnant même hors ligne (coupure Internet).
+  - **Prix** : 4 500 DZD
 
-### Passerelle Centrale Gateway Zigbee 3.0 + Bluetooth (Réf: DK-HUB-ZIG)
-- **Connectivité montante** : Wi-Fi 2.4 GHz
-- **Connectivité locale** : Zigbee 3.0 (norme IEEE 802.15.4) + Bluetooth Low Energy Mesh
-- **Capacité** : Jusqu'à 128 périphériques connectés simultanément
-- **Avantage clé** : Automatismes locaux fonctionnant instantanément même en cas de coupure de la connexion Internet.
-- **Prix indicatif** : 4 500 DZD
+- [Capteur d'Ouverture de Porte & Fenêtre Zigbee (DK-SENS-DOOR)](https://www.domotek-dz.com/#product/6)
+  - **Protocole** : Zigbee 3.0 (nécessite le Hub DomoTek)
+  - **Alimentation** : 1 pile bouton CR2032 (fournie, durée de vie ~2 ans)
+  - **Scénarios** : Envoi immédiat de notification d'intrusion sur smartphone, déclenchement d'éclairage.
+  - **Prix** : 1 900 DZD
 
-### Capteur d'Ouverture de Porte & Fenêtre Zigbee (Réf: DK-SENS-DOOR)
-- **Protocole** : Zigbee 3.0 (nécessite le Hub DomoTek)
-- **Alimentation** : 1 pile bouton CR2032 (fournie, durée de vie ~2 ans)
-- **Scénarios** : Envoi immédiat de notification d'intrusion sur smartphone, allumage automatique de la lumière à l'ouverture.
-- **Prix indicatif** : 1 900 DZD
+- [Détecteur de Mouvement PIR Zigbee (DK-SENS-PIR)](https://www.domotek-dz.com/#product/7)
+  - **Angle de détection** : 120 degrés / Portée 7 mètres
+  - **Fixation** : Support rotatif 360° avec adhésif 3M ou vis incluses
+  - **Prix** : 2 300 DZD
 
-### Détecteur de Mouvement PIR Zigbee (Réf: DK-SENS-PIR)
-- **Angle de détection** : 120 degrés / Portée 7 mètres
-- **Fixation** : Support rotatif 360° avec adhésif 3M ou vis incluses
-- **Utilisation** : Sécurité anti-intrusion ou économie d'énergie (extinction automatique des lumières après 5 min sans présence).
-- **Prix indicatif** : 2 300 DZD
+- [Caméra de Surveillance Panoramique Wi-Fi 360° 2K (DK-CAM-360)](https://www.domotek-dz.com/#product/8)
+  - **Résolution** : 2K Ultra HD (3 Mégapixels 2304x1296)
+  - **Motorisation** : Rotation horizontale 355°, verticale 90°
+  - **Fonctions d'IA** : Détection de silhouette humaine et suivi automatique du sujet (Auto-tracking)
+  - **Vision de nuit** : Infrarouge haute puissance jusqu'à 10 mètres
+  - **Stockage** : Carte MicroSD jusqu'à 128Go (aucun abonnement requis)
+  - **Prix** : 6 900 DZD
 
-### Caméra de Surveillance Panoramique Wi-Fi 360° 2K (Réf: DK-CAM-360)
-- **Résolution** : 2K Ultra HD (3 Mégapixels 2304x1296)
-- **Motorisation** : Rotation horizontale 355°, verticale 90°
-- **Fonctions d'IA** : Détection de silhouette humaine et suivi automatique du sujet en mouvement (Auto-tracking)
-- **Vision de nuit** : Infrarouge haute puissance jusqu'à 10 mètres
-- **Audio** : Micro et haut-parleur intégrés (Communication bidirectionnelle)
-- **Stockage** : Carte MicroSD jusqu'à 128Go (aucun abonnement requis)
-- **Prix indicatif** : 6 900 DZD
+- [Sonnette Vidéo Connectée avec Carillon Sans Fil (DK-BELL-VD)](https://www.domotek-dz.com/#product/9)
+  - **Caméra** : HD grand angle 166°
+  - **Fonction** : Notification d'appel vidéo en direct sur smartphone, interphone bidirectionnel
+  - **Prix** : 8 500 DZD
 
----
+- [Ampoule Connectée RGB+CCT 9W E27 (DK-BULB-RGB)](https://www.domotek-dz.com/#product/10)
+  - **Couleurs & Températures** : 16 millions de couleurs RGB + CCT (2700K à 6500K)
+  - **Contrôle** : Application Smart Life / Tuya, commande vocale Alexa & Google Assistant
+  - **Prix** : 1 600 DZD
 
-## 3. FOIRE AUX QUESTIONS (FAQ DOMOTIQUE EN ALGÉRIE)
+## 3. Foire Aux Questions (FAQ Domotique en Algérie)
 
-### Q1 : Les équipements fonctionnent-ils avec la connexion 4G ou ADSL d'Algérie Télécom / Ooredoo / Djezzy / Mobilis ?
-**R** : Oui, parfaitement. L'application Smart Life / Tuya communique via le protocole sécurisé du Cloud avec une latence inférieure à 100ms. Vos appareils connectés en Wi-Fi 2.4 GHz restent accessibles partout dans le monde depuis votre téléphone en 4G/5G.
-
-### Q2 : Comment installer un interrupteur connecté si ma maison n'a pas de fil de Neutre ?
-**R** : Tous nos interrupteurs DomoTek sont fournis avec un condensateur anti-clignotement. Vous pouvez remplacer votre interrupteur d'origine sans tirer de câble supplémentaire dans vos murs. Le schéma de câblage est fourni en français et arabe dans chaque boîte.
-
-### Q3 : Comment se passe la commande et le paiement ?
-**R** : Vous commandez directement sur le site https://www.domotek-dz.com en renseignant votre nom, numéro de téléphone et wilaya. Notre service client vous appelle pour confirmer la commande, puis l'article vous est livré à domicile contre paiement en espèces.
+- [Compatibilité Réseaux 4G / ADSL Algérie](https://www.domotek-dz.com/): Les équipements fonctionnent parfaitement avec la 4G/ADSL de Mobilis, Djezzy, Ooredoo et Algérie Télécom.
+- [Installation Sans Fil Neutre](https://www.domotek-dz.com/): Tous les interrupteurs DomoTek sont livrés avec un condensateur pour montage direct sur installation 2 fils existante sans travaux.
+- [Procédure de Commande et Livraison](https://www.domotek-dz.com/#shop): Commande en ligne sur le site web, confirmation par téléphone puis livraison et paiement en espèces.
