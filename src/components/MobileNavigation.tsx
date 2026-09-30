@@ -22,7 +22,7 @@ export const MobileNavigation: React.FC<{ s: Store }> = ({ s }) => (
           Boutique
         </button>
 
-        {/* Distinctive highlighted Policy & Returns card */}
+        {/* Distinctive highlighted Policy & Delivery card */}
         <button
           onClick={() => { s.setView("policy"); s.setMobileMenuOpen(false); }}
           className={`w-full my-2 flex items-center justify-between p-2.5 rounded-xl text-xs font-bold border transition-all ${
@@ -33,10 +33,10 @@ export const MobileNavigation: React.FC<{ s: Store }> = ({ s }) => (
         >
           <div className="flex items-center gap-2">
             <ShieldCheck className="h-4 w-4 shrink-0 text-cyan-500" />
-            <span>Politique & Retours</span>
+            <span>Politique & Livraison</span>
           </div>
           <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 font-mono">
-            7j / 12 mois
+            58 Wilayas
           </span>
         </button>
         <p className="pt-3 pb-1 text-xs" style={{ color: "var(--text-faint)" }}>Catégories</p>

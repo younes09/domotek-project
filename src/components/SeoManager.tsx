@@ -159,8 +159,8 @@ export const SeoManager: React.FC<{ s: Store }> = ({ s }) => {
       title = "Commander vos équipements domotiques — DomoTek Algérie";
       description = "Finalisez votre commande en toute sécurité avec paiement à la livraison dans toutes les wilayas d'Algérie.";
     } else if (view === "policy") {
-      title = "Politique de Retour, d'Échange & Garantie (12 Mois) — DomoTek Algérie";
-      description = "Consultez les conditions de retour sous 7 jours, d'échange et la garantie constructeur de 12 mois sur nos équipements domotiques chez DomoTek Algérie.";
+      title = "Conditions de Commande, Livraison 58 Wilayas & Paiement — DomoTek Algérie";
+      description = "Consultez les modalités de commande, les délais de livraison sur les 58 Wilayas d'Algérie et le paiement à la livraison chez DomoTek.";
       canonicalUrl = "https://www.domotek-dz.com/#policy";
     }
 

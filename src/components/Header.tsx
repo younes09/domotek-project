@@ -67,7 +67,7 @@ export const Header: React.FC<{ s: Store }> = ({ s }) => {
                 </button>
               ))}
 
-              {/* ✨ Distinctive Highlighted Policy & Returns Button */}
+              {/* ✨ Distinctive Highlighted Policy & Delivery Button */}
               <button
                 onClick={() => s.setView("policy")}
                 className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 border dk-focus shadow-sm ${
@@ -75,10 +75,10 @@ export const Header: React.FC<{ s: Store }> = ({ s }) => {
                     ? "bg-cyan-500 text-white border-cyan-400 shadow-md shadow-cyan-500/20 scale-105"
                     : "bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 border-cyan-500/30 hover:border-cyan-500/50 hover:scale-[1.02]"
                 }`}
-                title="Consulter notre politique de retour sous 7 jours et garantie 12 mois"
+                title="Consulter notre politique de commande, livraison 58 wilayas et paiement"
               >
                 <ShieldCheck className="h-3.5 w-3.5 shrink-0" />
-                <span>Politique & Retours</span>
+                <span>Politique & Livraison</span>
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
               </button>
             </nav>

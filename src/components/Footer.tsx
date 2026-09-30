@@ -57,12 +57,12 @@ export const Footer: React.FC<{ s: Store }> = ({ s }) => {
           <div className="space-y-2.5 text-xs sm:text-sm" style={{ color: "var(--text-dim)" }}>
             <p className="flex items-center gap-1.5"><strong style={{ color: "var(--text)" }}>Wilayas :</strong> 58 Wilayas en Algérie</p>
             <p className="flex items-center gap-1.5"><strong style={{ color: "var(--text)" }}>Paiement :</strong> À la livraison</p>
-            <p className="flex items-center gap-1.5"><strong style={{ color: "var(--text)" }}>Garantie :</strong> 12 Mois & Retours 7j</p>
+            <p className="flex items-center gap-1.5"><strong style={{ color: "var(--text)" }}>Livraison :</strong> 58 Wilayas (24h/48h)</p>
             <button
               onClick={() => s.setReturnPolicyOpen(true)}
               className="inline-flex items-center gap-1.5 text-xs text-left hover:text-cyan-400 transition-colors font-medium text-cyan-600 dark:text-cyan-400 dk-focus rounded"
             >
-              <span>📦 Consulter la politique de retour</span>
+              <span>📦 Consulter la politique de livraison</span>
             </button>
             <a
               href="https://wa.me/213775302636"
@@ -94,7 +94,7 @@ export const Footer: React.FC<{ s: Store }> = ({ s }) => {
             onClick={() => s.setReturnPolicyOpen(true)}
             className="hover:underline hover:text-cyan-400 transition-colors"
           >
-            Politique de retour & garantie
+            Politique de commande & livraison
           </button>
           <span>•</span>
           <span>Conçu pour la maison connectée en Algérie 🇩🇿</span>
