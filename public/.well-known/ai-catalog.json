@@ -1,0 +1,48 @@
+{
+  "$schema": "https://agenticresourcediscovery.org/schemas/v1.0/ard-catalog.schema.json",
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "DomoTek Algérie",
+    "identifier": "urn:air:domotek-dz.com:host:main"
+  },
+  "entries": [
+    {
+      "identifier": "urn:air:domotek-dz.com:content:llms-txt",
+      "displayName": "DomoTek LLM Site Index",
+      "type": "text/markdown",
+      "url": "https://www.domotek-dz.com/llms.txt",
+      "description": "Index condensé des équipements domotiques, tarifs en DZD, services de livraison 58 wilayas et documentation pour agents IA.",
+      "representativeQueries": [
+        "Quels sont les équipements domotiques disponibles chez DomoTek en Algérie ?",
+        "Comment commander des interrupteurs tactiles connectés et prises intelligentes en Algérie ?",
+        "Quels sont les prix et modalités de livraison de DomoTek ?"
+      ],
+      "tags": ["domotique", "smart-home", "algerie", "tuya", "zigbee", "iot", "llms-txt"]
+    },
+    {
+      "identifier": "urn:air:domotek-dz.com:content:llms-full-txt",
+      "displayName": "DomoTek Spécifications Techniques & FAQ Complète",
+      "type": "text/markdown",
+      "url": "https://www.domotek-dz.com/llms-full.txt",
+      "description": "Documentation technique détaillée, schémas de câblage sans neutre, compatibilités Tuya / Alexa / Google Home et FAQ complète.",
+      "representativeQueries": [
+        "Quelles sont les caractéristiques électriques des interrupteurs connectés sans neutre ?",
+        "Comment installer et connecter les capteurs et passerelles Zigbee DomoTek ?",
+        "Quelles sont les spécifications techniques de la caméra de surveillance 360 2K ?"
+      ],
+      "tags": ["documentation", "specifications", "faq", "schema-electrique", "tuya"]
+    },
+    {
+      "identifier": "urn:air:domotek-dz.com:sitemap:main",
+      "displayName": "DomoTek Sitemap XML",
+      "type": "application/xml",
+      "url": "https://www.domotek-dz.com/sitemap.xml",
+      "description": "Plan du site complet contenant toutes les URLs des produits et catégories du catalogue DomoTek.",
+      "representativeQueries": [
+        "Accéder au sitemap XML de DomoTek",
+        "Lister toutes les URLs produits de domotek-dz.com"
+      ],
+      "tags": ["sitemap", "seo", "urls"]
+    }
+  ]
+}

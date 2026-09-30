@@ -48,3 +48,5 @@ Sitemap: https://www.domotek-dz.com/sitemap.xml
 # LLM & AI Search context files:
 # https://www.domotek-dz.com/llms.txt
 # https://www.domotek-dz.com/llms-full.txt
+# https://www.domotek-dz.com/ai-catalog.json
+# https://www.domotek-dz.com/.well-known/ard.json
