@@ -1,12 +1,21 @@
-import React, { useMemo, useState } from "react";
-import { ArrowLeft, ChevronRight, SlidersHorizontal, X } from "lucide-react";
+import React, { useEffect, useMemo, useState } from "react";
+import { ArrowLeft, ChevronDown, ChevronRight, SlidersHorizontal, Sparkles, X } from "lucide-react";
 import { ProductCard } from "../components/ProductCard";
 import { ProductFilters, EMPTY_FILTERS } from "../components/ProductFilters";
 import type { Store } from "../types";
 
+const INITIAL_BATCH_SIZE = 8;
+const LOAD_MORE_STEP = 8;
+
 export const ShopView: React.FC<{ s: Store }> = ({ s }) => {
   const f = s.shopFilters;
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [visibleCount, setVisibleCount] = useState<number>(INITIAL_BATCH_SIZE);
+
+  // Reset pagination when any filter or sort option changes
+  useEffect(() => {
+    setVisibleCount(INITIAL_BATCH_SIZE);
+  }, [f.query, f.category, f.special, f.minPrice, f.maxPrice, f.availability, f.sort]);
 
   const filtered = useMemo(() => {
     let list = [...s.products];
@@ -25,6 +34,16 @@ export const ShopView: React.FC<{ s: Store }> = ({ s }) => {
     if (f.sort === "nouveautes") list.sort((a, b) => Number(b.isNew) - Number(a.isNew));
     return list;
   }, [s.products, f]);
+
+  const visibleProducts = useMemo(() => {
+    return filtered.slice(0, visibleCount);
+  }, [filtered, visibleCount]);
+
+  const handleLoadMore = () => {
+    setVisibleCount((prev) => prev + LOAD_MORE_STEP);
+  };
+
+  const remainingCount = Math.max(0, filtered.length - visibleCount);
 
   const title =
     f.special === "new"
@@ -54,7 +73,10 @@ export const ShopView: React.FC<{ s: Store }> = ({ s }) => {
       <div className="flex items-center justify-between mb-4">
         <div>
           <h1 className="dk-heading text-2xl font-semibold" style={{ color: "var(--text)" }}>{title}</h1>
-          <p className="text-sm mt-1" style={{ color: "var(--text-faint)" }}>{filtered.length} produit{filtered.length !== 1 ? "s" : ""}</p>
+          <p className="text-sm mt-1" style={{ color: "var(--text-faint)" }}>
+            {filtered.length} produit{filtered.length !== 1 ? "s" : ""}
+            {filtered.length > visibleCount && ` (Affichage de ${visibleProducts.length})`}
+          </p>
         </div>
         <div className="flex items-center gap-2">
           <select value={f.sort} onChange={(e) => s.setShopFilters({ ...f, sort: e.target.value as typeof f.sort })} className="dk-input rounded-lg px-3 py-2 text-sm hidden sm:block">
@@ -80,8 +102,39 @@ export const ShopView: React.FC<{ s: Store }> = ({ s }) => {
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5">
-              {filtered.map((p) => <ProductCard key={p.id} product={p} s={s} />)}
+            <div className="space-y-8">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5">
+                {visibleProducts.map((p) => <ProductCard key={p.id} product={p} s={s} />)}
+              </div>
+
+              {/* Progressive Load More Section */}
+              {remainingCount > 0 && (
+                <div className="pt-4 pb-2 flex flex-col items-center justify-center gap-3">
+                  <button
+                    onClick={handleLoadMore}
+                    className="group relative inline-flex items-center gap-3 px-8 py-3.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-extrabold text-sm shadow-[0_0_25px_rgba(0,180,255,0.3)] transition-all transform hover:-translate-y-0.5 active:translate-y-0"
+                  >
+                    <span>Charger plus de produits</span>
+                    <span className="text-xs bg-slate-950/20 text-slate-950 px-2.5 py-0.5 rounded-full font-mono font-bold">
+                      +{Math.min(LOAD_MORE_STEP, remainingCount)}
+                    </span>
+                    <ChevronDown className="h-4 w-4 stroke-[2.5] group-hover:translate-y-0.5 transition-transform" />
+                  </button>
+
+                  {/* Progress bar and counter */}
+                  <div className="flex flex-col items-center gap-1.5 mt-1">
+                    <div className="w-48 sm:w-56 bg-slate-200 dark:bg-slate-700/60 h-2 rounded-full overflow-hidden p-0.5">
+                      <div
+                        className="bg-cyan-500 h-full rounded-full transition-all duration-500"
+                        style={{ width: `${Math.min(100, Math.round((visibleProducts.length / filtered.length) * 100))}%` }}
+                      />
+                    </div>
+                    <p className="text-xs font-medium" style={{ color: "var(--text-faint)" }}>
+                      {visibleProducts.length} sur {filtered.length} produits affichés ({remainingCount} restant{remainingCount > 1 ? "s" : ""})
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
