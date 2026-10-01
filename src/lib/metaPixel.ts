@@ -20,7 +20,7 @@ declare global {
 }
 
 const STORAGE_PIXEL_KEY = "domotek_meta_pixel_id";
-const DEFAULT_PIXEL_ID = "1565801628121226";
+const DEFAULT_PIXEL_ID = "1089470470472743";
 
 // Ensemble des IDs de pixel déjà initialisés dans la session pour éviter les doublons
 const initializedPixelIds = new Set<string>();
