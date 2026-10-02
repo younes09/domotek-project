@@ -6,6 +6,7 @@ import {
   fetchCategoriesFromDb,
   fetchOrdersFromDb,
   fetchProductsFromDb,
+  fetchSocialSettingsFromDb,
   saveOrderToDb,
   seedSupabaseInitialData,
 } from "./supabaseDb";
@@ -329,10 +330,11 @@ export function useStore(): Store {
     let isMounted = true;
     async function initSupabaseData() {
       try {
-        const [dbCats, dbProds, dbOrders] = await Promise.allSettled([
+        const [dbCats, dbProds, dbOrders, dbSocial] = await Promise.allSettled([
           fetchCategoriesFromDb(),
           fetchProductsFromDb(),
           fetchOrdersFromDb(),
+          fetchSocialSettingsFromDb(),
         ]);
 
         if (isMounted) {
@@ -345,6 +347,12 @@ export function useStore(): Store {
           if (dbOrders.status === "fulfilled" && dbOrders.value !== null) {
             setOrders(dbOrders.value);
           }
+          if (dbSocial.status === "fulfilled" && dbSocial.value) {
+            setSocialSettingsState((prev) => ({ ...prev, ...dbSocial.value }));
+            try {
+              localStorage.setItem("domotek_social_links_v1", JSON.stringify(dbSocial.value));
+            } catch (e) {}
+          }
         }
       } catch (err) {
         console.warn("Supabase fetch notice:", err);
@@ -353,7 +361,7 @@ export function useStore(): Store {
 
     initSupabaseData();
 
-    // Abonnement temps réel Supabase aux changements sur les produits, catégories et commandes
+    // Abonnement temps réel Supabase aux changements sur les produits, catégories, commandes et paramètres
     const channel = supabase
       .channel("schema-db-changes")
       .on(
@@ -378,6 +386,19 @@ export function useStore(): Store {
         async () => {
           const freshOrders = await fetchOrdersFromDb();
           if (freshOrders !== null && isMounted) setOrders(freshOrders);
+        }
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "site_settings" },
+        async () => {
+          const freshSocial = await fetchSocialSettingsFromDb();
+          if (freshSocial && isMounted) {
+            setSocialSettingsState((prev) => ({ ...prev, ...freshSocial }));
+            try {
+              localStorage.setItem("domotek_social_links_v1", JSON.stringify(freshSocial));
+            } catch (e) {}
+          }
         }
       )
       .subscribe();

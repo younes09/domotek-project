@@ -333,3 +333,46 @@ export async function seedSupabaseInitialData(): Promise<void> {
     console.error("Error seeding initial data to Supabase:", err);
   }
 }
+
+export async function fetchSocialSettingsFromDb(): Promise<any | null> {
+  if (!isSupabaseConfigured || !supabase) return null;
+  try {
+    const response = await withTimeout(
+      supabase.from("site_settings").select("value").eq("key", "social_links").maybeSingle()
+    );
+    const { data, error } = response as any;
+    if (error) {
+      // Table might not exist yet or empty
+      return null;
+    }
+    if (data && data.value) {
+      return data.value;
+    }
+    return null;
+  } catch (err) {
+    return null;
+  }
+}
+
+export async function saveSocialSettingsToDb(settings: any): Promise<boolean> {
+  if (!isSupabaseConfigured || !supabase) return false;
+  try {
+    const { error } = await supabase.from("site_settings").upsert(
+      {
+        key: "social_links",
+        value: settings,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: "key" }
+    );
+    if (error) {
+      console.warn("Supabase site_settings sync note:", error.message);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.warn("Error saving social settings to Supabase:", err);
+    return false;
+  }
+}
+

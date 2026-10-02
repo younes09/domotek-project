@@ -166,13 +166,19 @@ export function getSocialSettings(): SocialSettings {
   return DEFAULT_SOCIAL_SETTINGS;
 }
 
+import { saveSocialSettingsToDb } from "./supabaseDb";
+
 /**
- * Sauvegarde les paramètres des réseaux sociaux et notifie l'application
+ * Sauvegarde les paramètres des réseaux sociaux et notifie l'application (LocalStorage + Supabase)
  */
 export function saveSocialSettings(settings: SocialSettings): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
     window.dispatchEvent(new CustomEvent(SOCIAL_UPDATE_EVENT, { detail: settings }));
+    // Synchronisation en arrière-plan avec Supabase
+    saveSocialSettingsToDb(settings).catch((err) =>
+      console.warn("Supabase social settings sync note:", err)
+    );
   } catch (e) {
     console.error("Erreur lors de la sauvegarde des paramètres réseaux sociaux :", e);
   }
