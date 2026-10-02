@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
-import { TrendingUp, ClipboardList, Users, Package, AlertTriangle, ArrowRight, ShoppingBag } from "lucide-react";
+import { TrendingUp, ClipboardList, Users, Package, AlertTriangle, ArrowRight, ShoppingBag, Share2, SlidersHorizontal, ShieldCheck } from "lucide-react";
 import { IconTile } from "../components/ui";
 import { formatDZD } from "../lib/format";
 import type { AdminTab } from "./AdminSidebar";
@@ -293,6 +293,30 @@ export const AdminDashboard: React.FC<{ s: Store; onNavigate: (t: AdminTab) => v
             )}
           </div>
         </div>
+      </div>
+
+      {/* Quick Access Shortcuts */}
+      <div className="dk-surface rounded-2xl p-4 border shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3" style={{ borderColor: "var(--border)" }}>
+        <div className="flex items-center gap-3">
+          <div className="h-9 w-9 rounded-xl bg-cyan-500/15 text-cyan-500 flex items-center justify-center shrink-0">
+            <Share2 className="h-4 w-4" />
+          </div>
+          <div>
+            <p className="text-xs font-bold" style={{ color: "var(--text)" }}>
+              Gestion des Réseaux Sociaux & Liens de Contact
+            </p>
+            <p className="text-[11px]" style={{ color: "var(--text-dim)" }}>
+              Personnalisez vos comptes Facebook, Instagram, TikTok, WhatsApp et email visibles sur la boutique.
+            </p>
+          </div>
+        </div>
+        <button
+          onClick={() => onNavigate("reseaux")}
+          className="px-4 py-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-600 dark:text-cyan-300 border border-cyan-500/30 text-xs font-bold transition-all flex items-center gap-1.5 shrink-0"
+        >
+          <span>Modifier les réseaux sociaux</span>
+          <ArrowRight className="h-3.5 w-3.5" />
+        </button>
       </div>
     </div>
   );

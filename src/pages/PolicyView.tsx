@@ -14,6 +14,7 @@ import {
   Headphones,
 } from "lucide-react";
 import type { Store } from "../types";
+import { buildWhatsAppUrl } from "../lib/socialSettings";
 
 export const PolicyView: React.FC<{ s: Store }> = ({ s }) => {
   return (
@@ -217,7 +218,7 @@ export const PolicyView: React.FC<{ s: Store }> = ({ s }) => {
             </h2>
           </div>
           <p className="text-xs sm:text-sm leading-relaxed" style={{ color: "var(--text-dim)" }}>
-            Vous avez besoin d'aide pour choisir le bon module ou configurer l'application Tuya / Smart Life ? Notre service client est joignable sur WhatsApp au <strong>0775 30 26 36</strong> pour vous guider pas-à-pas.
+            Vous avez besoin d'aide pour choisir le bon module ou configurer l'application Tuya / Smart Life ? Notre service client est joignable sur WhatsApp au <strong>{s.socialSettings.whatsapp || "0775 30 26 36"}</strong> pour vous guider pas-à-pas.
           </p>
         </section>
       </div>
@@ -244,15 +245,17 @@ export const PolicyView: React.FC<{ s: Store }> = ({ s }) => {
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-          <a
-            href="https://wa.me/213775302636?text=Bonjour%20DomoTek,%20j'ai%20une%20question%20sur%20la%20livraison%20ou%20une%20commande."
-            target="_blank"
-            rel="noreferrer"
-            className="px-5 py-3 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 border border-emerald-500/40 text-white bg-emerald-600 hover:bg-emerald-500 shadow-md transition-all"
-          >
-            <Phone className="h-4 w-4" />
-            <span>Contacter sur WhatsApp (0775 30 26 36)</span>
-          </a>
+          {s.socialSettings?.whatsappEnabled && (
+            <a
+              href={buildWhatsAppUrl(s.socialSettings, "Bonjour DomoTek, j'ai une question sur la livraison ou une commande.")}
+              target="_blank"
+              rel="noreferrer"
+              className="px-5 py-3 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 border border-emerald-500/40 text-white bg-emerald-600 hover:bg-emerald-500 shadow-md transition-all"
+            >
+              <Phone className="h-4 w-4" />
+              <span>Contacter sur WhatsApp ({s.socialSettings.whatsapp || "0775 30 26 36"})</span>
+            </a>
+          )}
 
           <button
             onClick={() => s.goShop({})}

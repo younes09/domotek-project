@@ -1,13 +1,15 @@
 import React, { useState } from "react";
-import { Facebook, Instagram, Phone } from "lucide-react";
+import { Facebook, Instagram, Phone, Mail, Youtube, Twitter, Linkedin, Send } from "lucide-react";
 import { Logo } from "./Logo";
-import { TikTokIcon } from "./ui";
+import { TikTokIcon, WhatsAppIcon } from "./ui";
 import type { Store } from "../types";
 import { getSecurityConfig } from "../lib/authSecurity";
+import { buildSocialUrl, buildWhatsAppUrl } from "../lib/socialSettings";
 
 export const Footer: React.FC<{ s: Store }> = ({ s }) => {
   const [clickCount, setClickCount] = useState(0);
   const secConfig = getSecurityConfig();
+  const soc = s.socialSettings;
 
   const handleSecretClick = () => {
     const next = clickCount + 1;
@@ -30,16 +32,91 @@ export const Footer: React.FC<{ s: Store }> = ({ s }) => {
             DomoTek — <strong className="text-cyan-400 font-semibold">La maison connectée, simplement.</strong><br />
             Contrôlez, automatisez et sécurisez votre maison avec nos interrupteurs, prises et capteurs intelligents.
           </p>
-          <div className="flex items-center gap-2 mt-4">
-            <a href="#" className="h-9 w-9 flex items-center justify-center rounded-xl dk-surface transition-colors hover:border-cyan-500/50 hover:text-cyan-400 dk-focus" aria-label="Facebook">
-              <Facebook className="h-4 w-4" style={{ color: "var(--text)" }} />
-            </a>
-            <a href="#" className="h-9 w-9 flex items-center justify-center rounded-xl dk-surface transition-colors hover:border-cyan-500/50 hover:text-cyan-400 dk-focus" aria-label="Instagram">
-              <Instagram className="h-4 w-4" style={{ color: "var(--text)" }} />
-            </a>
-            <a href="#" className="h-9 w-9 flex items-center justify-center rounded-xl dk-surface transition-colors hover:border-cyan-500/50 hover:text-cyan-400 dk-focus" aria-label="TikTok">
-              <TikTokIcon style={{ color: "var(--text)" }} />
-            </a>
+          <div className="flex flex-wrap items-center gap-2 mt-4">
+            {soc.facebookEnabled && soc.facebook && (
+              <a
+                href={buildSocialUrl("facebook", soc.facebook)}
+                target="_blank"
+                rel="noreferrer"
+                className="h-9 w-9 flex items-center justify-center rounded-xl dk-surface transition-all hover:border-blue-500/50 hover:text-blue-400 dk-focus"
+                aria-label="Facebook"
+                title="Facebook"
+              >
+                <Facebook className="h-4 w-4" style={{ color: "var(--text)" }} />
+              </a>
+            )}
+            {soc.instagramEnabled && soc.instagram && (
+              <a
+                href={buildSocialUrl("instagram", soc.instagram)}
+                target="_blank"
+                rel="noreferrer"
+                className="h-9 w-9 flex items-center justify-center rounded-xl dk-surface transition-all hover:border-pink-500/50 hover:text-pink-400 dk-focus"
+                aria-label="Instagram"
+                title="Instagram"
+              >
+                <Instagram className="h-4 w-4" style={{ color: "var(--text)" }} />
+              </a>
+            )}
+            {soc.tiktokEnabled && soc.tiktok && (
+              <a
+                href={buildSocialUrl("tiktok", soc.tiktok)}
+                target="_blank"
+                rel="noreferrer"
+                className="h-9 w-9 flex items-center justify-center rounded-xl dk-surface transition-all hover:border-cyan-500/50 hover:text-cyan-400 dk-focus"
+                aria-label="TikTok"
+                title="TikTok"
+              >
+                <TikTokIcon style={{ color: "var(--text)" }} />
+              </a>
+            )}
+            {soc.youtubeEnabled && soc.youtube && (
+              <a
+                href={buildSocialUrl("youtube", soc.youtube)}
+                target="_blank"
+                rel="noreferrer"
+                className="h-9 w-9 flex items-center justify-center rounded-xl dk-surface transition-all hover:border-red-500/50 hover:text-red-400 dk-focus"
+                aria-label="YouTube"
+                title="YouTube"
+              >
+                <Youtube className="h-4 w-4" style={{ color: "var(--text)" }} />
+              </a>
+            )}
+            {soc.twitterEnabled && soc.twitter && (
+              <a
+                href={buildSocialUrl("twitter", soc.twitter)}
+                target="_blank"
+                rel="noreferrer"
+                className="h-9 w-9 flex items-center justify-center rounded-xl dk-surface transition-all hover:border-sky-500/50 hover:text-sky-400 dk-focus"
+                aria-label="X / Twitter"
+                title="X / Twitter"
+              >
+                <Twitter className="h-4 w-4" style={{ color: "var(--text)" }} />
+              </a>
+            )}
+            {soc.linkedinEnabled && soc.linkedin && (
+              <a
+                href={buildSocialUrl("linkedin", soc.linkedin)}
+                target="_blank"
+                rel="noreferrer"
+                className="h-9 w-9 flex items-center justify-center rounded-xl dk-surface transition-all hover:border-blue-600/50 hover:text-blue-400 dk-focus"
+                aria-label="LinkedIn"
+                title="LinkedIn"
+              >
+                <Linkedin className="h-4 w-4" style={{ color: "var(--text)" }} />
+              </a>
+            )}
+            {soc.telegramEnabled && soc.telegram && (
+              <a
+                href={buildSocialUrl("telegram", soc.telegram)}
+                target="_blank"
+                rel="noreferrer"
+                className="h-9 w-9 flex items-center justify-center rounded-xl dk-surface transition-all hover:border-sky-400/50 hover:text-sky-400 dk-focus"
+                aria-label="Telegram"
+                title="Telegram"
+              >
+                <Send className="h-4 w-4" style={{ color: "var(--text)" }} />
+              </a>
+            )}
           </div>
         </div>
         <div>
@@ -64,14 +141,32 @@ export const Footer: React.FC<{ s: Store }> = ({ s }) => {
             >
               <span>📦 Consulter la politique de livraison</span>
             </button>
-            <a
-              href="https://wa.me/213775302636"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 mt-2 px-3 py-1.5 rounded-lg border border-emerald-500/30 text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 font-medium transition-colors"
-            >
-              <Phone className="h-3.5 w-3.5" /> 0775 30 26 36
-            </a>
+            {soc.whatsappEnabled && (
+              <a
+                href={buildWhatsAppUrl(soc)}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 mt-2 px-3 py-1.5 rounded-lg border border-emerald-500/30 text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 font-medium transition-colors"
+              >
+                <WhatsAppIcon className="h-3.5 w-3.5" /> {soc.whatsapp || "0775 30 26 36"}
+              </a>
+            )}
+            {soc.phoneEnabled && soc.phone && soc.phone !== soc.whatsapp && (
+              <a
+                href={`tel:${soc.phone.replace(/[^0-9+]/g, "")}`}
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-cyan-500/30 text-cyan-400 bg-cyan-500/10 hover:bg-cyan-500/20 font-medium transition-colors"
+              >
+                <Phone className="h-3.5 w-3.5" /> {soc.phone}
+              </a>
+            )}
+            {soc.emailEnabled && soc.email && (
+              <a
+                href={`mailto:${soc.email}`}
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-700 text-slate-300 hover:text-cyan-400 font-medium transition-colors text-xs"
+              >
+                <Mail className="h-3.5 w-3.5" /> {soc.email}
+              </a>
+            )}
           </div>
         </div>
         <div>

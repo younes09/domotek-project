@@ -11,6 +11,7 @@ import {
   Package,
 } from "lucide-react";
 import type { Store } from "../types";
+import { buildWhatsAppUrl } from "../lib/socialSettings";
 
 export const ReturnPolicyModal: React.FC<{ s: Store }> = ({ s }) => {
   // Prevent background scrolling when modal is open
@@ -148,15 +149,17 @@ export const ReturnPolicyModal: React.FC<{ s: Store }> = ({ s }) => {
           className="p-4 sm:p-5 border-t flex flex-col sm:flex-row items-center justify-between gap-3 sticky bottom-0 z-20"
           style={{ background: "var(--surface)", borderColor: "var(--border)" }}
         >
-          <a
-            href="https://wa.me/213775302636?text=Bonjour,%20j'ai%20une%20question%20sur%20ma%20commande%20ou%20la%20livraison"
-            target="_blank"
-            rel="noreferrer"
-            className="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 border border-emerald-500/30 text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 transition-all"
-          >
-            <Phone className="h-4 w-4 text-emerald-400" />
-            <span>Assistance WhatsApp : 0775 30 26 36</span>
-          </a>
+          {s.socialSettings?.whatsappEnabled && (
+            <a
+              href={buildWhatsAppUrl(s.socialSettings, "Bonjour, j'ai une question sur ma commande ou la livraison")}
+              target="_blank"
+              rel="noreferrer"
+              className="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 border border-emerald-500/30 text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 transition-all"
+            >
+              <Phone className="h-4 w-4 text-emerald-400" />
+              <span>Assistance WhatsApp : {s.socialSettings.whatsapp || "0775 30 26 36"}</span>
+            </a>
+          )}
 
           <button
             onClick={() => s.setReturnPolicyOpen(false)}

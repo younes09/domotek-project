@@ -11,6 +11,7 @@ import { AdminProducts } from "./AdminProducts";
 import { AdminCategories } from "./AdminCategories";
 import { AdminOrders } from "./AdminOrders";
 import { AdminCustomers } from "./AdminCustomers";
+import { AdminSocial } from "./AdminSocial";
 import { AdminSecurity } from "./AdminSecurity";
 import { AdminLogin } from "./AdminLogin";
 import type { Store } from "../types";
@@ -191,6 +192,7 @@ export const AdminView: React.FC<{ s: Store }> = ({ s }) => {
           {tab === "categories" && <AdminCategories s={s} />}
           {tab === "commandes" && <AdminOrders s={s} />}
           {tab === "clients" && <AdminCustomers s={s} />}
+          {tab === "reseaux" && <AdminSocial s={s} />}
           {tab === "securite" && <AdminSecurity s={s} />}
         </div>
       </div>

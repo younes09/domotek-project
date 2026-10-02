@@ -23,6 +23,7 @@ import {
 import { TrustBadges, WhatsAppIcon } from "../components/ui";
 import { ProductCard } from "../components/ProductCard";
 import type { Store } from "../types";
+import { buildWhatsAppUrl } from "../lib/socialSettings";
 
 export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
   const [activeTab, setActiveTab] = useState<string>("all");
@@ -231,19 +232,21 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
                   <ChevronRight className="h-5 w-5 stroke-[2.5] group-hover:translate-x-1 transition-transform" />
                 </button>
 
-                <a
-                  href="https://wa.me/213775302636?text=Bonjour%20DomoTek,%20j'aimerais%20avoir%20des%20informations%20sur%20vos%20solutions%20maison%20connectée."
-                  target="_blank"
-                  rel="noreferrer"
-                  className={`px-6 py-4 rounded-xl text-sm font-bold backdrop-blur-md transition-all flex items-center gap-2.5 shadow-lg ${
-                    isDark
-                      ? "border border-emerald-500/40 bg-emerald-950/60 text-emerald-300 hover:bg-emerald-900/70 hover:border-emerald-500/60"
-                      : "border border-emerald-400 bg-emerald-50/90 text-emerald-800 hover:bg-emerald-100"
-                  }`}
-                >
-                  <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                  <span>Conseil WhatsApp : <strong>0775 30 26 36</strong></span>
-                </a>
+                {s.socialSettings?.whatsappEnabled && (
+                  <a
+                    href={buildWhatsAppUrl(s.socialSettings, "Bonjour DomoTek, j'aimerais avoir des informations sur vos solutions maison connectée.")}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={`px-6 py-4 rounded-xl text-sm font-bold backdrop-blur-md transition-all flex items-center gap-2.5 shadow-lg ${
+                      isDark
+                        ? "border border-emerald-500/40 bg-emerald-950/60 text-emerald-300 hover:bg-emerald-900/70 hover:border-emerald-500/60"
+                        : "border border-emerald-400 bg-emerald-50/90 text-emerald-800 hover:bg-emerald-100"
+                    }`}
+                  >
+                    <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span>Conseil WhatsApp : <strong>{s.socialSettings.whatsapp || "0775 30 26 36"}</strong></span>
+                  </a>
+                )}
               </div>
 
               {/* Social Proof Stats Under Hero CTA */}
@@ -471,7 +474,7 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
                   </p>
                 </div>
                 <a
-                  href={`https://wa.me/213775302636?text=${encodeURIComponent(scenarios[activeScenario].whatsappMsg)}`}
+                  href={buildWhatsAppUrl(s.socialSettings, scenarios[activeScenario].whatsappMsg)}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition-all shadow-md shrink-0"
@@ -569,7 +572,7 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
               {/* Ready to click chips */}
               <div className="pt-2 flex flex-wrap gap-2">
                 <a
-                  href="https://wa.me/213775302636?text=Bonjour,%20je%20voudrais%20savoir%20si%20mon%20installation%20est%20compatible%20sans%20fil%20neutre."
+                  href={buildWhatsAppUrl(s.socialSettings, "Bonjour, je voudrais savoir si mon installation est compatible sans fil neutre.")}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg dk-surface-2 hover:border-cyan-500/50 transition-all"
@@ -579,7 +582,7 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
                   <span>Compatibilité sans neutre ?</span>
                 </a>
                 <a
-                  href="https://wa.me/213775302636?text=Bonjour,%20j'aimerais%20automatiser%20mes%20volets%20roulants,%20que%20me%20conseillez-vous%20?"
+                  href={buildWhatsAppUrl(s.socialSettings, "Bonjour, j'aimerais automatiser mes volets roulants, que me conseillez-vous ?")}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg dk-surface-2 hover:border-cyan-500/50 transition-all"
@@ -592,7 +595,7 @@ export const HomeView: React.FC<{ s: Store }> = ({ s }) => {
 
               <div className="pt-3">
                 <a
-                  href="https://wa.me/213775302636"
+                  href={buildWhatsAppUrl(s.socialSettings)}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm transition-all shadow-[0_0_25px_rgba(37,211,102,0.35)] transform hover:-translate-y-0.5"

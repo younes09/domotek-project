@@ -25,6 +25,12 @@ import {
   trackGAPurchase,
   trackGAViewItem,
 } from "./googleAnalytics";
+import {
+  getSocialSettings,
+  saveSocialSettings,
+  type SocialSettings,
+  SOCIAL_UPDATE_EVENT,
+} from "./socialSettings";
 
 const EMPTY_FILTERS: ShopFilters = {
   category: "all", minPrice: "", maxPrice: "", availability: "all", sort: "popularite", special: null, query: "",
@@ -385,6 +391,36 @@ export function useStore(): Store {
     return (localStorage.getItem("domotek_theme") as "light" | "dark") || "light";
   });
 
+  const [socialSettings, setSocialSettingsState] = useState<SocialSettings>(getSocialSettings);
+
+  const setSocialSettings: React.Dispatch<React.SetStateAction<SocialSettings>> = useCallback((action) => {
+    setSocialSettingsState((prev) => {
+      const next = typeof action === "function" ? action(prev) : action;
+      saveSocialSettings(next);
+      return next;
+    });
+  }, []);
+
+  const updateSocialSettings = useCallback((patch: Partial<SocialSettings>) => {
+    setSocialSettingsState((prev) => {
+      const next = { ...prev, ...patch };
+      saveSocialSettings(next);
+      return next;
+    });
+  }, []);
+
+  useEffect(() => {
+    const handleUpdate = (e: any) => {
+      if (e.detail) {
+        setSocialSettingsState(e.detail);
+      } else {
+        setSocialSettingsState(getSocialSettings());
+      }
+    };
+    window.addEventListener(SOCIAL_UPDATE_EVENT, handleUpdate);
+    return () => window.removeEventListener(SOCIAL_UPDATE_EVENT, handleUpdate);
+  }, []);
+
   useEffect(() => { window.scrollTo(0, 0); }, [view, selectedProduct?.id]);
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
@@ -552,6 +588,7 @@ export function useStore(): Store {
     quickViewProduct, setQuickViewProduct,
     returnPolicyOpen, setReturnPolicyOpen,
     theme, toggleTheme: () => setTheme((t) => (t === "light" ? "dark" : "light")),
+    socialSettings, setSocialSettings, updateSocialSettings,
   };
 }
 

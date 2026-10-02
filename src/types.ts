@@ -124,6 +124,9 @@ export interface CheckoutFormData {
   deliveryDelay?: string;
 }
 
+import type { SocialSettings } from "./lib/socialSettings";
+export type { SocialSettings };
+
 export interface FirstItemNoticeData {
   product: Product;
   qty: number;
@@ -196,4 +199,8 @@ export interface Store {
 
   theme: "light" | "dark";
   toggleTheme: () => void;
+
+  socialSettings: SocialSettings;
+  setSocialSettings: React.Dispatch<React.SetStateAction<SocialSettings>>;
+  updateSocialSettings: (patch: Partial<SocialSettings>) => void;
 }

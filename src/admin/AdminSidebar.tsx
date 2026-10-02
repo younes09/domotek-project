@@ -6,6 +6,7 @@ import {
   ClipboardList,
   Users,
   ShieldCheck,
+  Share2,
   ArrowLeft,
   LogOut,
   AlertTriangle,
@@ -13,7 +14,7 @@ import {
 import type { Store } from "../types";
 import { getSecurityConfig } from "../lib/authSecurity";
 
-export type AdminTab = "dashboard" | "produits" | "categories" | "commandes" | "clients" | "securite";
+export type AdminTab = "dashboard" | "produits" | "categories" | "commandes" | "clients" | "reseaux" | "securite";
 
 const ITEMS: Array<{ key: AdminTab; label: string; Icon: React.ComponentType<{ className?: string }> }> = [
   { key: "dashboard", label: "Tableau de bord", Icon: LayoutDashboard },
@@ -21,6 +22,7 @@ const ITEMS: Array<{ key: AdminTab; label: string; Icon: React.ComponentType<{ c
   { key: "categories", label: "Catégories", Icon: SlidersHorizontal },
   { key: "commandes", label: "Commandes", Icon: ClipboardList },
   { key: "clients", label: "Clients CRM", Icon: Users },
+  { key: "reseaux", label: "Réseaux Sociaux", Icon: Share2 },
   { key: "securite", label: "Sécurité & Accès", Icon: ShieldCheck },
 ];
 

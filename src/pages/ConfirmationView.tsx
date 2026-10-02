@@ -17,6 +17,7 @@ import { WhatsAppIcon } from "../components/ui";
 import { formatDZD } from "../lib/format";
 import { formatOrderWhatsAppMessage } from "../lib/notifications";
 import { AndersonLogo } from "../components/AndersonLogo";
+import { buildWhatsAppUrl } from "../lib/socialSettings";
 import type { Store } from "../types";
 
 export const ConfirmationView: React.FC<{ s: Store }> = ({ s }) => {
@@ -24,7 +25,7 @@ export const ConfirmationView: React.FC<{ s: Store }> = ({ s }) => {
   const [copied, setCopied] = useState(false);
 
   const whatsappMessage = o ? formatOrderWhatsAppMessage(o) : "";
-  const whatsappUrl = `https://wa.me/213775302636?text=${encodeURIComponent(whatsappMessage)}`;
+  const whatsappUrl = buildWhatsAppUrl(s.socialSettings, whatsappMessage);
 
   const handleCopy = () => {
     if (!whatsappMessage) return;
@@ -100,7 +101,7 @@ export const ConfirmationView: React.FC<{ s: Store }> = ({ s }) => {
             className="flex-1 py-4 px-6 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm sm:text-base flex items-center justify-center gap-3 shadow-[0_0_30px_rgba(37,211,102,0.35)] transition-all transform hover:-translate-y-0.5"
           >
             <WhatsAppIcon className="h-6 w-6 fill-slate-950 shrink-0" />
-            <span>Envoyer sur WhatsApp (0775 30 26 36)</span>
+            <span>Envoyer sur WhatsApp ({s.socialSettings.whatsapp || "0775 30 26 36"})</span>
             <ArrowRight className="h-5 w-5 shrink-0" />
           </a>
 
